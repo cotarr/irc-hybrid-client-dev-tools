@@ -1,20 +1,20 @@
 {
-  "name": "irc-hybrid-client-minifyer",
+  "name": "irc-hybrid-client-dev-tools",
   "version": "0.0.1",
-  "description": "Minify irc-hybrid-client files in adjacent folder",
+  "description": "Development tools to minify irc-hybrid-client files",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/cotarr/irc-hybrid-client-minifyer.git"
+    "url": "git+https://github.com/cotarr/irc-hybrid-client-dev-tools.git"
   },
   "author": "cotarr@yahoo.com",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/cotarr/irc-hybrid-client-minifyer/issues"
+    "url": "https://github.com/cotarr/irc-hybrid-client-dev-tools/issues"
   },
-  "homepage": "https://github.com/cotarr/irc-hybrid-client-minifyer#readme",
+  "homepage": "https://github.com/cotarr/irc-hybrid-client-dev-tools#readme",
   "devDependencies": {
     "del": "^6.0.0",
     "gulp": "^4.0.2",
