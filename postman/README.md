@@ -7,7 +7,7 @@ It is not intended to comprehensively test overall API functionality.
 
 To run these tests it is necessary to install [Postman](https://www.postman.com/downloads/).
 The test collections can be imported from the postman folder in the cloned git repository.
-These tests were written using Postman v7.28.0.
+These tests were written using Postman v7.28.0. (Tested Postman v8.6.2)
 
 
 # Warning
@@ -29,8 +29,10 @@ the API requests individually, it is recommended to use a dedicated IRC test ser
 - server_user1
 - server_password1
 
-# Setup
+# Postman config
+* Postman settings: General: automatically follow redirects = OFF
 
+# Setup
 * There are two collections, one for API and one for websocket authorization testing.
 * Assign a temporary user/password in the web server for testing.
 * In Postman, create a environment with the variables listed above. Set values to the temporary user/password and server URL.
