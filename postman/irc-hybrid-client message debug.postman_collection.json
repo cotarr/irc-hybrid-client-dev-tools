@@ -364,6 +364,40 @@
 					}
 				}
 			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json"
+					}
+				],
+				"url": {
+					"raw": "{{server_URL}}/irc/cache",
+					"host": [
+						"{{server_URL}}"
+					],
+					"path": [
+						"irc",
+						"cache"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Debug  /irc/getircstate",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
 			"protocolProfileBehavior": {
 				"disableBodyPruning": true
 			},
@@ -385,13 +419,13 @@
 					}
 				},
 				"url": {
-					"raw": "{{server_URL}}/irc/cache",
+					"raw": "{{server_URL}}/irc/getircstate",
 					"host": [
 						"{{server_URL}}"
 					],
 					"path": [
 						"irc",
-						"cache"
+						"getircstate"
 					]
 				}
 			},
