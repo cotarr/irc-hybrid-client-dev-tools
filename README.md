@@ -1,5 +1,12 @@
 # irc-hybrid-client-dev-tools
 
+# Other Contents
+
+* postman/ folder contains some exported postman API test collections
+* postman/API-Specs.md contains a description of the irc-hybrid-client API specification.
+
+# Bundling and Minify Tools
+
 This is a support repository used to minify and bundle the web page files for
 repository [irc-hybrid-client](https://github.com/cotarr/irc-hybrid-client).
 
