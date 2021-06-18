@@ -1,5 +1,7 @@
 # Testing Readme
 
+* A description of API specification is included in repository at postman/API-Specs.md
+
 Postman tests for [irc-hybrid-client](https://github.com/cotarr/irc-hybrid-client)
 
 The primary purpose of the tests is limited to confirming there are no open unprotected API routes.
@@ -33,7 +35,10 @@ the API requests individually, it is recommended to use a dedicated IRC test ser
 * Postman settings: General: automatically follow redirects = OFF
 
 # Setup
-* There are two collections, one for API and one for websocket authorization testing.
+* There are three collections:
+  * API authorization testing.
+  * Websocket authorization testing.
+  * Manual debug of POST requests.
 * Assign a temporary user/password in the web server for testing.
 * In Postman, create a environment with the variables listed above. Set values to the temporary user/password and server URL.
 * Suggest manual delete irc-hybrid-client cookie from postman before running tests.
@@ -77,3 +82,10 @@ List of tests
 * 6.1 Tell server to expect a new websocket connection (hash + expiration time)
 * 6.2-6.4 Logout, login, postman now has different cookie.
 * 6.5 Attempt to open websocket upgrade request in case of cookie hash does not match previously saved value (failed authorization)
+
+# 3 Manual Debug
+This collection was used during manual debugging to exercise different POST requests for the purpose of manually checking API function and data validation.
+
+In most cases, the response to the request is returned asynchronously as stream data via the web-socket. The web browser should be simultaneously logged into the server. Some of the GET requests are not included in this collection.
+
+To get a valid cookie, run selection 1, then 2. After a valid cookie is present, the remainder of POST requests can be performed manually. Open a web browser concurrently with postman. Using Server --> Tools, select the View-Raw and View-Comms checkboxes to see the responses within the websocket stream

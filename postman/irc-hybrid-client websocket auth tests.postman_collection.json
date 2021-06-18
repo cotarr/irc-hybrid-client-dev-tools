@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "64554271-a14f-422e-9406-e65ae89389e5",
+		"_postman_id": "25e112a6-0168-4fd9-b1e7-58b3486ee333",
 		"name": "irc-hybrid-client websocket auth tests",
 		"description": "# Tests associated with browser to server websocket\n- Suggest delete cookie before running tests.\n- Assign a temporary user/password in the web server for testing.\n- In Postman, create a environment with the variables listed below. Set values to the temporary user/password and server URL.\n- A series of tests is run to test the websocket authroization.\n\n# Enviornment\n- server_URL\n- server_user1\n- server_password1",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
@@ -12,7 +12,6 @@
 				{
 					"listen": "test",
 					"script": {
-						"id": "307b4d1d-7d89-40fe-9712-bb6b5b848dbc",
 						"exec": [
 							"pm.test(\"Status code is 200\", function () {",
 							"    pm.response.to.have.status(200);",
@@ -50,7 +49,6 @@
 				{
 					"listen": "test",
 					"script": {
-						"id": "afcb2f5d-8bd6-4e4e-bce5-2ab26c6ba572",
 						"exec": [
 							"",
 							"pm.test(\"Fail if already logged in\", function () {",
@@ -132,7 +130,6 @@
 				{
 					"listen": "test",
 					"script": {
-						"id": "5b311d18-1584-4c5e-a013-759e12907e18",
 						"exec": [
 							"pm.test(\"Status code is 302\", function () {",
 							"    pm.response.to.have.status(302);",
@@ -205,7 +202,6 @@
 				{
 					"listen": "test",
 					"script": {
-						"id": "62220e51-cf48-469f-9df9-7789ce472ba1",
 						"exec": [
 							"pm.test(\"Status code is 200\", function () {",
 							"    pm.response.to.have.status(200);",
@@ -259,7 +255,6 @@
 				{
 					"listen": "test",
 					"script": {
-						"id": "18e3cd97-0413-4fd0-8bd4-0471b24c627f",
 						"exec": [
 							"//",
 							"// Postman can not connect a websocket",
@@ -330,7 +325,6 @@
 				{
 					"listen": "test",
 					"script": {
-						"id": "722e91eb-2213-4542-804b-ac4d5a66fe68",
 						"exec": [
 							"pm.test(\"Status code is 200\", function () {",
 							"    pm.response.to.have.status(200);",
@@ -384,7 +378,6 @@
 				{
 					"listen": "test",
 					"script": {
-						"id": "0e5a231e-1381-4eea-ba0c-754a6c24f1b1",
 						"exec": [
 							"pm.test(\"Status code is 200\", function () {",
 							"    pm.response.to.have.status(200);",
@@ -423,7 +416,6 @@
 				{
 					"listen": "test",
 					"script": {
-						"id": "833573a6-4df8-4dd3-a39f-6a6d900414b8",
 						"exec": [
 							"",
 							"pm.test(\"Fail if already logged in\", function () {",
@@ -506,7 +498,6 @@
 				{
 					"listen": "test",
 					"script": {
-						"id": "55886edc-18a0-49ed-b19a-2cf5556cd130",
 						"exec": [
 							"pm.test(\"Status code is 302\", function () {",
 							"    pm.response.to.have.status(302);",
@@ -580,7 +571,6 @@
 				{
 					"listen": "test",
 					"script": {
-						"id": "ecc37f60-77a6-4157-8b80-373ae7caa9ba",
 						"exec": [
 							"//",
 							"// Postman can not connect a websocket",
@@ -650,7 +640,6 @@
 		{
 			"listen": "prerequest",
 			"script": {
-				"id": "ca7c95a9-4687-49c8-8b5d-d81fbed08671",
 				"type": "text/javascript",
 				"exec": [
 					""
@@ -660,13 +649,11 @@
 		{
 			"listen": "test",
 			"script": {
-				"id": "356ee6f4-1c5d-42c2-9916-98c21891fe8e",
 				"type": "text/javascript",
 				"exec": [
 					""
 				]
 			}
 		}
-	],
-	"protocolProfileBehavior": {}
+	]
 }
