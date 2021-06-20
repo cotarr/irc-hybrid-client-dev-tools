@@ -1,8 +1,8 @@
 # Testing Readme
 
-* A description of API specification is included in repository at postman/API-Specs.md
 
 Postman tests for [irc-hybrid-client](https://github.com/cotarr/irc-hybrid-client)
+
 
 The primary purpose of the tests is limited to confirming there are no open unprotected API routes.
 It is not intended to comprehensively test overall API functionality.
@@ -11,6 +11,7 @@ To run these tests it is necessary to install [Postman](https://www.postman.com/
 The test collections can be imported from the postman folder in the cloned git repository.
 These tests were written using Postman v7.28.0. (Tested Postman v8.6.2)
 
+API documentation: [cotarr.github.io/irc-hybrid-client/api.html](https://cotarr.github.io/irc-hybrid-client/api.html)
 
 # Warning
 

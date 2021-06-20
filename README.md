@@ -3,7 +3,6 @@
 # Other Contents
 
 * postman/ folder contains some exported postman API test collections
-* postman/API-Specs.md contains a description of the irc-hybrid-client API specification.
 
 # Bundling and Minify Tools
 
