@@ -1,9 +1,5 @@
 # irc-hybrid-client-dev-tools
 
-# Other Contents
-
-* postman/ folder contains some exported postman API test collections
-
 # Bundling and Minify Tools
 
 This is a support repository used to minify and bundle the web page files for
