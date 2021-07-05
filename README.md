@@ -20,7 +20,7 @@ The minification process uses a development library called
 [gulp](https://gulpjs.com/).
 The gulp library files are listed in the package.json as development decencies.
 
-Running `gulp minify` will source files from adjacent git repository folder
+Running `npx gulp minify` will source files from adjacent git repository folder
 `../irc-hybrid-client/secure/`
 and place output files in the `../irc-hybrid-client/secure-minify/`
 folder.
@@ -65,21 +65,12 @@ export NODE_ENV=development
 npm install
 ```
 
-It is necessary to install gulp-cli globally.
-The gulp-cli utility is used by gulp to manage multiple gulp versions.
-This is not required if gulp-cli is already installed as a global npm package.
-On your system, sudo or root permission may be required to install global packages.
-
-```bash
-npm install -g gulp-cli
-```
-
 To minify the files, change the working directory to this project's base folder.
-Call the gulp process using `gulp minify`.
+Call the gulp process using `npx gulp minify`.
 
 ```bash
 cd ../irc-hybrid-client-dev-tools
-gulp minify
+npx gulp minify
 ```
 
 Some of this would vary depending on the specific deployment environments.

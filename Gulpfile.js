@@ -72,6 +72,7 @@ const jsMinify = function () {
   const license = '/*\n' +
     fs.readFileSync('LICENSE', 'utf8') +
     '*/\n\n';
+  const jsStrict = '\'use strict\';\n\n';
   return src(
     [
       '../irc-hybrid-client/secure/js/webclient.js',
@@ -85,8 +86,10 @@ const jsMinify = function () {
       '../irc-hybrid-client/secure/js/webclient09.js',
       '../irc-hybrid-client/secure/js/webclient10.js'
     ])
+    .pipe(replace('\'use strict\';\n', ''))
     .pipe(concat('webclient.js'))
     .pipe(minify(jsMinifyOptions))
+    .pipe(insert.prepend(jsStrict))
     .pipe(insert.prepend(license))
     .pipe(dest('../irc-hybrid-client/secure-minify/js'));
 };
@@ -129,7 +132,7 @@ const verifyFoldersExist = function (cb) {
 // default using 'gulp' command
 //
 const defaultTask = function (cb) {
-  console.log('\n\nTo Minify HTML file use: gulp minify\n\n');
+  console.log('\n\nTo Minify HTML file use: npx gulp minify\n\n');
   cb();
 };
 
@@ -146,3 +149,4 @@ const minifyProd = series(
 exports.default = defaultTask;
 exports.clean = series(verifyFoldersExist, clean);
 exports.minify = series(verifyFoldersExist, clean, minifyProd);
+exports.dist = series(verifyFoldersExist, clean, minifyProd);
