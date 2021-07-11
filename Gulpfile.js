@@ -12,8 +12,14 @@ const replace = require('gulp-replace');
 const rename = require('gulp-rename');
 const fs = require('fs');
 
+// For configuratino see: https://www.npmjs.com/package/terser#compress-options
+
 // To disable length limit, set maxLineLength = false
 const maxLineLength = 200;
+
+// 1 = single quote
+// 3 = always use original style quotes
+const jsQuoteStyle = 3;
 
 const htmlMinifyOptions = {
   minifyCSS: ({
@@ -32,7 +38,8 @@ const jsMinifyOptions = {
   mangle: false,
   compress: false,
   output: {
-    max_line_len: maxLineLength
+    max_line_len: maxLineLength,
+    quote_style: jsQuoteStyle
   }
 };
 
