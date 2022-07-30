@@ -60,6 +60,7 @@ const clean = function() {
     {dryRun: false, force: true});
 };
 
+// for /irc/webclient.html
 const htmlMinify = function() {
   return src('../irc-hybrid-client/secure/webclient.html')
     // these files have been bundled into one file, so they are being removed
@@ -75,6 +76,13 @@ const htmlMinify = function() {
     .pipe(htmlmin(htmlMinifyOptions))
     .pipe(dest('../irc-hybrid-client/secure-minify'));
 };
+// For /irc/serverlist.html
+const htmlMinify2 = function() {
+  return src('../irc-hybrid-client/secure/serverlist.html')
+    .pipe(htmlmin(htmlMinifyOptions))
+    .pipe(dest('../irc-hybrid-client/secure-minify'));
+};
+// For js/webclient.js
 const jsMinify = function () {
   const license = '/*\n' +
     fs.readFileSync('LICENSE', 'utf8') +
@@ -100,16 +108,37 @@ const jsMinify = function () {
     .pipe(insert.prepend(license))
     .pipe(dest('../irc-hybrid-client/secure-minify/js'));
 };
+// For js/serverlist.js
+const jsMinify2 = function () {
+  const license = '/*\n' +
+    fs.readFileSync('LICENSE', 'utf8') +
+    '*/\n\n';
+  const jsStrict = '\'use strict\';\n\n';
+  return src('../irc-hybrid-client/secure/js/serverlist.js')
+    .pipe(replace('\'use strict\';\n', ''))
+    .pipe(minify(jsMinifyOptions))
+    .pipe(insert.prepend(jsStrict))
+    .pipe(insert.prepend(license))
+    .pipe(dest('../irc-hybrid-client/secure-minify/js'));
+};
+
 
 // -----------
 //    CSS
 // -----------
+// for css/styles.css
 const cssMinify = function() {
   return src(
     [
       '../irc-hybrid-client/secure/css/styles.css'
     ])
     .pipe(concat('styles.css'))
+    .pipe(cleancss(minifyCssOptions))
+    .pipe(dest('../irc-hybrid-client/secure-minify/css'));
+};
+// for css/serverlist.css
+const cssMinify2 = function() {
+  return src('../irc-hybrid-client/secure/css/serverlist.css')
     .pipe(cleancss(minifyCssOptions))
     .pipe(dest('../irc-hybrid-client/secure-minify/css'));
 };
@@ -147,9 +176,15 @@ const defaultTask = function (cb) {
 // Process Production secure-minify folder
 //
 const minifyProd = series(
+  // For /irc/webclient.html
   htmlMinify,
   jsMinify,
   cssMinify,
+  // For /irc/serverlist.html
+  htmlMinify2,
+  jsMinify2,
+  cssMinify2,
+  // other files
   soundsCopy
 );
 

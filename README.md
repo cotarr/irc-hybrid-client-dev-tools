@@ -11,7 +11,7 @@ The irc-hybrid-client repository includes both minified and un-minified original
 It can be cloned and deployed as-is, requiring only editing of the configurations files.
 
 Running the gulp script will concatenate multiple files
-into one HTML, one JavaScrpt and one CSS files.
+into one HTML, one JavaScript and one CSS files.
 It will remove comments and whitespace from the javascript code.
 This will significantly reduce the download size of the files
 and reduce bandwidth used by smartphones.
