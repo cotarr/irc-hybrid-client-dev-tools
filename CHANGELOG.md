@@ -6,13 +6,21 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [v0.0.4](https://github.com/cotarr/irc-hybrid-client-dev-tools/releases/tag/v0.0.4) 2022-07-30
+## [v0.0.5](https://github.com/cotarr/irc-hybrid-client-dev-tools/releases/tag/v0.0.5) 2022-07-31
+
+### Changed
+
+- package-lock.json - Manually edited package-lock.json to bump glob-parent@5.1.2 to address github dependabot alert. Glob-parent is a dependency in 4 packages.
+- package-lock.json - Manually edited package-lock.json to bump terser@4.8.1 to address github dependabot alert. Terser is a dependency of gulp-minify.
+- The terser version upgrade caused some minor differences in the minified javascript code. The terser compress options have been modified due to the version change. This has resulted in some minor changes in the minified javascript in webclient.js and serverlist.js in the irc-hybrid-client repository.
+
+## v0.0.4 2022-07-30
 
 ### Changed
 
 - Update some package dependencies
 
-## [v0.0.3](https://github.com/cotarr/irc-hybrid-client-dev-tools/releases/tag/v0.0.3) 2022-07-30
+## v0.0.3 2022-07-30
 
 ### Changed
 

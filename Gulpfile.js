@@ -36,7 +36,9 @@ const jsMinifyOptions = {
   ext: '.js',
   noSource: true,
   mangle: false,
-  compress: false,
+  compress: {
+    defaults: false 
+  },
   output: {
     max_line_len: maxLineLength,
     quote_style: jsQuoteStyle

@@ -32,9 +32,11 @@ The secure-minify folder is erased during the build process.
 
 # Security note
 
-Running `npm audit` on this repository may generate a warning
-due to legacy packages within the dependency tree having
-polluted prototype issues or other minor vulnerabilities.
+Some of the dependencies of the GulpJs bundler appear to be no longer maintained 
+or deprecated. This has produced occasional npm audit dependency issues.
+When possible, upgraded versions have been implemented in the package-lock.json.
+Therefore, running `npm audit` on this repository may generate a warning
+due to legacy packages within the dependency tree. 
 
 When you evaluate how this could impact your use of this repository,
 consider that this is a development utility that is run within the
