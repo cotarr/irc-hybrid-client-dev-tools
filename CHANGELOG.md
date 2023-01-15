@@ -10,6 +10,7 @@ and this project adheres to
 
 ## [v0.0.8](https://github.com/cotarr/irc-hybrid-client-dev-tools/releases/tag/v0.0.8) 2023-01-15
 
+- Gulpfile.js - Update /secure/sounds rules to exclude custom sound files.
 - Remove eslint from project
 - Regenerate a new package-lock.json
 

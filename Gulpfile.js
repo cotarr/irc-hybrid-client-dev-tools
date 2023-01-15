@@ -148,7 +148,7 @@ const cssMinify2 = function() {
 // copy sound files
 // ------------------------------
 const soundsCopy = function() {
-  return src('../irc-hybrid-client/secure/sounds/*')
+  return src('../irc-hybrid-client/secure/sounds/short-beep*')
     .pipe(dest('../irc-hybrid-client/secure-minify/sounds'));
 };
 
