@@ -9,7 +9,6 @@ const minify = require('gulp-minify');
 const htmlmin = require('gulp-htmlmin');
 const cleancss = require('gulp-clean-css');
 const replace = require('gulp-replace');
-const rename = require('gulp-rename');
 const fs = require('fs');
 
 // For configuratino see: https://www.npmjs.com/package/terser#compress-options

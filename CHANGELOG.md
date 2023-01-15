@@ -6,6 +6,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## Next
+
+## [v0.0.8](https://github.com/cotarr/irc-hybrid-client-dev-tools/releases/tag/v0.0.8) 2023-01-15
+
+- Remove eslint from project
+- Regenerate a new package-lock.json
+
 ## [v0.0.7](https://github.com/cotarr/irc-hybrid-client-dev-tools/releases/tag/v0.0.7) 2022-12-30
 
 - package-lock.json -Bump decode-uri-component v0.2.0 to v0.2.2 to address npm audit security alert.
