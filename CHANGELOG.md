@@ -6,7 +6,20 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## Next
+## Next v0.0.9-dev 2023-08-15 (Draft)
+
+### Branch Notes, git branch: web-components
+
+This is to support development for a web component version irc-hybrid-client
+
+### Changes
+
+- Created temporary git branch `web-components` (Both irc-hybrid-client and irc-hybrid-client-dev-tools)
+- Rewrite Gulpfile.js to accommodate web component version of irc-hybrid-client
+- Added NPM package: gulp-rename
+- Update NPM dependencies
+- Requires `npm install`
+- Update README.md with new instructions
 
 ## [v0.0.8](https://github.com/cotarr/irc-hybrid-client-dev-tools/releases/tag/v0.0.8) 2023-01-15
 

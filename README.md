@@ -1,6 +1,6 @@
 # irc-hybrid-client-dev-tools
 
-# Bundling and Minify Tools
+## Bundling and Minify Tools
 
 This is a support repository used to minify and bundle the web page files for
 repository [irc-hybrid-client](https://github.com/cotarr/irc-hybrid-client).
@@ -20,17 +20,12 @@ The minification process uses a development library called
 [gulp](https://gulpjs.com/).
 The gulp library files are listed in the package.json as development decencies.
 
-Running `npx gulp minify` will source files from adjacent git repository folder
-`../irc-hybrid-client/secure/`
-and place output files in the `../irc-hybrid-client/secure-minify/`
-folder.
-
 Configuration for the minify and bundle process is stored in Gulpfile.js
 
 The package.json files, configuration JSON files, and the /docs folder are not included in the bundle.
 The secure-minify folder is erased during the build process.
 
-# Security note
+## Security note
 
 Some of the dependencies of the GulpJs bundler appear to be no longer maintained 
 or deprecated. This has produced occasional npm audit dependency issues.
@@ -44,7 +39,7 @@ limited scope of a development environment, with data input limited
 to repository source code files, and consider that
 these tools are not directly exposed to the public internet.
 
-# Installation
+## Installation
 
 To use this repository to minify files in the `irc-hybrid-client` repository, it is necessary
 to install this repository in the same parent folder that holds irc-hybrid-client.
@@ -66,15 +61,34 @@ cd irc-hybrid-client-dev-tools
 export NODE_ENV=development
 npm install
 ```
+## Run to bundle and minify
 
-To minify the files, change the working directory to this project's base folder.
-Call the gulp process using `npx gulp minify`.
+| Command                |  build-dev/...             |  build-prod/...   |
+| --------------------   | -------------------------- | ----------------- |
+|  npx gulp cleanDev     | Remove Files               |                   |
+|  npx gulp cleanProd    |                            | Remove Files      |
+|  npx gulp cleanAll     | Remove files               | Remove Files      |
+|  npx gulp dev          | Copy, individual js        |                   |
+|  npx gulp dist         | Copy, individual js        | Bundle and Minify |
+|  npx gulp              | (Copy when source changed) |                   |
+
+Example: To bundle and minify the production version into build-prod/
 
 ```bash
 cd ../irc-hybrid-client-dev-tools
-npx gulp minify
+npx gulp dist
 ```
 
 Some of this would vary depending on the specific deployment environments.
 The above commands should be able to produce a minified version.
 The deployment itself is left to you.
+
+## File Structure
+
+| Source Files                                  | Development Build (multiple js)    |Bundled, Minified (3 files) |
+| --------------------------------------------- | -----------------------------------| -------------------------- |
+| source-files/html/*.html                      | build-dev/webclient.html           | build-prod/webclient.html  |
+| source-files/css/*.css (shared css)           | build-dev/css/styles.css           | build-prod/css/styles.css  |
+| source-files/js/*.js (loads page)             | build-dev/js/(*multiple files*).js | build-prod/js/webclient.js |
+| source-files/web-components/*.html,*.css,*.js |  
+
