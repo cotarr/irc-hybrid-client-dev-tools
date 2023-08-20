@@ -99,15 +99,26 @@ const htmlWebclientDev = function () {
     fs.readFileSync('../irc-hybrid-client/source-files/web-components/hamburger-icon.html', 'utf8') +
     fs.readFileSync('../irc-hybrid-client/source-files/web-components/header-bar.html', 'utf8') +
     fs.readFileSync('../irc-hybrid-client/source-files/web-components/error-panel.html', 'utf8') +
+    fs.readFileSync('../irc-hybrid-client/source-files/web-components/help-panel.html', 'utf8') +
+    fs.readFileSync('../irc-hybrid-client/source-files/web-components/logout-panel.html', 'utf8') +
+    fs.readFileSync('../irc-hybrid-client/source-files/web-components/server-form.html', 'utf8') +
+    fs.readFileSync('../irc-hybrid-client/source-files/web-components/irc-controls-panel.html', 'utf8') +
+    fs.readFileSync('../irc-hybrid-client/source-files/web-components/irc-server-panel.html', 'utf8') +
+    fs.readFileSync('../irc-hybrid-client/source-files/web-components/wallops-panel.html', 'utf8') +
     fs.readFileSync('../irc-hybrid-client/source-files/web-components/notice-panel.html', 'utf8') +
     fs.readFileSync('../irc-hybrid-client/source-files/web-components/manage-channels-panel.html', 'utf8') +
     fs.readFileSync('../irc-hybrid-client/source-files/web-components/channel-panel.html', 'utf8') +
-    fs.readFileSync('../irc-hybrid-client/source-files/web-components/debug-panel.html', 'utf8');
+    fs.readFileSync('../irc-hybrid-client/source-files/web-components/debug-panel.html', 'utf8') +
+    fs.readFileSync('../irc-hybrid-client/source-files/web-components/show-ircstate.html', 'utf8') +
+    fs.readFileSync('../irc-hybrid-client/source-files/web-components/show-webstate.html', 'utf8');
   const jsFilenames = '\n' +
     '<script src="./js/_beforeLoad.js" defer></script>\n' +
     '<script src="./js/temp-placeholder.js" defer></script>\n' +
     '<script src="./js/glob-vars.js" defer></script>\n' +
     '<script src="./js/display-utils.js" defer></script>\n' +
+    '<script src="./js/beep-sounds.js" defer></script>\n' +
+    '<script src="./js/local-command-parser.js" defer></script>\n' +
+    '<script src="./js/remote-command-parser.js" defer></script>\n' +
     '<script src="./js/user-info.js" defer></script>\n' +
     '<script src="./js/websocket-panel.js" defer></script>\n' +
     '<script src="./js/nav-menu.js" defer></script>\n' +
@@ -115,10 +126,18 @@ const htmlWebclientDev = function () {
     '<script src="./js/hamburger-icon.js" defer></script>\n' +
     '<script src="./js/header-bar.js" defer></script>\n' +
     '<script src="./js/error-panel.js" defer></script>\n' +
+    '<script src="./js/help-panel.js" defer></script>\n' +
+    '<script src="./js/logout-panel.js" defer></script>\n' +
+    '<script src="./js/server-form.js" defer></script>\n' +
+    '<script src="./js/irc-controls-panel.js" defer></script>\n' +
+    '<script src="./js/irc-server-panel.js" defer></script>\n' +
+    '<script src="./js/wallops-panel.js" defer></script>\n' +
     '<script src="./js/notice-panel.js" defer></script>\n' +
     '<script src="./js/manage-channels-panel.js" defer></script>\n' +
     '<script src="./js/channel-panel.js" defer></script>\n' +
     '<script src="./js/debug-panel.js" defer></script>\n' +
+    '<script src="./js/show-ircstate.js" defer></script>\n' +
+    '<script src="./js/show-webstate.js" defer></script>\n' +
     '<script src="./js/_afterLoad.js" defer></script>\n';
   const now = new Date();
   const compileDate = 'Build timestamp: ' + now.toGMTString();
@@ -138,10 +157,18 @@ const htmlWebclientProd = function () {
   fs.readFileSync('../irc-hybrid-client/source-files/web-components/hamburger-icon.html', 'utf8') +
   fs.readFileSync('../irc-hybrid-client/source-files/web-components/header-bar.html', 'utf8') +
   fs.readFileSync('../irc-hybrid-client/source-files/web-components/error-panel.html', 'utf8') +
+  fs.readFileSync('../irc-hybrid-client/source-files/web-components/help-panel.html', 'utf8') +
+  fs.readFileSync('../irc-hybrid-client/source-files/web-components/logout-panel.html', 'utf8') +
+  fs.readFileSync('../irc-hybrid-client/source-files/web-components/server-form.html', 'utf8') +
+  fs.readFileSync('../irc-hybrid-client/source-files/web-components/irc-controls-panel.html', 'utf8') +
+  fs.readFileSync('../irc-hybrid-client/source-files/web-components/irc-server-panel.html', 'utf8') +
+  fs.readFileSync('../irc-hybrid-client/source-files/web-components/wallops-panel.html', 'utf8') +
   fs.readFileSync('../irc-hybrid-client/source-files/web-components/notice-panel.html', 'utf8') +
   fs.readFileSync('../irc-hybrid-client/source-files/web-components/manage-channels-panel.html', 'utf8') +
   fs.readFileSync('../irc-hybrid-client/source-files/web-components/channel-panel.html', 'utf8') +
-  fs.readFileSync('../irc-hybrid-client/source-files/web-components/debug-panel.html', 'utf8');
+  fs.readFileSync('../irc-hybrid-client/source-files/web-components/debug-panel.html', 'utf8') +
+  fs.readFileSync('../irc-hybrid-client/source-files/web-components/show-ircstate.html', 'utf8') +
+  fs.readFileSync('../irc-hybrid-client/source-files/web-components/show-webstate.html', 'utf8');
 const now = new Date();
   const compileDate = 'Build timestamp: ' + now.toGMTString();
   return src('../irc-hybrid-client/source-files/html/_index.html')
@@ -158,6 +185,9 @@ const jsWebclientDev = function () {
       '../irc-hybrid-client/source-files/web-components/temp-placeholder.js',
       '../irc-hybrid-client/source-files/web-components/glob-vars.js',
       '../irc-hybrid-client/source-files/web-components/display-utils.js',
+      '../irc-hybrid-client/source-files/web-components/beep-sounds.js',
+      '../irc-hybrid-client/source-files/web-components/local-command-parser.js',
+      '../irc-hybrid-client/source-files/web-components/remote-command-parser.js',
       '../irc-hybrid-client/source-files/web-components/user-info.js',
       '../irc-hybrid-client/source-files/web-components/websocket-panel.js',
       '../irc-hybrid-client/source-files/web-components/nav-menu.js',
@@ -165,10 +195,18 @@ const jsWebclientDev = function () {
       '../irc-hybrid-client/source-files/web-components/hamburger-icon.js',
       '../irc-hybrid-client/source-files/web-components/header-bar.js',
       '../irc-hybrid-client/source-files/web-components/error-panel.js',
+      '../irc-hybrid-client/source-files/web-components/help-panel.js',
+      '../irc-hybrid-client/source-files/web-components/logout-panel.js',
+      '../irc-hybrid-client/source-files/web-components/server-form.js',
+      '../irc-hybrid-client/source-files/web-components/irc-controls-panel.js',
+      '../irc-hybrid-client/source-files/web-components/irc-server-panel.js',
+      '../irc-hybrid-client/source-files/web-components/wallops-panel.js',
       '../irc-hybrid-client/source-files/web-components/notice-panel.js',
       '../irc-hybrid-client/source-files/web-components/manage-channels-panel.js',
       '../irc-hybrid-client/source-files/web-components/channel-panel.js',
       '../irc-hybrid-client/source-files/web-components/debug-panel.js',
+      '../irc-hybrid-client/source-files/web-components/show-ircstate.js',
+      '../irc-hybrid-client/source-files/web-components/show-webstate.js',
       '../irc-hybrid-client/source-files/js/_afterLoad.js'
     ])
     .pipe(dest('../irc-hybrid-client/build-dev/js'));
@@ -183,6 +221,9 @@ const jsWebclientProd = function () {
       '../irc-hybrid-client/source-files/web-components/temp-placeholder.js',
       '../irc-hybrid-client/source-files/web-components/glob-vars.js',
       '../irc-hybrid-client/source-files/web-components/display-utils.js',
+      '../irc-hybrid-client/source-files/web-components/beep-sounds.js',
+      '../irc-hybrid-client/source-files/web-components/local-command-parser.js',
+      '../irc-hybrid-client/source-files/web-components/remote-command-parser.js',
       '../irc-hybrid-client/source-files/web-components/user-info.js',
       '../irc-hybrid-client/source-files/web-components/websocket-panel.js',
       '../irc-hybrid-client/source-files/web-components/nav-menu.js',
@@ -190,10 +231,18 @@ const jsWebclientProd = function () {
       '../irc-hybrid-client/source-files/web-components/hamburger-icon.js',
       '../irc-hybrid-client/source-files/web-components/header-bar.js',
       '../irc-hybrid-client/source-files/web-components/error-panel.js',
+      '../irc-hybrid-client/source-files/web-components/help-panel.js',
+      '../irc-hybrid-client/source-files/web-components/logout-panel.js',
+      '../irc-hybrid-client/source-files/web-components/server-form.js',
+      '../irc-hybrid-client/source-files/web-components/irc-controls-panel.js',
+      '../irc-hybrid-client/source-files/web-components/irc-server-panel.js',
+      '../irc-hybrid-client/source-files/web-components/wallops-panel.js',
       '../irc-hybrid-client/source-files/web-components/notice-panel.js',
       '../irc-hybrid-client/source-files/web-components/manage-channels-panel.js',
       '../irc-hybrid-client/source-files/web-components/channel-panel.js',
       '../irc-hybrid-client/source-files/web-components/debug-panel.js',
+      '../irc-hybrid-client/source-files/web-components/show-ircstate.js',
+      '../irc-hybrid-client/source-files/web-components/show-webstate.js',
       '../irc-hybrid-client/source-files/js/_afterLoad.js'
     ])
     .pipe(replace('\'use strict\';\n', ''))
@@ -215,9 +264,17 @@ const cssWebclientDev = function () {
       '../irc-hybrid-client/source-files/web-components/hamburger-icon.css',
       '../irc-hybrid-client/source-files/web-components/header-bar.css',
       '../irc-hybrid-client/source-files/web-components/error-panel.css',
+      '../irc-hybrid-client/source-files/web-components/help-panel.css',
+      '../irc-hybrid-client/source-files/web-components/logout-panel.css',
+      '../irc-hybrid-client/source-files/web-components/server-form.css',
+      '../irc-hybrid-client/source-files/web-components/irc-controls-panel.css',
+      '../irc-hybrid-client/source-files/web-components/irc-server-panel.css',
+      '../irc-hybrid-client/source-files/web-components/wallops-panel.css',
       '../irc-hybrid-client/source-files/web-components/notice-panel.css',
       '../irc-hybrid-client/source-files/web-components/manage-channels-panel.css',
-      '../irc-hybrid-client/source-files/web-components/debug-panel.css'
+      '../irc-hybrid-client/source-files/web-components/debug-panel.css',
+      '../irc-hybrid-client/source-files/web-components/show-ircstate.css',
+      '../irc-hybrid-client/source-files/web-components/show-webstate.css'
     ])
     .pipe(concat('styles.css'))
     .pipe(dest('../irc-hybrid-client/build-dev/css'));
