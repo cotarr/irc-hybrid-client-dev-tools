@@ -101,7 +101,8 @@ const htmlWebclientDev = function () {
     fs.readFileSync('../irc-hybrid-client/source-files/web-components/error-panel.html', 'utf8') +
     fs.readFileSync('../irc-hybrid-client/source-files/web-components/help-panel.html', 'utf8') +
     fs.readFileSync('../irc-hybrid-client/source-files/web-components/logout-panel.html', 'utf8') +
-    fs.readFileSync('../irc-hybrid-client/source-files/web-components/server-form.html', 'utf8') +
+    fs.readFileSync('../irc-hybrid-client/source-files/web-components/server-form-panel.html', 'utf8') +
+    fs.readFileSync('../irc-hybrid-client/source-files/web-components/server-list-panel.html', 'utf8') +
     fs.readFileSync('../irc-hybrid-client/source-files/web-components/irc-controls-panel.html', 'utf8') +
     fs.readFileSync('../irc-hybrid-client/source-files/web-components/irc-server-panel.html', 'utf8') +
     fs.readFileSync('../irc-hybrid-client/source-files/web-components/wallops-panel.html', 'utf8') +
@@ -130,7 +131,8 @@ const htmlWebclientDev = function () {
     '<script src="./js/error-panel.js" defer></script>\n' +
     '<script src="./js/help-panel.js" defer></script>\n' +
     '<script src="./js/logout-panel.js" defer></script>\n' +
-    '<script src="./js/server-form.js" defer></script>\n' +
+    '<script src="./js/server-form-panel.js" defer></script>\n' +
+    '<script src="./js/server-list-panel.js" defer></script>\n' +
     '<script src="./js/irc-controls-panel.js" defer></script>\n' +
     '<script src="./js/irc-server-panel.js" defer></script>\n' +
     '<script src="./js/wallops-panel.js" defer></script>\n' +
@@ -162,7 +164,8 @@ const htmlWebclientProd = function () {
   fs.readFileSync('../irc-hybrid-client/source-files/web-components/error-panel.html', 'utf8') +
   fs.readFileSync('../irc-hybrid-client/source-files/web-components/help-panel.html', 'utf8') +
   fs.readFileSync('../irc-hybrid-client/source-files/web-components/logout-panel.html', 'utf8') +
-  fs.readFileSync('../irc-hybrid-client/source-files/web-components/server-form.html', 'utf8') +
+  fs.readFileSync('../irc-hybrid-client/source-files/web-components/server-form-panel.html', 'utf8') +
+  fs.readFileSync('../irc-hybrid-client/source-files/web-components/server-list-panel.html', 'utf8') +
   fs.readFileSync('../irc-hybrid-client/source-files/web-components/irc-controls-panel.html', 'utf8') +
   fs.readFileSync('../irc-hybrid-client/source-files/web-components/irc-server-panel.html', 'utf8') +
   fs.readFileSync('../irc-hybrid-client/source-files/web-components/wallops-panel.html', 'utf8') +
@@ -202,7 +205,8 @@ const jsWebclientDev = function () {
       '../irc-hybrid-client/source-files/web-components/error-panel.js',
       '../irc-hybrid-client/source-files/web-components/help-panel.js',
       '../irc-hybrid-client/source-files/web-components/logout-panel.js',
-      '../irc-hybrid-client/source-files/web-components/server-form.js',
+      '../irc-hybrid-client/source-files/web-components/server-form-panel.js',
+      '../irc-hybrid-client/source-files/web-components/server-list-panel.js',
       '../irc-hybrid-client/source-files/web-components/irc-controls-panel.js',
       '../irc-hybrid-client/source-files/web-components/irc-server-panel.js',
       '../irc-hybrid-client/source-files/web-components/wallops-panel.js',
@@ -240,7 +244,8 @@ const jsWebclientProd = function () {
       '../irc-hybrid-client/source-files/web-components/error-panel.js',
       '../irc-hybrid-client/source-files/web-components/help-panel.js',
       '../irc-hybrid-client/source-files/web-components/logout-panel.js',
-      '../irc-hybrid-client/source-files/web-components/server-form.js',
+      '../irc-hybrid-client/source-files/web-components/server-form-panel.js',
+      '../irc-hybrid-client/source-files/web-components/server-list-panel.js',
       '../irc-hybrid-client/source-files/web-components/irc-controls-panel.js',
       '../irc-hybrid-client/source-files/web-components/irc-server-panel.js',
       '../irc-hybrid-client/source-files/web-components/wallops-panel.js',
@@ -274,7 +279,8 @@ const cssWebclientDev = function () {
       '../irc-hybrid-client/source-files/web-components/error-panel.css',
       '../irc-hybrid-client/source-files/web-components/help-panel.css',
       '../irc-hybrid-client/source-files/web-components/logout-panel.css',
-      '../irc-hybrid-client/source-files/web-components/server-form.css',
+      '../irc-hybrid-client/source-files/web-components/server-form-panel.css',
+      '../irc-hybrid-client/source-files/web-components/server-list-panel.css',
       '../irc-hybrid-client/source-files/web-components/irc-controls-panel.css',
       '../irc-hybrid-client/source-files/web-components/irc-server-panel.css',
       '../irc-hybrid-client/source-files/web-components/wallops-panel.css',
