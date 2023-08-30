@@ -107,6 +107,8 @@ const htmlWebclientDev = function () {
     fs.readFileSync('../irc-hybrid-client/source-files/web-components/irc-server-panel.html', 'utf8') +
     fs.readFileSync('../irc-hybrid-client/source-files/web-components/wallops-panel.html', 'utf8') +
     fs.readFileSync('../irc-hybrid-client/source-files/web-components/notice-panel.html', 'utf8') +
+    fs.readFileSync('../irc-hybrid-client/source-files/web-components/manage-pm-panels.html', 'utf8') +
+    fs.readFileSync('../irc-hybrid-client/source-files/web-components/pm-panel.html', 'utf8') +
     fs.readFileSync('../irc-hybrid-client/source-files/web-components/manage-channels-panel.html', 'utf8') +
     fs.readFileSync('../irc-hybrid-client/source-files/web-components/channel-panel.html', 'utf8') +
     fs.readFileSync('../irc-hybrid-client/source-files/web-components/debug-panel.html', 'utf8') +
@@ -137,6 +139,8 @@ const htmlWebclientDev = function () {
     '<script src="./js/irc-server-panel.js" defer></script>\n' +
     '<script src="./js/wallops-panel.js" defer></script>\n' +
     '<script src="./js/notice-panel.js" defer></script>\n' +
+    '<script src="./js/manage-pm-panels.js" defer></script>\n' +
+    '<script src="./js/pm-panel.js" defer></script>\n' +
     '<script src="./js/manage-channels-panel.js" defer></script>\n' +
     '<script src="./js/channel-panel.js" defer></script>\n' +
     '<script src="./js/debug-panel.js" defer></script>\n' +
@@ -170,6 +174,8 @@ const htmlWebclientProd = function () {
   fs.readFileSync('../irc-hybrid-client/source-files/web-components/irc-server-panel.html', 'utf8') +
   fs.readFileSync('../irc-hybrid-client/source-files/web-components/wallops-panel.html', 'utf8') +
   fs.readFileSync('../irc-hybrid-client/source-files/web-components/notice-panel.html', 'utf8') +
+  fs.readFileSync('../irc-hybrid-client/source-files/web-components/manage-pm-panels.html', 'utf8') +
+  fs.readFileSync('../irc-hybrid-client/source-files/web-components/pm-panel.html', 'utf8') +
   fs.readFileSync('../irc-hybrid-client/source-files/web-components/manage-channels-panel.html', 'utf8') +
   fs.readFileSync('../irc-hybrid-client/source-files/web-components/channel-panel.html', 'utf8') +
   fs.readFileSync('../irc-hybrid-client/source-files/web-components/debug-panel.html', 'utf8') +
@@ -211,6 +217,8 @@ const jsWebclientDev = function () {
       '../irc-hybrid-client/source-files/web-components/irc-server-panel.js',
       '../irc-hybrid-client/source-files/web-components/wallops-panel.js',
       '../irc-hybrid-client/source-files/web-components/notice-panel.js',
+      '../irc-hybrid-client/source-files/web-components/manage-pm-panels.js',
+      '../irc-hybrid-client/source-files/web-components/pm-panel.js',
       '../irc-hybrid-client/source-files/web-components/manage-channels-panel.js',
       '../irc-hybrid-client/source-files/web-components/channel-panel.js',
       '../irc-hybrid-client/source-files/web-components/debug-panel.js',
@@ -250,6 +258,8 @@ const jsWebclientProd = function () {
       '../irc-hybrid-client/source-files/web-components/irc-server-panel.js',
       '../irc-hybrid-client/source-files/web-components/wallops-panel.js',
       '../irc-hybrid-client/source-files/web-components/notice-panel.js',
+      '../irc-hybrid-client/source-files/web-components/manage-pm-panels.js',
+      '../irc-hybrid-client/source-files/web-components/pm-panel.js',
       '../irc-hybrid-client/source-files/web-components/manage-channels-panel.js',
       '../irc-hybrid-client/source-files/web-components/channel-panel.js',
       '../irc-hybrid-client/source-files/web-components/debug-panel.js',
@@ -270,7 +280,6 @@ const cssWebclientDev = function () {
   return src(
     [
       '../irc-hybrid-client/source-files/css/_global.css',
-      '../irc-hybrid-client/source-files/css/_styles-old.css',
       '../irc-hybrid-client/source-files/web-components/websocket-panel.css',
       '../irc-hybrid-client/source-files/web-components/nav-menu.css',
       '../irc-hybrid-client/source-files/web-components/activity-spinner.css',
@@ -285,6 +294,7 @@ const cssWebclientDev = function () {
       '../irc-hybrid-client/source-files/web-components/irc-server-panel.css',
       '../irc-hybrid-client/source-files/web-components/wallops-panel.css',
       '../irc-hybrid-client/source-files/web-components/notice-panel.css',
+      '../irc-hybrid-client/source-files/web-components/manage-pm-panels.css',
       '../irc-hybrid-client/source-files/web-components/manage-channels-panel.css',
       '../irc-hybrid-client/source-files/web-components/debug-panel.css',
       '../irc-hybrid-client/source-files/web-components/show-raw.css',
