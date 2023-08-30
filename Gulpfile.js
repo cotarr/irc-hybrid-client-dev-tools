@@ -392,4 +392,6 @@ exports.dist = series(
   cleanProd,
   buildDev,
   buildProd,
+  cleanDev,
+  placeholderDev
 );
