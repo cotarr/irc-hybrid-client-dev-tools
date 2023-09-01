@@ -117,7 +117,6 @@ const htmlWebclientDev = function () {
     fs.readFileSync('../irc-hybrid-client/source-files/web-components/show-webstate.html', 'utf8');
   const jsFilenames = '\n' +
     '<script src="./js/_beforeLoad.js" defer></script>\n' +
-    '<script src="./js/temp-placeholder.js" defer></script>\n' +
     '<script src="./js/glob-vars.js" defer></script>\n' +
     '<script src="./js/display-utils.js" defer></script>\n' +
     '<script src="./js/beep-sounds.js" defer></script>\n' +
@@ -195,7 +194,6 @@ const jsWebclientDev = function () {
   return src(
     [
       '../irc-hybrid-client/source-files/js/_beforeLoad.js',
-      '../irc-hybrid-client/source-files/web-components/temp-placeholder.js',
       '../irc-hybrid-client/source-files/web-components/glob-vars.js',
       '../irc-hybrid-client/source-files/web-components/display-utils.js',
       '../irc-hybrid-client/source-files/web-components/beep-sounds.js',
@@ -236,7 +234,6 @@ const jsWebclientProd = function () {
   return src(
     [
       '../irc-hybrid-client/source-files/js/_beforeLoad.js',
-      '../irc-hybrid-client/source-files/web-components/temp-placeholder.js',
       '../irc-hybrid-client/source-files/web-components/glob-vars.js',
       '../irc-hybrid-client/source-files/web-components/display-utils.js',
       '../irc-hybrid-client/source-files/web-components/beep-sounds.js',

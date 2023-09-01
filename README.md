@@ -63,14 +63,14 @@ npm install
 ```
 ## Run to bundle and minify
 
-| Command                |  build-dev/...             |  build-prod/...   |
-| --------------------   | -------------------------- | ----------------- |
-|  npx gulp cleanDev     | Remove Files               |                   |
-|  npx gulp cleanProd    |                            | Remove Files      |
-|  npx gulp cleanAll     | Remove files               | Remove Files      |
-|  npx gulp dev          | Copy, individual js        |                   |
-|  npx gulp dist         | Copy, individual js        | Bundle and Minify |
-|  npx gulp              | (Copy when source changed) |                   |
+| Command                |  build-dev/...              |  build-prod/...   |
+| --------------------   | --------------------------- | ----------------- |
+|  npx gulp cleanDev     | Remove Files                |                   |
+|  npx gulp cleanProd    |                             | Remove Files      |
+|  npx gulp cleanAll     | Remove files                | Remove Files      |
+|  npx gulp dev          | Build dev files for debug   |                   |
+|  npx gulp dist         | Temp use, then remove files | Bundle and Minify |
+|  npx gulp              | Monitor for source changes  |                   |
 
 Example: To bundle and minify the production version into build-prod/
 
