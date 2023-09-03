@@ -25,6 +25,14 @@ Configuration for the minify and bundle process is stored in Gulpfile.js
 The package.json files, configuration JSON files, and the /docs folder are not included in the bundle.
 The secure-minify folder is erased during the build process.
 
+## Breaking Change Sept 2023
+
+The Gulpfile.js in this repository was re-written for irc-hybrid-client 
+Version v2 (~Sept 2023). The new Gulpfile.js is designated as irc-hybrid-client-dev-tools Version 2.0.0.
+
+For users who want to bundle irc-hybrid-client Version v0.2.53 or Version v1.0.0
+should roll this repository back to irc-hybrid-client-dev-tools Version v0.0.8 (commit hash 73a9185)
+
 ## Security note
 
 Some of the dependencies of the GulpJs bundler appear to be no longer maintained 

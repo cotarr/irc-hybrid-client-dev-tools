@@ -1,6 +1,6 @@
 {
   "name": "irc-hybrid-client-dev-tools",
-  "version": "0.0.9-dev",
+  "version": "2.0.0-dev",
   "description": "Development tools to minify irc-hybrid-client files",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"

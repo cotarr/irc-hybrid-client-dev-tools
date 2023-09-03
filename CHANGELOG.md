@@ -6,20 +6,36 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## Next v0.0.9-dev 2023-08-15 (Draft)
+## Next v2.0.0-dev 2023-09-03 (Draft)
 
-### Branch Notes, git branch: web-components
+Replacement Gulpfile.js to bundle irc-hybrid-client v2.0.0 and higher
 
-This is to support development for a web component version irc-hybrid-client
+### Breaking Change
+
+This is a breaking change. 
+
+To bundle the older version irc-hybrid-client Version v0.2.53 or Version v1.0.0
+roll this repository back to irc-hybrid-client-dev-tools Version v0.0.8 (commit hash 73a9185)
 
 ### Changes
 
-- Created temporary git branch `web-components` (Both irc-hybrid-client and irc-hybrid-client-dev-tools)
 - Rewrite Gulpfile.js to accommodate web component version of irc-hybrid-client
 - Added NPM package: gulp-rename
 - Update NPM dependencies
 - Requires `npm install`
 - Update README.md with new instructions
+
+New folder structure:
+
+| Command                |  build-dev/...              |  build-prod/...   |
+| --------------------   | --------------------------- | ----------------- |
+|  npx gulp cleanDev     | Remove Files                |                   |
+|  npx gulp cleanProd    |                             | Remove Files      |
+|  npx gulp cleanAll     | Remove files                | Remove Files      |
+|  npx gulp dev          | Build dev files for debug   |                   |
+|  npx gulp dist         | Temp use, then remove files | Bundle and Minify |
+|  npx gulp              | Monitor for source changes  |                   |
+
 
 ## [v0.0.8](https://github.com/cotarr/irc-hybrid-client-dev-tools/releases/tag/v0.0.8) 2023-01-15
 

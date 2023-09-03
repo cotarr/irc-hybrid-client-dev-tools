@@ -1,5 +1,5 @@
 //
-// Gulpfile for irc-hybrid-client
+// Gulpfile for irc-hybrid-client V2 and later
 //
 const { src, dest, watch, series, parallel } = require('gulp');
 const del = require('del');
