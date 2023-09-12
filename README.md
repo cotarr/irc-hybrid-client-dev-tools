@@ -23,7 +23,8 @@ The gulp library files are listed in the package.json as development decencies.
 Configuration for the minify and bundle process is stored in Gulpfile.js
 
 The package.json files, configuration JSON files, and the /docs folder are not included in the bundle.
-The secure-minify folder is erased during the build process.
+However, the /docs folder can be enabled as a help web page in the configuration using unbundled files.
+The build-dev and build-prod folders are erased during the build process if they don't exist.
 
 ## Breaking Change Sept 2023
 
@@ -31,7 +32,8 @@ The Gulpfile.js in this repository was re-written for irc-hybrid-client
 Version v2 (~Sept 2023). The new Gulpfile.js is designated as irc-hybrid-client-dev-tools Version 2.0.0.
 
 For users who want to bundle irc-hybrid-client Version v0.2.53 or Version v1.0.0
-should roll this repository back to irc-hybrid-client-dev-tools Version v0.0.8 (commit hash 73a9185)
+should roll this repository back to irc-hybrid-client-dev-tools 
+Version v0.0.8 (2023-01-15, commit hash 73a9185)
 
 ## Security note
 
@@ -44,8 +46,9 @@ due to legacy packages within the dependency tree.
 When you evaluate how this could impact your use of this repository,
 consider that this is a development utility that is run within the
 limited scope of a development environment, with data input limited
-to repository source code files, and consider that
-these tools are not directly exposed to the public internet.
+to repository source code files, and consider that these tools can be 
+used in a way that is not directly exposed to the public internet, 
+such as a virtual machine.
 
 ## Installation
 
@@ -55,7 +58,7 @@ After installation the two repository folders should be side by side.
 It will look like this with the `ls` command.
 
 ```
-ls
+ls -l
 drwxr-xr-x 12 user user 4096 May 22 05:33 irc-hybrid-client
 drwxr-xr-x  4 user user 4096 May 22 05:01 irc-hybrid-client-dev-tools
 ```
@@ -98,5 +101,5 @@ The deployment itself is left to you.
 | source-files/html/*.html                      | build-dev/webclient.html           | build-prod/webclient.html  |
 | source-files/css/*.css (shared css)           | build-dev/css/styles.css           | build-prod/css/styles.css  |
 | source-files/js/*.js (loads page)             | build-dev/js/(*multiple files*).js | build-prod/js/webclient.js |
-| source-files/web-components/*.html,*.css,*.js |  
+| source-files/web-components/*.html,*.css,*.js |                                    |                            |
 

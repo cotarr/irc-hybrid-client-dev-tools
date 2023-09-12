@@ -15,7 +15,8 @@ Replacement Gulpfile.js to bundle irc-hybrid-client v2.0.0 and higher
 This is a breaking change. 
 
 To bundle the older version irc-hybrid-client Version v0.2.53 or Version v1.0.0
-roll this repository back to irc-hybrid-client-dev-tools Version v0.0.8 (commit hash 73a9185)
+roll this repository back to irc-hybrid-client-dev-tools 
+Version v0.0.8 (2023-01-15, commit hash 73a9185)
 
 ### Changes
 
