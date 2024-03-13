@@ -6,6 +6,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+
+## [v2.0.1](https://github.com/cotarr/irc-hybrid-client-dev-tools/releases/tag/v2.0.1) 2024-03-13
+
+Update npm dependency es5-ext to v0.10.64 to address npm audit warning.
+
 ## [v2.0.0](https://github.com/cotarr/irc-hybrid-client-dev-tools/releases/tag/v2.0.0) 2023-09-12
 
 Replacement Gulpfile.js to bundle irc-hybrid-client v2.0.0 and higher
