@@ -1,6 +1,6 @@
 {
   "name": "irc-hybrid-client-dev-tools",
-  "version": "2.0.1",
+  "version": "3.0.0-dev",
   "description": "Development tools to minify irc-hybrid-client files",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -16,15 +16,15 @@
   },
   "homepage": "https://github.com/cotarr/irc-hybrid-client-dev-tools#readme",
   "devDependencies": {
-    "del": "^6.1.1",
-    "gulp": "^4.0.2",
+    "del": "^7.1.0",
+    "gulp": "^5.0.0",
     "gulp-clean-css": "^4.3.0",
-    "gulp-cli": "^2.3.0",
     "gulp-concat": "^2.6.1",
-    "gulp-htmlmin": "^5.0.1",
+    "gulp-html-minifier-terser": "^7.1.0",
     "gulp-insert": "^0.5.0",
-    "gulp-minify": "^3.1.0",
+    "gulp-order3": "^1.0.1",
     "gulp-rename": "^2.0.0",
-    "gulp-replace": "^1.1.4"
+    "gulp-replace": "^1.1.4",
+    "gulp-uglify-es": "^3.0.0"
   }
 }

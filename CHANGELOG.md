@@ -6,6 +6,44 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## Next v3.0.0-dev (Draft)
+
+Recently the gulp project has released Gulp v5 to replace Gulp v4. 
+My thanks to the gulp team for the new release.
+The previous Gulp v4 release had been idle for many year leading to 
+deprecated dependencies that were no longer maintained.
+In addition, the gulp-htmlmin module was recently flagged 
+with a GitHub dependabot security alert.
+
+To address this, the full set of Gulp npm packages have been upgraded to current.
+The Gulpfile.js has been upgraded to address breaking 
+changes introduced by the replacement packages.
+
+### Breaking Change
+
+- Upgrade gulp package from v4 to v5.0.0 (Breaking Change)
+- Converted Gulpfile.js from CommonJs Require() to ESM import() modules, with new filename Gulpfile.mjs
+- Upgrade del from v6 to 7.1.0 (Breaking change, CommonJS to ESM version)
+- Replace gulp-htmlmin with gulp-html-minifier-terser to address npm audit warning in unmaintained gulp-htmlmin.
+- Replace gulp-minify with gulp-uglify-es to address unmaintained dependencies in gulp-minify.
+- Added gulp-order3 because gulp v5 does not preserve order of src() to pipe like gulp v4 (Breaking change).
+- Removed package gulp-cli, not needed, dependency of gulp5
+- Upgraded options passed to several functions to align with the new versions.
+
+Deleted "node-modules" folder. Deleted "package-lock.json". Performed clean `npm install`. 
+This produced a clean install with no deprecated package warning or security audit warning.
+
+Results:
+
+When running the gulp runner, the contents bundled html and css files were not changed.
+
+When running the gulp runner, the contents of bundled javascript files 
+show minor changes due to replacement of the minify library.
+The changes appear to be limited to minor optimization variations, 
+such as optimization of extraneous parenthesis () and braces {}.
+The goal of the configuration is to remove white space and comments.
+Deeper minify capabilities involving mangling and compressing are disabled 
+in the options, so no major variations were expected.
 
 ## [v2.0.1](https://github.com/cotarr/irc-hybrid-client-dev-tools/releases/tag/v2.0.1) 2024-03-13
 

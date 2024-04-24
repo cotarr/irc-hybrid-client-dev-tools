@@ -1,18 +1,20 @@
 //
 // Gulpfile for irc-hybrid-client V2 and later
 //
-const { src, dest, watch, series, parallel } = require('gulp');
-const del = require('del');
-const concat = require('gulp-concat');
-const insert = require('gulp-insert');
-const minify = require('gulp-minify');
-const htmlmin = require('gulp-htmlmin');
-const cleancss = require('gulp-clean-css');
-const replace = require('gulp-replace');
-const rename = require('gulp-rename');
-const fs = require('fs');
+'use strict';
 
-// For configuration see: https://www.npmjs.com/package/terser#compress-options
+import { src, dest, watch, series } from 'gulp';
+import cleancss from 'gulp-clean-css';
+import concat from 'gulp-concat';
+import { deleteAsync } from 'del';
+import htmlmin from 'gulp-html-minifier-terser';
+import insert from 'gulp-insert';
+import order from 'gulp-order3';
+import rename from 'gulp-rename';
+import replace from 'gulp-replace';
+import uglify from 'gulp-uglify-es';
+
+import fs from 'fs';
 
 // To disable length limit, set maxLineLength = false
 const maxLineLength = 200;
@@ -32,16 +34,19 @@ const htmlMinifyOptions = {
   maxLineLength: maxLineLength
 };
 
-const jsMinifyOptions = {
-  ext: '.js',
-  noSource: true,
+const jsUglifyOptions = {
   mangle: false,
   compress: {
-    defaults: false 
+    defaults: false
   },
   output: {
+    // comments: 'all',
     max_line_len: maxLineLength,
-    quote_style: jsQuoteStyle
+    quote_style: jsQuoteStyle,
+    keep_quoted_props: true,
+    keep_numbers: true,
+    semicolons: true,
+    braces: true
   }
 };
 
@@ -55,18 +60,18 @@ const minifyCssOptions = {
 // Clean build folder
 //
 const cleanDev = function () {
-  return del(
+  return deleteAsync(
     [
       '../irc-hybrid-client/build-dev'
     ],
     {
-      dryRun: false,
-      force: true
+       dryRun: false,
+       force: true
     });
 };
 
 const cleanProd = function () {
-  return del(
+  return deleteAsync(
     [
       '../irc-hybrid-client/build-prod'
     ],
@@ -159,7 +164,7 @@ const htmlWebclientDev = function () {
     .pipe(replace('<!-- COMPILE-DATE -->', compileDate))
     .pipe(replace('<script src="./js/webclient.js" defer></script>', jsFilenames))
     .pipe(dest('../irc-hybrid-client/build-dev'));
-};
+}; // tmlWebclientDev()
 
 const htmlWebclientProd = function () {
   const templates = '' +
@@ -187,7 +192,7 @@ const htmlWebclientProd = function () {
   fs.readFileSync('../irc-hybrid-client/source-files/web-components/show-events.html', 'utf8') +
   fs.readFileSync('../irc-hybrid-client/source-files/web-components/show-ircstate.html', 'utf8') +
   fs.readFileSync('../irc-hybrid-client/source-files/web-components/show-webstate.html', 'utf8');
-const now = new Date();
+  const now = new Date();
   const compileDate = 'Build timestamp: ' + now.toGMTString();
   return src('../irc-hybrid-client/source-files/html/_index.html')
     .pipe(rename('webclient.html'))
@@ -195,7 +200,8 @@ const now = new Date();
     .pipe(replace('<!-- COMPILE-DATE -->', compileDate))
     .pipe(htmlmin(htmlMinifyOptions))
     .pipe(dest('../irc-hybrid-client/build-prod'));
-};
+}; // htmlWebclientProd()
+
 const jsWebclientDev = function () {
   return src(
     [
@@ -234,7 +240,7 @@ const jsWebclientDev = function () {
       '../irc-hybrid-client/source-files/js/_afterLoad.js'
     ])
     .pipe(dest('../irc-hybrid-client/build-dev/js'));
-};
+}; // jsWebclientDev()
 
 const jsWebclientProd = function () {
   const license = '/*\n' + fs.readFileSync('LICENSE', 'utf8') + '*/\n\n';
@@ -275,13 +281,48 @@ const jsWebclientProd = function () {
       '../irc-hybrid-client/source-files/web-components/show-webstate.js',
       '../irc-hybrid-client/source-files/js/_afterLoad.js'
     ])
+    .pipe(order([
+      '_beforeLoad.js',
+      'glob-vars.js',
+      'display-utils.js',
+      'beep-sounds.js',
+      'local-command-parser.js',
+      'remote-command-parser.js',
+      'ctcp-parser.js',
+      'user-info.js',
+      'websocket-panel.js',
+      'nav-menu.js',
+      'activity-spinner.js',
+      'hamburger-icon.js',
+      'header-bar.js',
+      'error-panel.js',
+      'help-panel.js',
+      'license-panel.js',
+      'logout-panel.js',
+      'server-form-panel.js',
+      'server-list-panel.js',
+      'irc-controls-panel.js',
+      'irc-server-panel.js',
+      'wallops-panel.js',
+      'notice-panel.js',
+      'manage-pm-panels.js',
+      'pm-panel.js',
+      'manage-channels-panel.js',
+      'channel-panel.js',
+      'debug-panel.js',
+      'show-raw.js',
+      'show-events.js',
+      'show-ircstate.js',
+      'show-webstate.js',
+      '_afterLoad.js'      
+    ]))
     .pipe(replace('\'use strict\';\n', ''))
     .pipe(concat('webclient.js'))
-    .pipe(minify(jsMinifyOptions))
+    .pipe(uglify.default(jsUglifyOptions))
     .pipe(insert.prepend(jsStrict))
     .pipe(insert.prepend(license))
     .pipe(dest('../irc-hybrid-client/build-prod/js'));
-};
+}; // jsWebclientProd()
 
 const cssWebclientDev = function () {
   return src(
@@ -312,24 +353,24 @@ const cssWebclientDev = function () {
     ])
     .pipe(concat('styles.css'))
     .pipe(dest('../irc-hybrid-client/build-dev/css'));
-};
+}; // cssWebclientDev
 
 const cssWebclientProd = function () {
   return src('../irc-hybrid-client/build-dev/css/styles.css')
   .pipe(cleancss(minifyCssOptions))
   .pipe(dest('../irc-hybrid-client/build-prod/css'));
-}
+} // cssWebclientProd()
 
 
 // ------------------------------
 // copy sound files
 // ------------------------------
 const soundsCopyDev = function() {
-  return src('../irc-hybrid-client/source-files/sounds/short-beep*')
+  return src('../irc-hybrid-client/source-files/sounds/short-beep*.mp3', { encoding: false })
     .pipe(dest('../irc-hybrid-client/build-dev/sounds'));
 };
 const soundsCopyProd = function() {
-  return src('../irc-hybrid-client/source-files/sounds/short-beep*')
+  return src('../irc-hybrid-client/source-files/sounds/short-beep*.mp3', { encoding: false })
     .pipe(dest('../irc-hybrid-client/build-prod/sounds'));
 };
 
@@ -373,30 +414,30 @@ const watchHtml = function () {
     buildDev);
 };
 
-exports.cleanDev = series(
+const cleanDevTask = series(
   cleanDev,
   placeholderDev,
 );
-exports.cleanDist = series(
+const cleanDistTask = series(
   cleanProd,
   placeholderProd
 );
-exports.cleanAll = series(
+const cleanAllTask = series(
   cleanDev,
   placeholderDev,
   cleanProd,
   placeholderProd
 );
-exports.default = series(
+const defaultTask = series(
   cleanDev,
   buildDev,
   watchHtml
 );
-exports.dev = series(
+const devTask = series(
   cleanDev,
   buildDev
 );
-exports.dist = series(
+const distTask = series(
   cleanDev,
   cleanProd,
   buildDev,
@@ -404,3 +445,10 @@ exports.dist = series(
   cleanDev,
   placeholderDev
 );
+
+export { cleanDevTask as cleanDev };
+export { cleanDistTask as cleanDist };
+export { cleanAllTask as cleanAll };
+export { devTask as dev };
+export { distTask as dist };
+export default defaultTask;

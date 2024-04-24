@@ -20,7 +20,7 @@ The minification process uses a development library called
 [gulp](https://gulpjs.com/).
 The gulp library files are listed in the package.json as development decencies.
 
-Configuration for the minify and bundle process is stored in Gulpfile.js
+Configuration for the minify and bundle process is stored in Gulpfile.mjs
 
 The package.json files, configuration JSON files, and the /docs folder are not included in the bundle.
 However, the /docs folder can be enabled as a help web page in the configuration using unbundled files.
