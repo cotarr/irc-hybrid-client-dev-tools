@@ -6,6 +6,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+
+## Next
+
+- Upgrade npm dependency braces to v3.0.3 to address github dependabot security notification.
+- Update gulp-order3 to v1.0.3
+
 ## [v3.0.0](https://github.com/cotarr/irc-hybrid-client-dev-tools/releases/tag/v3.0.0) 2024-04-24
 
 Recently the gulp project has released Gulp v5 to replace Gulp v4. 
