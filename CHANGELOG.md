@@ -7,7 +7,7 @@ and this project adheres to
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 
-## Next
+## [v3.0.1](https://github.com/cotarr/irc-hybrid-client-dev-tools/releases/tag/v3.0.1) 2024-06-30
 
 - Upgrade npm dependency braces to v3.0.3 to address github dependabot security notification.
 - Update gulp-order3 to v1.0.3
