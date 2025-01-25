@@ -6,6 +6,22 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## Next
+
+Added: New collection of API tests used to test the irc-hybrid-client web server.
+
+Status: WORK IN PROGRESS, Git branch: debug-tests
+
+Motivation: The ThunderClient tests included in the irc-hybrid-client
+repository are not longer available because free features of ThunderClient
+VSCode plugin are now pay-walled.
+
+Using the Node.js assertion library, some alternate tests of the web server
+are being developed. The intention is that some tests may be run from
+the irc-hybrid-client repository by installing a symbolic link to
+the /debug/ folder in this repository.
+
+As the tests are developed, documentation will be added to the /debug/README.md file.
 
 ## [v3.0.2](https://github.com/cotarr/irc-hybrid-client-dev-tools/releases/tag/v3.0.2) 2024-09-26
 
