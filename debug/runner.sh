@@ -261,14 +261,26 @@ check_for_errors 4-user-auth-login
 sleep 5
 
 # ---------------------
+# Test: websocket-auth.js
+# ---------------------
+echo
+echo "Executing: node debug/websocket-auth.js"
+sleep 5
+node ./debug/websocket-auth.js
+check_for_errors 5-websocket-auth
+sleep 5
+
+
+# ---------------------
 # Test: basic-functions.js
 # ---------------------
 echo
 echo "Executing: node debug/basic-functions.js"
 sleep 5
 node ./debug/basic-functions.js
-check_for_errors 5-basic-functions
+check_for_errors 6-basic-functions
 sleep 5
+# The basic function will shutdown server with /terminate route
 
 # -------------------------------------------------
 # Restart node server with alternate configuration
@@ -289,7 +301,7 @@ echo
 echo "Executing: node disabled-routes.js"
 sleep 5
 node ./debug/disabled-routes.js
-check_for_errors 6-disabled-routes
+check_for_errors 7-disabled-routes
 sleep 5
 
 # -------------------------------------------------
@@ -310,7 +322,7 @@ echo
 echo "Executing: node debug/user-auth-count.js"
 sleep 5
 node ./debug/user-auth-count.js
-check_for_errors 7-user-auth-count
+check_for_errors 8-user-auth-count
 sleep 5
 
 # --------

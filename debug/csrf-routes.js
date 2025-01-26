@@ -198,7 +198,7 @@ setup(chainObj)
       .split('content="')[1]
       .split('"')[0];
     chain.savedParsedCsrfToken = chain.parsedCsrfToken;
-    console.log('parsedCsrfToken', chain.parsedCsrfToken);
+    // console.log('parsedCsrfToken', chain.parsedCsrfToken);
     return Promise.resolve(chain);
   })
 

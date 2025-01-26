@@ -78,6 +78,7 @@ node debug/csrf-routes.js
 node debug/disabled-routes.js
 node debug/user-auth-login.js
 node debug/user-auth-count.js
+node debug/websocket-auth.js
 
 ./debug/runner.sh
 ```
@@ -124,6 +125,11 @@ With NODE_ENV=production maximum allowed tries is 5
 Run with environment variables: `NODE_ENV=production`
 Restart node server before test to reset counter
 
+### websocket-auth.js
+
+This is a testing utility used specifically to test irc-hybrid-client application
+use of a RFC-4655 websocket connection including authentication.
+
 ## Test runner.sh bash script
 
 The folder includes a bash script that will run all the test modules in sequence.
@@ -153,15 +159,16 @@ a passing result for each test. Setting these environment
 variables from the command line will show additional
 information during test execution.
 
-| Environment  | Description                                |
-| ------------ | ------------------------------------------ |
-| SHOWRES=1    | Print raw response body for each request   |
-| SHOWRES=2    | Print response headers for each request    |
-| SHOWRES=3    | Print both body and headers each request   |
-| SHOWTOKEN=1  | Print JWT payload                          |
-| SHOWTOKEN=2  | Print JWT introspect meta-data             |
-| SHOWTOKEN=3  | Print JWT payload and introspect meta-data |
-| SHOWCOOKIE=1 | Print request, response cookie             |
+| Environment     | Description                                |
+| --------------- | ------------------------------------------ |
+| SHOWRES=1       | Print raw response body for each request   |
+| SHOWRES=2       | Print response headers for each request    |
+| SHOWRES=3       | Print both body and headers each request   |
+| SHOWTOKEN=1     | Print JWT payload                          |
+| SHOWTOKEN=2     | Print JWT introspect meta-data             |
+| SHOWTOKEN=3     | Print JWT payload and introspect meta-data |
+| SHOWCOOKIE=1    | Print request, response cookie             |
+| SHOWWEBSOCKET=1 | Print websocket connect state changes      |
 
 ### For debugging writing of new tests
 

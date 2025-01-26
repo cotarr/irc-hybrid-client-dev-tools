@@ -71,6 +71,6 @@ testEnv.ircChannel = '#test';
 if (process.env.TESTENV_IRC_CHANNEL) {
   testEnv.ircChannel = process.env.TESTENV_IRC_CHANNEL;
 }
-console.log('testEnv', JSON.stringify(testEnv, null, 2));
+// console.log('testEnv', JSON.stringify(testEnv, null, 2));
 
 module.exports = { config, servers, testEnv };
