@@ -270,6 +270,15 @@ node ./debug/websocket-auth.js
 check_for_errors 5-websocket-auth
 sleep 5
 
+# ---------------------
+# Test: response-headers.js
+# ---------------------
+echo
+echo "Executing: node debug/response-headers.js"
+sleep 5
+node ./debug/response-headers.js
+check_for_errors 6-response-headers
+sleep 5
 
 # ---------------------
 # Test: basic-functions.js
@@ -278,7 +287,7 @@ echo
 echo "Executing: node debug/basic-functions.js"
 sleep 5
 node ./debug/basic-functions.js
-check_for_errors 6-basic-functions
+check_for_errors 7-basic-functions
 sleep 5
 # The basic function will shutdown server with /terminate route
 
@@ -302,7 +311,7 @@ echo
 echo "Executing: node debug/cookie-tests.js"
 sleep 5
 node ./debug/cookie-tests.js
-check_for_errors 7-cookie-tests
+check_for_errors 8-cookie-tests
 sleep 5
 
 # -------------------------------------------------
@@ -325,7 +334,7 @@ echo
 echo "Executing: node debug/cookie-tests.js"
 sleep 5
 node ./debug/cookie-tests.js
-check_for_errors 8-cookie-tests
+check_for_errors 9-cookie-tests
 sleep 5
 
 # -------------------------------------------------
@@ -348,7 +357,7 @@ echo
 echo "Executing: node disabled-routes.js"
 sleep 5
 node ./debug/disabled-routes.js
-check_for_errors 9-disabled-routes
+check_for_errors 10-disabled-routes
 sleep 5
 
 # -------------------------------------------------
@@ -370,7 +379,7 @@ echo
 echo "Executing: node debug/user-auth-count.js"
 sleep 5
 node ./debug/user-auth-count.js
-check_for_errors 10-user-auth-count
+check_for_errors 11-user-auth-count
 sleep 5
 
 # --------

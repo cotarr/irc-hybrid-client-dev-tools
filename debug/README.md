@@ -78,6 +78,7 @@ node debug/protected-routes.js
 node debug/csrf-routes.js
 node debug/user-auth-login.js
 node debug/websocket-auth.js
+node debug/response-headers.js
 node debug/basic-functions.js
 node debug/cookie-tests.js
 node debug/disabled-routes.js
@@ -118,6 +119,10 @@ the HTML form data for user password entry
 
 This is a testing utility used specifically to test irc-hybrid-client application
 use of a RFC-4655 websocket connection including authentication.
+
+### response.headers.js
+
+Check HTTP security headers provided by Helmet middleware
 
 ### basic-functions.js
 
