@@ -55,6 +55,10 @@ testEnv.ircServerIndex = 0;
 if (process.env.TESTENV_IRC_SERVERINDEX) {
   testEnv.ircServerIndex = process.env.TESTENV_IRC_SERVERINDEX;
 }
+testEnv.ircRegisterDelay = 5;
+if (process.env.TESTENV_IRC_REGISTERDELAY) {
+  testEnv.ircRegisterDelay = process.env.TESTENV_IRC_REGISTERDELAY;
+}
 testEnv.ircNickname = 'debug-nick';
 if (process.env.TESTENV_IRC_NICKNAME) {
   testEnv.ircNickname = process.env.TESTENV_IRC_NICKNAME;

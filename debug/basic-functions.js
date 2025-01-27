@@ -1,5 +1,7 @@
 // basic-functions.js
 //
+// This script will execute an IRC network connect.
+//
 // Warning: These test will connect to an actual IRC server.
 // To avoid getting k-lined on a major IRC network, these
 // tests should be run on a dedicated development IRC server.
@@ -316,7 +318,7 @@ setup(chainObj)
     chain.requestAcceptType = 'application/json'
     return Promise.resolve(chain);
   })
-  .then((chain) => sleep(chain, 5, 'Delay - Waiting for host name lookup, ident lookup'))
+  .then((chain) => sleep(chain, testEnv.ircRegisterDelay, 'Delay - Waiting for host name lookup, ident lookup'))
   .then((chain) => managedFetch(chain))
   .then((chain) => {
     logRequest(chain);
@@ -417,7 +419,7 @@ setup(chainObj)
   .then((chain) => managedFetch(chain))
   .then((chain) => {
     logRequest(chain);
-    console.log(JSON.stringify(chain.responseRawData, null, 2));
+    // console.log(JSON.stringify(chain.responseRawData, null, 2));
     console.log('\tExpect: status === 200');
     assert.strictEqual(chain.responseStatus, 200);
     console.log('\tExpect: message "Terminate received"');

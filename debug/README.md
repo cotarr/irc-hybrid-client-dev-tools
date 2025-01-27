@@ -60,6 +60,7 @@ TESTENV_IRCWEBURL=http://localhost:3003
 TESTENV_LOCAL_USERNAME=user1
 TESTENV_LOCAL_PASSWORD=mysecret
 TESTENV_IRC_SERVERINDEX=0
+TESTENV_IRC_REGISTERDELAY=5
 TESTENV_IRC_NICKNAME=debug-nick
 TESTENV_IRC_REALNAME=test
 TESTENV_IRC_CONNECTMODE="+i"
@@ -75,10 +76,12 @@ using the symlink to the debug folder.
 node debug/public-routes.js
 node debug/protected-routes.js
 node debug/csrf-routes.js
-node debug/disabled-routes.js
 node debug/user-auth-login.js
-node debug/user-auth-count.js
 node debug/websocket-auth.js
+node debug/basic-functions.js
+node debug/cookie-tests.js
+node debug/disabled-routes.js
+node debug/user-auth-count.js
 
 ./debug/runner.sh
 ```
@@ -102,11 +105,6 @@ SITE_SECURITY_EXPIRES="Fri, 1 Apr 2022 08:00:00 -0600"
 This script will confirm that protected routes are not available
 without a valid login cookie
 
-### disabled-routes.js
-
-The /docs/ folder and the server list editor are capable of
-being disabled in the configuration.
-
 ### csrf-routes.js
 
 This script will check routes that require valid CSRF tokens
@@ -116,6 +114,43 @@ This script will check routes that require valid CSRF tokens
 This script will emulate the browser submission of
 the HTML form data for user password entry
 
+### websocket-auth.js
+
+This is a testing utility used specifically to test irc-hybrid-client application
+use of a RFC-4655 websocket connection including authentication.
+
+### basic-functions.js
+
+This script will execute an IRC network connect.
+
+Warning: These test will connect to an actual IRC server.
+To avoid getting k-lined on a major IRC network, these
+tests should be run on a dedicated development IRC server.
+
+### cookie-tests.js
+
+The irc-hybrid-client web server uses session cookies to
+authorize access to the website. The sessions and cookies
+are created by the express-session middleware.
+The script includes two options for cookies with fixed
+expiration cookies and rolling cookies, where rolling
+cookies will extend the cookie expiration with each request.
+
+```bash
+  # Recommended test configuration
+  SESSION_EXPIRE_SEC=8
+
+  # Option 1 of 2
+  SESSION_SET_ROLLING_COOKIE=false
+  # Option 1 of 2
+  SESSION_SET_ROLLING_COOKIE=true
+```
+
+### disabled-routes.js
+
+The /docs/ folder and the server list editor are capable of
+being disabled in the configuration.
+
 ### user-auth-count.js
 
 This script will emulate the browser submission multiple bad
@@ -124,11 +159,6 @@ With NODE_ENV=production maximum allowed tries is 5
 
 Run with environment variables: `NODE_ENV=production`
 Restart node server before test to reset counter
-
-### websocket-auth.js
-
-This is a testing utility used specifically to test irc-hybrid-client application
-use of a RFC-4655 websocket connection including authentication.
 
 ## Test runner.sh bash script
 
@@ -164,9 +194,6 @@ information during test execution.
 | SHOWRES=1       | Print raw response body for each request   |
 | SHOWRES=2       | Print response headers for each request    |
 | SHOWRES=3       | Print both body and headers each request   |
-| SHOWTOKEN=1     | Print JWT payload                          |
-| SHOWTOKEN=2     | Print JWT introspect meta-data             |
-| SHOWTOKEN=3     | Print JWT payload and introspect meta-data |
 | SHOWCOOKIE=1    | Print request, response cookie             |
 | SHOWWEBSOCKET=1 | Print websocket connect state changes      |
 

@@ -288,6 +288,52 @@ sleep 5
 echo
 stop_server
 set_default_env
+export SESSION_SET_ROLLING_COOKIE=false
+export SESSION_EXPIRE_SEC=8
+echo "Config: SESSION_SET_ROLLING_COOKIE=false"
+echo "Config: SESSION_EXPIRE_SEC=8"
+restart_server
+sleep 5
+
+# -------------------------------------------
+# Test: cookie-tests.js (Not rolling cookie)
+# -------------------------------------------
+echo
+echo "Executing: node debug/cookie-tests.js"
+sleep 5
+node ./debug/cookie-tests.js
+check_for_errors 7-cookie-tests
+sleep 5
+
+# -------------------------------------------------
+# Restart node server with alternate configuration
+# -------------------------------------------------
+echo
+stop_server
+set_default_env
+export SESSION_SET_ROLLING_COOKIE=true
+export SESSION_EXPIRE_SEC=8
+echo "Config: SESSION_SET_ROLLING_COOKIE=true"
+echo "Config: SESSION_EXPIRE_SEC=8"
+restart_server
+sleep 5
+
+# -------------------------------------------
+# Test: cookie-tests.js (Rolling cookie)
+# -------------------------------------------
+echo
+echo "Executing: node debug/cookie-tests.js"
+sleep 5
+node ./debug/cookie-tests.js
+check_for_errors 8-cookie-tests
+sleep 5
+
+# -------------------------------------------------
+# Restart node server with alternate configuration
+# -------------------------------------------------
+echo
+stop_server
+set_default_env
 export IRC_DISABLE_LIST_EDITOR=true
 export IRC_SERVE_HTML_HELP_DOCS=false
 echo "Config: IRC_DISABLE_LIST_EDITOR=true"
@@ -302,7 +348,7 @@ echo
 echo "Executing: node disabled-routes.js"
 sleep 5
 node ./debug/disabled-routes.js
-check_for_errors 7-disabled-routes
+check_for_errors 9-disabled-routes
 sleep 5
 
 # -------------------------------------------------
@@ -324,7 +370,7 @@ echo
 echo "Executing: node debug/user-auth-count.js"
 sleep 5
 node ./debug/user-auth-count.js
-check_for_errors 8-user-auth-count
+check_for_errors 10-user-auth-count
 sleep 5
 
 # --------
