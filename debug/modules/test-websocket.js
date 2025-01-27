@@ -24,6 +24,7 @@
 //   - The HTTP status 101 response is parsed for proper handshake values.
 //   - The http/https connection is upgraded to a ws/wss websocket connection.
 //   - Test: Perform client websocket PING (opCode 9) and wait for websocket PONG (opCode 10) response
+//   - Test: Send unexpected (invalid) message over stream to webserver, expect server to log the error
 //   - Test: Listen and confirm HEARTBEAT messages at 10 second intervals from irc-hybrid-client.
 //   - Resolve Promise for success and anticipated test errors, else throw error
 //
@@ -66,8 +67,6 @@ exports.testIrcHybridClientWebsocket = (chain) => {
     let timerLoopCount = 0;
     const loopTimeoutSeconds = 30;
     const timerLoopTimeoutLimit = loopTimeoutSeconds * 1000 / timerLoopIntervalMs;
-    const wsWriteDelayLimit = 100;
-    let wsWriteDelayCount = 0;
 
     let httpMessageIndex = 0;
     let websocketMessageIndex = 0;
@@ -319,6 +318,139 @@ exports.testIrcHybridClientWebsocket = (chain) => {
     }
 
     /**
+     * Construct the RFC-6455 websocket frame header for outgoing text message
+     * @param {Buffer|String} inMessage - Packet of stream data used to determine length in 8 bit bytes
+     * @param {Boolean} frag - Optional flag to indicate iMessage is part of a fragmented packet
+     * @returns {Buffer} Returns Buffer containing 2 to 14 bytes websocket header + XOR masked data
+     */
+    function _encodeWebsocketFrame (inMessage, frag) {
+      // Setup for encoding of packet fragments
+      // Optional argument 'frag' boolean, true if fragment
+      //
+      // Case of normal non-fragment packets
+      //
+      // frag = undefined/false fragmentState === 0 (Normal packet)    FIN=1 opcode=1
+      //
+      // Case of encoding fragmented packet.
+      //
+      // frag = true            fragmentState === 1 Start Packet       FIN=0 opcode=1
+      // frag = true            fragmentState === 2 Middle (optional)  FIN=0 opcode=0
+      // frag = undefined/false fragmentState === 3 Final Packet       FIN=1 opcode=0
+      // ----------------------------------------------
+
+      // Set global variable to remember fragment state across socket data events
+      if (frag) {
+        if (fragmentState === 0) {
+          // First fragmented packet
+          fragmentState = 1;
+        } else if (fragmentState === 1) {
+          // Middle packet
+          fragmentState = 2;
+        }
+      } else {
+        if (fragmentState > 0) {
+          // Final fragment packet
+          fragmentState = 3;
+        }
+      }
+      // Websocket header FIN bit to identify fragments
+      let notContinuationFrameBit = 1;
+      if ((fragmentState === 1) || (fragmentState === 2)) {
+        notContinuationFrameBit = 0;
+      }
+
+      // For fragmented packets, websocket header opcode forced to zero for second through last packets
+      let opcode = 0x01; // text frame (0x02 = binary frame)
+      if ((fragmentState === 2) || (fragmentState === 3)) {
+        opcode = 0x00; // Continuation frame
+      }
+
+      // Last, final, fragmented packet, clear flags. Expect next packet to be normal
+      if (fragmentState === 3) {
+        fragmentState = 0;
+      }
+
+      //
+      // This Section will build the websocket header as described in
+      // RFC-6455 Section 5.2
+      //
+      const maskedFrameBit = 1;
+      const mask32 = Uint8Array.from([_random8bit(), _random8bit(), _random8bit(), _random8bit()]);
+
+      // In order to perform 8 bit XOR operations with multi-byte wide international characters
+      // convert the multi-byte text characters to 8 bit elements of JavaScript type Uint8Array
+      let inMessageUint8Array = null;
+      if (Buffer.isBuffer(inMessage)) {
+        inMessageUint8Array = Uint8Array.from(inMessage);
+      } else if (typeof inMessage === 'string') {
+        inMessageUint8Array = Uint8Array.from(Buffer.from(inMessage));
+      } else {
+        throw new Error('_encodeWebsocketFrame expect type Buffer or String');
+      }
+      // console.log('inMessageUint8Array', inMessageUint8Array);
+
+      // Mask the data bytes by applying binary bitwise XOR from websocket mask key
+      // Results are temporary pushed to a Javascript array with elements type Number
+      // then when the loop is complete, convert back to type Uint8Array
+      let inMessageUint8MaskedArray = null;
+      if (maskedFrameBit === 0) {
+        inMessageUint8MaskedArray = inMessageUint8Array;
+      } else {
+        let maskIndex = 0;
+        if (inMessageUint8Array.length > 0) {
+          inMessageUint8MaskedArray = [];
+          for (let i = 0; i < inMessageUint8Array.length; i++) {
+            // data XOR mask
+            inMessageUint8MaskedArray.push((inMessageUint8Array[i] ^ mask32[maskIndex]) & 0xff);
+            // console.log(i, maskIndex, mask32[maskIndex], inMessageUint8Array[i], inMessageUint8MaskedArray[i]);
+            maskIndex++;
+            if (maskIndex > 3) maskIndex = 0;
+          }
+        } else {
+          inMessageUint8MaskedArray = inMessageUint8Array;
+        }
+      }
+      const maskedUint8Array = Uint8Array.from(inMessageUint8MaskedArray);
+      // console.log('maskedUint8Array', maskedUint8Array)
+
+      // Build the websocket frame header in sequence, byte by byte
+      // The header is constructed using Javascript array with element of type Number,
+      // then when complete, convert the array to type Uint8Array
+      const headerArray = [];
+      headerArray.push(((notContinuationFrameBit << 7) & 0x80) | (opcode & 0x0F));
+      if (maskedUint8Array.length <= 125) {
+        headerArray.push(((maskedFrameBit << 7) & 0x80) | (maskedUint8Array.length & 0x7F));
+      } else if (maskedUint8Array.length <= 65535) {
+        headerArray.push(((maskedFrameBit << 7) & 0x80) | (126 & 0x7F));
+        headerArray.push((maskedUint8Array.length >> 8) & 0xff);
+        headerArray.push((maskedUint8Array.length) & 0xff);
+      } else if (maskedUint8Array.length > 65535) {
+        headerArray.push(((maskedFrameBit << 7) & 0x80) | (127 & 0x7F));
+        headerArray.push((maskedUint8Array.length >> 56) & 0xff);
+        headerArray.push((maskedUint8Array.length >> 48) & 0xff);
+        headerArray.push((maskedUint8Array.length >> 40) & 0xff);
+        headerArray.push((maskedUint8Array.length >> 32) & 0xff);
+        headerArray.push((maskedUint8Array.length >> 24) & 0xff);
+        headerArray.push((maskedUint8Array.length >> 16) & 0xff);
+        headerArray.push((maskedUint8Array.length >> 8) & 0xff);
+        headerArray.push((maskedUint8Array.length) & 0xff);
+      }
+      if (maskedFrameBit) {
+        headerArray.push(mask32[0]);
+        headerArray.push(mask32[1]);
+        headerArray.push(mask32[2]);
+        headerArray.push(mask32[3]);
+      }
+      const uint8Header = Uint8Array.from(headerArray);
+      // console.log('uint8Header', uint8Header);
+
+      // To stay consistent, data received from TCP socket and sent to TCP socket is NodeJs type Buffer
+      const outBuffer = Buffer.concat([uint8Header, maskedUint8Array], (uint8Header.length + maskedUint8Array.length));
+      return outBuffer;
+    } // _encodeWebsocketFrame ()
+
+
+    /**
      * Construct the RFC-6455 websocket frame header for websocket opcode command (no data)
      * @param {Number} command
      * @returns {Buffer} Returns buffer containing 2 to 14 byte header without data
@@ -533,7 +665,7 @@ exports.testIrcHybridClientWebsocket = (chain) => {
       if (show) console.log('Event: socket.close, hadError=' + hadError +
         ' destroyed=' + socket.destroyed);
       socketConnected = false;
-      if (websocketConnectState < 8) { 
+      if (websocketConnectState < 10) { 
         chain.websocketError = true;
         if (chain.websocketErrorMessage.length === 0) {
           chain.websocketErrorMessage = 'Event: socket.close, hadError=' +
@@ -566,8 +698,10 @@ exports.testIrcHybridClientWebsocket = (chain) => {
     // 5 - Websocket connected
     // 6 - Sending websocket protocol PING (opcode 0x09)
     // 7 - Delay Timer
-    // 8 - Send websocket protocol CLOSE command (opcode 0x08)
-    // 9 - Closing websocket, wait to exit program
+    // 8 - Write ad-hoc message to server, expect to log error
+    // 9 - Delay Timer
+    // 10 - Send websocket protocol CLOSE command (opcode 0x08)
+    // 11 - Closing websocket, wait to exit program
     //
     function timerHandler () {
       timerLoopCount++;
@@ -622,18 +756,13 @@ exports.testIrcHybridClientWebsocket = (chain) => {
 
           // 4 - Successful websocket upgrade response
         } else if (websocketConnectState === 4) {
-          wsWriteDelayCount = 0;
           websocketConnectState = 5;
           if (show) console.log('websocketConnectState', websocketConnectState, '(Connected)');
 
         // 5 Delay timer
         } else if (websocketConnectState === 5) {
-          wsWriteDelayCount++;
-          if (wsWriteDelayCount >= wsWriteDelayLimit) {
-            wsWriteDelayCount = 0;
-            websocketConnectState = 6;
-            if (show) console.log('websocketConnectState', websocketConnectState, '(Timer)');
-          }
+          websocketConnectState = 6;
+          if (show) console.log('websocketConnectState', websocketConnectState, '(Timer)');
 
         // 6 - Sending websocket protocol PING (opcode 0x09)
         } else if (websocketConnectState === 6) {
@@ -646,15 +775,25 @@ exports.testIrcHybridClientWebsocket = (chain) => {
 
         // 7 - Delay timer
         } else if (websocketConnectState === 7) {
-          wsWriteDelayCount++;
-          if (wsWriteDelayCount >= wsWriteDelayLimit) {
-            wsWriteDelayCount = 0;
-            websocketConnectState = 8;
-            if (show) console.log('websocketConnectState', websocketConnectState, '(Waiting for websocket data)');
-          }
+          websocketConnectState = 8;
+          if (show) console.log('websocketConnectState', websocketConnectState, '(Waiting for websocket data)');
 
-        // 8 - Send websocket protocol CLOSE (opcode 0x08)
+          // 8 - Sending websocket ad-hoc content. Expect web server to ignore message and log the error
         } else if (websocketConnectState === 8) {
+            const encodedFrame = _encodeWebsocketFrame('Test script: write websocket message to server');
+            socket.write(encodedFrame);
+            if (show) printOutFrame(encodedFrame);
+            websocketConnectState = 9;
+            if (show) console.log('websocketConnectState', websocketConnectState);
+          websocketMessageIndex++;
+
+        // 9 - Delay timer
+        } else if (websocketConnectState === 9) {
+          websocketConnectState = 10;
+          if (show) console.log('websocketConnectState', websocketConnectState, '(Timer: 1 second)');
+
+        // 10 - Send websocket protocol CLOSE (opcode 0x08)
+        } else if (websocketConnectState === 10) {
           if (heartbeatCount >= heartbeatCountLimit) {
             websocketTestDone = true;
             console.log('        Test: All HEARTBEAT messages received, ending test.')
@@ -662,12 +801,12 @@ exports.testIrcHybridClientWebsocket = (chain) => {
             const commandFrame = _encodeCommandFrame(closeOpcode);
             if (show) printOutFrame(commandFrame);
             socket.write(commandFrame);
-            websocketConnectState = 9;
+            websocketConnectState = 11;
             if (show) console.log('websocketConnectState', websocketConnectState);
           }
 
-        // 9 - Set watchdog timer, then Wait for socket to close
-        } else if (websocketConnectState === 9) {
+        // 11 - Set watchdog timer, then Wait for socket to close
+        } else if (websocketConnectState === 11) {
         websocketConnectState = 99;
         if (show) console.log('websocketConnectState', websocketConnectState, '(Timer: 5 seconds)');
         setTimeout(

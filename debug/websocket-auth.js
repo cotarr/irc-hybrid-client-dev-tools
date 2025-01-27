@@ -52,7 +52,7 @@ const sleep = (chain, timeSeconds, logMessage) => {
     delete chain.abortSleepTimer;
     return Promise.resolve(chain);
   } else {
-    console.log('\nWaiting for ' + timeSeconds.toString() + ' seconds' + messageStr);
+    console.log('        Waiting for ' + timeSeconds.toString() + ' seconds' + messageStr);
     return new Promise((resolve, reject) => {
       setTimeout(() => {
         resolve(chain);
@@ -376,10 +376,10 @@ setup(chainObj)
 
 
   // -----------------------------------------------
-  // 111 UPGRADE /irc/wsauth (websocket upgrade, timer exceeded)
+  // 111 UPGRADE /irc/wsauth (websocket upgrade, wait for timer to expire)
   // -----------------------------------------------
   .then((chain) => {
-    chain.testDescription = '111 UPGRADE /irc/wsauth (websocket upgrade, timer exceeded)';
+    chain.testDescription = '111 UPGRADE /irc/wsauth (websocket upgrade, wait for timer to expire)';
     chain.requestMethod = 'UPGRADE';
     chain.requestFetchURL = encodeURI(testEnv.ircWebURL + '/irc/ws');
     chain.requestCsrfHeader = chain.savedParsedCsrfToken;

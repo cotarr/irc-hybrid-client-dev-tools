@@ -61,7 +61,7 @@ function show_default_env
     echo 'Config: SITE_SECURITY_EXPIRES="Thu, 22 Feb 2024 10:51:49 -0600"'
 
     echo "Config: SESSION_SET_ROLLING_COOKIE=true"
-    echo 'Config: SESSION_SECRET="the session secret"'
+    echo 'Config: SESSION_SECRET= (runner value not shown)'
     echo "Config: SESSION_ENABLE_REDIS=false"
 
     echo "Config: OAUTH2_ENABLE_REMOTE_LOGIN=false"
@@ -286,11 +286,12 @@ sleep 5
 # Restart node server with alternate configuration
 # -------------------------------------------------
 echo
-echo "Config: NODE_ENV=production"
 stop_server
 set_default_env
 export IRC_DISABLE_LIST_EDITOR=true
 export IRC_SERVE_HTML_HELP_DOCS=false
+echo "Config: IRC_DISABLE_LIST_EDITOR=true"
+echo "Config: IRC_SERVE_HTML_HELP_DOCS=false"
 restart_server
 sleep 5
 
@@ -308,10 +309,11 @@ sleep 5
 # Restart node server with alternate configuration
 # -------------------------------------------------
 echo
-echo "Config: NODE_ENV=production"
 stop_server
 set_default_env
 export NODE_ENV=production
+echo "Config: NODE_ENV=production"
+
 restart_server
 sleep 5
 
