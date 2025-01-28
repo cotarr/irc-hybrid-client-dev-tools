@@ -36,19 +36,19 @@ if (servers.length < 1) {
 //
 const testEnv = {};
 
-testEnv.ircWebURL = 'http://localhost:' + config.server.port.toString();
-if (process.env.TESTENV_IRCWEBURL) {
-  testEnv.ircWebURL = process.env.TESTENV_IRCWEBURL;
+testEnv.ircWebURL = '';
+if (process.env.TESTENV_WEB_URL) {
+  testEnv.ircWebURL = process.env.TESTENV_WEB_URL;
 }
 
-testEnv.localUsername = 'user1';
-  if (process.env.TESTENV_USERNAME) {
-    testEnv.username = process.env.TESTENV_USERNAME;
-  }
+testEnv.localUsername = '';
+if (process.env.TESTENV_WEB_USERNAME) {
+  testEnv.localUsername = process.env.TESTENV_WEB_USERNAME;
+}
 
-testEnv.localPassword = 'mysecret';
-if (process.env.TESTENV_PASSWORD) {
-  testEnv.password = process.env.TESTENV_PASSWORD;
+testEnv.localPassword = '';
+if (process.env.TESTENV_WEB_PASSWORD) {
+  testEnv.localPassword = process.env.TESTENV_WEB_PASSWORD;
 }
 
 testEnv.ircServerIndex = 0;
@@ -76,5 +76,28 @@ if (process.env.TESTENV_IRC_CHANNEL) {
   testEnv.ircChannel = process.env.TESTENV_IRC_CHANNEL;
 }
 // console.log('testEnv', JSON.stringify(testEnv, null, 2));
+
+if ((testEnv.ircWebURL.length === 0) ||
+  (testEnv.localUsername.length === 0) ||
+  (testEnv.localPassword.length === 0)) {
+  console.log(`
+---------------------------------------
+Testing Configuration Error
+
+The irc-hybrid-client .env file must include credentials
+for the testing instance of the irc-hybrid-client web server
+including the web server URL, web login username and web login password.
+
+Example .env file:
+
+TESTENV_WEB_URL=http://localhost:3003
+TESTENV_WEB_USERNAME=user1
+TESTENV_WEB_PASSWORD=mysecret
+
+---------------------------------------
+`); // close console.log
+
+  process.exit(1);
+}
 
 module.exports = { config, servers, testEnv };
