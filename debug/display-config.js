@@ -43,7 +43,8 @@ console.log('--------------------\n');
 
 const filteredTestEnv = Object.assign({}, testEnv);
 // Passwords and secrets removed from log.
-delete filteredTestEnv.localPassword;
+filteredTestEnv.localPassword = '(redacted)';
+filteredTestEnv.remoteAuthPassword = '(redacted)';
 
 console.log('testEnv ' + JSON.stringify(filteredTestEnv, null, 2));
 

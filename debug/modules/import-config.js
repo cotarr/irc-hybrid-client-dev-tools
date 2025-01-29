@@ -100,4 +100,22 @@ TESTENV_WEB_PASSWORD=mysecret
   process.exit(1);
 }
 
+//
+// (OPTIONAL) Remote authentication using collab-auth
+//
+testEnv.remoteAuthUsername = '';
+if (process.env.TESTENV_REMOTE_AUTH_USERNAME) {
+  testEnv.remoteAuthUsername = process.env.TESTENV_REMOTE_AUTH_USERNAME;
+}
+
+testEnv.remoteAuthPassword = '';
+if (process.env.TESTENV_REMOTE_AUTH_PASSWORD) {
+  testEnv.remoteAuthPassword = process.env.TESTENV_REMOTE_AUTH_PASSWORD;
+}
+
+testEnv.remoteAuthTrustedClient = null;
+if (process.env.TESTENV_REMOTE_TRUSTED_CLIENT) {
+  testEnv.remoteAuthTrustedClient = (process.env.TESTENV_REMOTE_TRUSTED_CLIENT === 'true') || false;
+}
+
 module.exports = { config, servers, testEnv };

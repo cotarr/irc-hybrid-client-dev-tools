@@ -61,7 +61,7 @@ function show_default_env
     echo 'Config: SITE_SECURITY_EXPIRES="Thu, 22 Feb 2024 10:51:49 -0600"'
 
     echo "Config: SESSION_SET_ROLLING_COOKIE=true"
-    echo 'Config: SESSION_SECRET= (runner value not shown)'
+    echo 'Config: SESSION_SECRET= (redacted)'
     echo "Config: SESSION_ENABLE_REDIS=false"
 
     echo "Config: OAUTH2_ENABLE_REMOTE_LOGIN=false"
@@ -381,6 +381,35 @@ sleep 5
 node ./debug/user-auth-count.js
 check_for_errors 11-user-auth-count
 sleep 5
+
+# ------------- Start of case of include remote auth ------------
+if grep "^TESTENV_RUNNER_REMOTE_AUTH\=enabled" ./.env &> /dev/null ; then
+
+    # -------------------------------------------------
+    # Restart node server with alternate configuration
+    # -------------------------------------------------
+    echo
+    stop_server
+    set_default_env
+    export OAUTH2_ENABLE_REMOTE_LOGIN=true
+    echo "Config: OAUTH2_ENABLE_REMOTE_LOGIN=true"
+
+    restart_server
+    sleep 5
+
+    # ---------------------
+    # Test: remote/remote-auth.js (Optional)
+    # ---------------------
+    echo
+    echo "Executing: node debug/remote/remote-auth.js"
+    sleep 5
+    node ./debug/remote/remote-auth.js
+    check_for_errors 12-remote/remote-auth
+    sleep 5
+# ------------- End of case of include remote auth ------------
+else
+    echo "\nOAuth 2.0 remote authorization testing skipped due to configuration\n"
+fi
 
 # --------
 #   DONE

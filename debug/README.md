@@ -22,6 +22,13 @@ related to security, authentication and basic function.
 Manual should be used to test specific functionality as an IRC client,
 such as parsing IRC commands for changing an IRC nickname, or sending a message to an IRC channel.
 
+## API Documentation
+
+This docs page contains further instructions related to testing of the API
+in combination with the websocket.
+
+[cotarr.github.io/irc-hybrid-client/api.html](https://cotarr.github.io/irc-hybrid-client/api.html)
+
 ## setup
 
 The tests are located in a separate repository "irc-hybrid-client-dev-tools"
@@ -74,6 +81,7 @@ The irc-hybrid-client .env file must include credentials for the testing instanc
 
 
 ```bash
+OAUTH2_ENABLE_REMOTE_LOGIN=false
 TESTENV_WEB_URL=http://localhost:3003
 TESTENV_WEB_USERNAME=user1
 TESTENV_WEB_PASSWORD=mysecret
@@ -194,6 +202,13 @@ With NODE_ENV=production maximum allowed tries is 5
 Run with environment variables: `NODE_ENV=production`
 Restart node server before test to reset counter
 
+## (Optional) remote authentication
+
+The irc-hybrid-client may be configured to use optional
+remote authentication. The /remote/ folder contains
+separate tests that may be used with optional remote authentication.
+See debug/remote/README.md for instructions.
+
 ## Test runner.sh bash script
 
 The folder includes a bash script that will run all the test modules in sequence.
@@ -292,3 +307,12 @@ shows the approach to a chain of tests.
   // ...
 
 ```
+
+## Legacy tests collections
+
+The legacy postman collections can be found in the "postman/" folder in commit 
+ca1bec034ca2500251bd67387d94c650b3620db1 from 2023-07-17.
+
+The legacy ThunderClient collections (vscode extension) can be found in then
+"thunderclient/" folder in commit 866fb05e88af042d72bcc9156263538d8ba86b70
+from 2024-12-10.
