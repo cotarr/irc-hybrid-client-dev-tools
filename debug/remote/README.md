@@ -1,13 +1,11 @@
-# Thunder Client Tests for irc-hybrid-client - Remote Login
+# (Optional) API Tests for irc-hybrid-client - Remote Login
 
-The purpose of the Remote Auth collection in this folder is
+The purpose of the debug/remote/remote-auth.js test script in this folder is
 to exercise the optional remote login workflow using the
 [collab-auth](https://github.com/cotarr/collab-auth) authorization server
 as an OAuth 2.0 remote login server for irc-hybrid-client program.
 
-This test collection can then be used to debug the authorization workflow.
 It is not intended comprehensive test for security vulnerabilities.
-
 These instructions use temporary passwords that are not
 intended for use in a server that is visible on the internet.
 
@@ -18,8 +16,8 @@ The remote-auth.sh script is located in a separate "debug/remote/" folder of the
 ## irc-hybrid-client .env configuration
 
 This assumes the irc-hybrid-client ad been previously configured for the
-normal API tests using internal password login. All testing using the 
-internal password login worked properly before trying this.
+basic API tests in the debug/ folder, and these tests have passed.
+
 This configuration change substitutes a different user password
 authentication service.
 
@@ -42,11 +40,21 @@ TESTENV_REMOTE_AUTH_USERNAME=bob
 TESTENV_REMOTE_AUTH_PASSWORD=bobssecret
 ```
 
-The variable OAUTH2_ENABLE_REMOTE_LOGIN will switch back and forth between
-internal password login and external OAuth2 login.
+The variable OAUTH2_ENABLE_REMOTE_LOGIN is a special case.
+When using the stand alone debug/remote/remote-auth.sh script,
+the "OAUTH2_ENABLE_REMOTE_LOGIN" variable should be set to "true'
+in the .env file as shown above.
 
-When using the test runner.sh, the OAUTH2_ENABLE_REMOTE_LOGIN
-should not be defined in the .env file.
+However, when using the test runner script located at debug/runner.sh,
+the "OAUTH2_ENABLE_REMOTE_LOGIN" should be disabled with "#"
+comment character in the .env file. An additional variable 
+"TESTENV_RUNNER_REMOTE_AUTH=enabled" should be added to enable remote
+testing in the runner script as follows:
+
+```bash
+# OAUTH2_ENABLE_REMOTE_LOGIN=true
+TESTENV_RUNNER_REMOTE_AUTH=enabled
+```
 
 ## collab-auth configuration
 
@@ -123,7 +131,7 @@ to interact directly with the authorization server, independent of any user's pe
 For the case where a client account is configured with `trustedClient": false`,
 the authorization server will present the user with a access decision form. The browser will
 submit a POST request for the user to "Accept" or "Deny" the permission to access the resource.
-This will redirect rthe browser back to the web server with an authorization code.
+This will redirect the browser back to the web server with an authorization code.
 In the case of `trustedClient: true`, the decision form is skipped, and the server will
 redirect browser immediately back to the web server with an authorization code.
 

@@ -29,50 +29,41 @@ NODE_OUTPUT=/dev/null
 #NODE_OUTPUT=/dev/stdout
 
 #
+# Function to check for dis-allowed environment variables in .env
+#
+function check_bad_env_vars
+  {
+    if grep "^\s*$1" ./.env &> /dev/null ; then
+      echo "For testing, comment or remove \"$1\" the .env file"
+      exit 1
+    fi
+  }
+
+#
 # Function to set environment variable default values
 #
 function set_default_env
   {
     NODE_ENV=development
-
     SITE_SECURITY_CONTACT=mailto:bob@example.com
     SITE_SECURITY_EXPIRES="Thu, 22 Feb 2024 10:51:49 -0600"
-
     SESSION_SET_ROLLING_COOKIE=true
-    SESSION_SECRET="the session secret"
-    SESSION_ENABLE_REDIS=false
-
+    SESSION_EXPIRE_SEC=604800
     OAUTH2_ENABLE_REMOTE_LOGIN=false
-
     IRC_DISABLE_LIST_EDITOR=false
-    IRC_PERSIST_MESSAGE_CACHE=false
-    IRC_SOCKET_LOCAL_ADDRESS=
     IRC_SERVE_HTML_HELP_DOCS=true
-    IRC_CUSTOM_BEEP_SOUNDS=false
-
-    IRC_ENABLE_SOCKS5_PROXY=false
   }
 
 function show_default_env
   {
     echo "Config: NODE_ENV=development"
-
     echo "Config: SITE_SECURITY_CONTACT=mailto:bob@example.com"
     echo 'Config: SITE_SECURITY_EXPIRES="Thu, 22 Feb 2024 10:51:49 -0600"'
-
     echo "Config: SESSION_SET_ROLLING_COOKIE=true"
-    echo 'Config: SESSION_SECRET= (redacted)'
-    echo "Config: SESSION_ENABLE_REDIS=false"
-
+    echo "Config: SESSION_EXPIRE_SEC=604800"
     echo "Config: OAUTH2_ENABLE_REMOTE_LOGIN=false"
-
     echo "Config: IRC_DISABLE_LIST_EDITOR=false"
-    echo "Config: IRC_PERSIST_MESSAGE_CACHE=false"
-    echo "Config: IRC_SOCKET_LOCAL_ADDRESS="
     echo "Config: IRC_SERVE_HTML_HELP_DOCS=true"
-    echo "Config: IRC_CUSTOM_BEEP_SOUNDS=false"
-
-    echo "Config: IRC_ENABLE_SOCKS5_PROXY=false"
   }
 
 #
@@ -142,6 +133,16 @@ if [ ! -e $PID_DIR ] ; then
   echo
   exit 1
 fi
+
+# ---------------------
+# Check: .env file contains dis-allowed environment variables 
+# ---------------------
+check_bad_env_vars NODE_ENV
+check_bad_env_vars SESSION_SET_ROLLING_COOKIE
+check_bad_env_vars SESSION_EXPIRE_SEC
+check_bad_env_vars OAUTH2_ENABLE_REMOTE_LOGIN
+check_bad_env_vars IRC_DISABLE_LIST_EDITOR
+check_bad_env_vars IRC_SERVE_HTML_HELP_DOCS
 
 # ---------------------
 # Display Server Config

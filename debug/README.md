@@ -1,6 +1,4 @@
-# irc-hybrid-client Debug Tests
-
-WORK IN PROGRESS
+# irc-hybrid-client Debug Test Scripts
 
 ## Description
 
@@ -19,83 +17,120 @@ related to security, authentication and basic function.
 - This does not test the web browser code as it relates to being an IRC client..
 - This does not test the IRC client interface between the web server and the IRC server.
 
-Manual should be used to test specific functionality as an IRC client,
+Additional manual debugging should be used to test overall functionality as an IRC client,
 such as parsing IRC commands for changing an IRC nickname, or sending a message to an IRC channel.
 
 ## API Documentation
 
-This docs page contains further instructions related to testing of the API
-in combination with the websocket.
+This docs page contains further instructions related to the API
 
 [cotarr.github.io/irc-hybrid-client/api.html](https://cotarr.github.io/irc-hybrid-client/api.html)
 
-## setup
+## Installation of test environment
 
-The tests are located in a separate repository "irc-hybrid-client-dev-tools"
+A private development IRC server is recommended to avoid k-line from tests.
+The irc-hybrid-client was written using the "ngircd" Debian apt repository.
+
+The test scripts are located in a separate repository "irc-hybrid-client-dev-tools"
 In order to run the tests both irc-hybrid-client and irc-hybrid-client-dev-tools
 repositories must both be installed in the same parent folder.
 
-Example side by side repositories
+A symbolic link is required to run testing JavaScript files from the irc-hybrid-client directory.
+
+Example of side by side repositories:
 
 ```txt
 drwxr-xr-x 13 user user 4096 Jan 23 14:13 irc-hybrid-client
 drwxr-xr-x  5 user user 4096 Jan 23 09:52 irc-hybrid-client-dev-tools
 ```
 
-A symbolic link is required to run testing JavaScript files from the irc-hybrid-client directory.
-
-- Change directory to the base folder of the irc-hybrid-client repository.
-- Create a symbolic link to the debug folder in the irc-hybrid-client-dev-tools repository
+Example commands to install both repositories and create symlink:
 
 ```bash
+# Clone GitHub repositories.
+git clone https://github.com/cotarr/irc-hybrid-client.git
+git clone https://github.com/cotarr/irc-hybrid-client-dev-tools.git
+cd irc-hybrid-client
+# install dependencies
+npm install
+# Create symbolic link from irc-hybrid-client repository to the testing folder
 ln -s ../irc-hybrid-client-dev-tools/debug debug
 ```
 
-- In order to keep the two repositories separate, the "debug" folder filename will be added to the irc-hybrid-client .gitignore.
+## Configure irc-hybrid-client .env file for testing
 
-## Test environment setup
+- For testing, the irc-hybrid-client configuration must use the ".env file" (Not the legacy "credentials.js" file)
+- In the base folder of the irc-hybrid-client repository, create a new .env file.
+- Configure generic web server settings such as port number in the .env file using the "example-.env" as a template.
 
-- A private development IRC server is recommended to avoid k-line from tests.
-- The irc-hybrid-client was written using the "ngircd" Debian apt repository. (recommend: ngircd)
-- The irc-hybrid-client repository should setup and tested using the web browser as follows:
-  - Clone the irc-hybrid-client repository
-  - Install irc-hybrid-client's npm modules using `npm install`
-  - For testing, the irc-hybrid-client configuration must use the ".env file" (Not the "credentials.js" file)
-  - Update .env file for the web server's login username and password using the irc-hybrid-client utility found in "tools/genEnvVarAuthForUser_1.mjs"
-  - Depending on your test setup, configure any other web server settings, such as port number, in the .env file (see documentation)
-  - Start the web server from the irc-hybrid-client directory `npm start`
-  - Using a web browser, login to the web server and confirm username and password are working correctly
-  - Create at least one definition for an IRC server to be used for testing (see documentation).
-  - Using the web browser, connect to the IRC network and confirm the testing instance of the irc-hybrid-client web server has basic IRC functionality working correctly.
-- Configure mandatory testing variables in the ".env" file in the irc-hybrid-client directory
-  - Configure the irc-hybrid-client for local authentication: `OAUTH2_ENABLE_REMOTE_LOGIN=false`
-  - Configure a testing URL in the .env file, example: `TESTENV_WEB_URL=http://localhost:3003`
-  - Configure a testing web login username in the .env file, example: `TESTENV_WEB_USERNAME=user1`
-  - Configure a testing web login password in the .env file, example: `TESTENV_WEB_PASSWORD=mysecret`
-- Review and update optional test configuration variables as necessary.
-  - By default the first server is used in testing (index = 0), override with `TESTENV_IRC_SERVERINDEX=0`
+Example minimum configuration for testing.
 
-## Required (.env) Environment Variables
+```bash
+ENV_VAR_CONFIG_VERSION=2
+SERVER_TLS_KEY=/home/user/.tls/key.pem
+SERVER_TLS_CERT=/home/user/.tls/cert.pem
+SERVER_TLS=false
+SERVER_PORT=3003
+SERVER_PID_FILENAME=/home/user/tmp/ircHybridClient.PID
+SERVER_INSTANCE_NUMBER=0
+SESSION_SECRET="---cookie-secret-goes-here--"
+```
 
-The irc-hybrid-client .env file must include credentials for the testing instance of the irc-hybrid-client web server including the web server URL, web login username and web login password. You should substitute values that were configured for your web server.
+The following variables must NOT be defined in the .env file during testing.
+The test runner (debug/runner.sh) will restart the irc-hybrid-client
+server several times with different values for these variables.
+The .env file will over-rise these ad-hoc environment variables and cause the
+tests to fail.
+
+```bash
+# Not allowed in .env during testing.
+NODE_ENV=
+SESSION_SET_ROLLING_COOKIE=
+SESSION_EXPIRE_SEC=
+OAUTH2_ENABLE_REMOTE_LOGIN=
+IRC_DISABLE_LIST_EDITOR=
+IRC_SERVE_HTML_HELP_DOCS=
+```
+
+Update .env file for the web server's login username and password using the
+irc-hybrid-client utility found in "tools/genEnvVarAuthForUser_1.mjs".
+The .env file should look similar to this:
+  
+```bash
+LOGIN_USER_USERID=1
+LOGIN_USER_USER=user1
+LOGIN_USER_NAME="Bob Smith"
+LOGIN_USER_HASH="---BCRYPT-HASH-GOES-HERE---"
+```
+
+- Start the web server from the irc-hybrid-client directory `npm start`
+- Using a web browser, login to the web server at route "/irc/webclient.html" and confirm username and password are working correctly.
+- Create at least one definition for a development IRC server to be used for testing (see documentation).
+- Using the web browser, connect to the IRC network and confirm the testing instance of the irc-hybrid-client web server are working as expected.
+- Close the web browser
+
+## Test script (.env) Environment Variables
+
+Environment variables that begin with "TESTENV_" are used to configure the testing script. They are located in the same .env file as the irc-hybrid-client configuration.
+
+The irc-hybrid-client .env file must include setting for the testing instance of the irc-hybrid-client web server including the web server URL, web login username and web login password. You should substitute values that were configured for your web server.
 
 
 ```bash
-OAUTH2_ENABLE_REMOTE_LOGIN=false
 TESTENV_WEB_URL=http://localhost:3003
 TESTENV_WEB_USERNAME=user1
 TESTENV_WEB_PASSWORD=mysecret
 ```
 
-## Environment (.env) Configuration Variables
-
-The following environment variables may be used to supply data values used in the tests. Changing these values will not impact the actual server configuration. Rather, it is intended to allow adhoc substitution of expected test result values. In order to allow adhoc testing without having to change the configuration files each time, adhoc values may be prepended on the command line.
+By default the test script will use the first IRC server definition. If you prefer to use one of the other IRC server definitions, set the TESTENV_IRC_SERVERINDEX to an integer starting with zero.
 
 ```bash
-TESTENV_WEB_URL=http://localhost:3003
-TESTENV_WEB_USERNAME=user1
-TESTENV_WEB_PASSWORD=mysecret
 TESTENV_IRC_SERVERINDEX=0
+```
+
+The following optional test variables may be omitted from the .env file unless they need to be changed to alternate values.
+
+```bash
 TESTENV_IRC_REGISTERDELAY=5
 TESTENV_IRC_NICKNAME=debug-nick
 TESTENV_IRC_REALNAME=test
@@ -121,7 +156,6 @@ node debug/basic-functions.js
 node debug/cookie-tests.js
 node debug/disabled-routes.js
 node debug/user-auth-count.js
-./debug/runner.sh
 ```
 
 ## Description of test files
@@ -205,13 +239,13 @@ Restart node server before test to reset counter
 ## (Optional) remote authentication
 
 The irc-hybrid-client may be configured to use optional
-remote authentication. The /remote/ folder contains
+remote authentication. The debug/remote/ folder contains
 separate tests that may be used with optional remote authentication.
 See debug/remote/README.md for instructions.
 
 ## Test runner.sh bash script
 
-The folder includes a bash script that will run all the test modules in sequence.
+The `debug/runner.sh` bash script will run all the test modules in sequence.
 The script will pause for 5 seconds between each test to provide an opportunity
 to review data and/or to abort the tests using ctrl-C.
 
@@ -257,7 +291,7 @@ information during test execution.
 Command line example:
 
 ```bash
-SHOWRES=3 SHOWCOOKIE=1 SHOWSTACK=1 node debug/access-token-client.js
+SHOWRES=3 SHOWCOOKIE=1 SHOWSTACK=1 node debug/public-routes.js
 ```
 
 ## Structure of JavaScript test files
@@ -271,12 +305,15 @@ completed and the response values parsed. The following pseudo code
 shows the approach to a chain of tests.
 
 ```js
-
-// ...
+  // ...
+  //
+  // Part 1 of 3, configuration
+  //
   .then((chain) => {
     // Set various fetch related variables
     chain.requestMethod = 'GET';
     chain.requestFetchURL = '/some/route/
+    chain.requestAcceptType = 'text/html';
 
     // Set any relevant testing variables
     chain.someVariables = someValue;
@@ -284,14 +321,16 @@ shows the approach to a chain of tests.
     // Resolved promise passes chain object to managedFetch function
     return Promise.resolve(chain)
 
-  // The debug/modules/managed-fetch.js module is called.
+  //
+  // Part 2 of 3, Perform HTTP fetch request
+  //
   .then((chain) => managedFetch(chain))
 
+  //
+  // Part 3 of 3, Evaluate HTTP response data
+  //
   .then((chain) => {
-    // Evaluate the results of the fetch operation
-    if (chain.someValue === 'expected result') {
-      doSomething()
-    }
+    logRequest(chain);
 
     // Assertion testing
     console.log('\tExpect: status === 302');
@@ -305,14 +344,10 @@ shows the approach to a chain of tests.
     return Promise.resolve(chain)
   })
   // ...
-
 ```
 
 ## Legacy tests collections
 
-The legacy postman collections can be found in the "postman/" folder in commit 
-ca1bec034ca2500251bd67387d94c650b3620db1 from 2023-07-17.
+The legacy postman collections can be found in the "postman/" folder in commit ca1bec034ca2500251bd67387d94c650b3620db1 from 2023-07-17.
 
-The legacy ThunderClient collections (vscode extension) can be found in then
-"thunderclient/" folder in commit 866fb05e88af042d72bcc9156263538d8ba86b70
-from 2024-12-10.
+The legacy ThunderClient collections (vscode extension) can be found in then "thunderclient/" folder in commit 866fb05e88af042d72bcc9156263538d8ba86b70 from 2024-12-10.
