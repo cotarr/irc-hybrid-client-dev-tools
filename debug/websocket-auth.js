@@ -319,10 +319,10 @@ setup(chainObj)
   })
 
   // -----------------------------------------------
-  // 101 UPGRADE /irc/wsauth (websocket upgrade, timer not active)
+  // 103 UPGRADE /irc/wsauth (websocket upgrade, timer not active)
   // -----------------------------------------------
   .then((chain) => {
-    chain.testDescription = '101 UPGRADE /irc/wsauth (websocket upgrade, timer not active)';
+    chain.testDescription = '103 UPGRADE /irc/wsauth (websocket upgrade, timer not active)';
     chain.requestMethod = 'UPGRADE';
     chain.requestFetchURL = encodeURI(testEnv.ircWebURL + '/irc/ws');
     chain.requestCsrfHeader = chain.savedParsedCsrfToken;

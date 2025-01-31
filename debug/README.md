@@ -172,28 +172,153 @@ SITE_SECURITY_CONTACT=security@example.com
 SITE_SECURITY_EXPIRES="Fri, 1 Apr 2022 08:00:00 -0600"
 ```
 
+```txt
+Test: 100 GET /status (server is running)
+Test: 101 GET /.well-known/security.txt
+Test: 102 GET /robots.txt
+Test: 103 GET /favicon.ico
+Test: 300 GET /not-found.html (Error handler)
+```
+
 ### protected-routes.js
 
 This script will confirm that protected routes are not available
 without a valid login cookie
 
+```txt
+Test: 10 GET /status (server is running)
+Test: 50 GET /login - Get new nonce and CSRF token
+Test: 51 POST /login-authorize - Get valid cookie (used in writing tests)
+Test: 52 GET /irc/webclient.html (get CSRF)
+Test: 100 GET /secure (no cookie)
+Test: 101 GET /userinfo (no cookie)
+Test: 102 POST /irc/server (no cookie)
+Test: 103 POST /irc/connect (no cookie)
+Test: 104 POST /irc/message (no cookie)
+Test: 105 GET /irc/getircstate (no cookie)
+Test: 106 POST /irc/prune (no cookie)
+Test: 107 GET /irc/cache (no cookie)
+Test: 108 POST /irc/erase (no cookie)
+Test: 109 POST /irc/disconnect (no cookie)
+Test: 110 POST /terminate (no cookie)
+Test: 200 GET /irc/serverlist (no cookie)
+Test: 201 POST /irc/serverlist (no cookie)
+Test: 202 PATCH /irc/serverlist?index=x (no cookie)
+Test: 203 COPY /irc/serverlist (no cookie)
+Test: 204 DELETE /irc/serverlist (no cookie)
+Test: 300 GET /irc/webclient.html (custom route, no cookie)
+Test: 301 GET /irc/css/styles.css (from web root, no cookie)
+Test: 302 GET /irc/js/webclient.js (from web root, no cookie)
+Test: 303 GET /irc/sounds/short-beep1.mp3 (from web root, no redirect)
+Test: 400 GET /irc/docs/ (from /docs/ root, no redirect)
+Test: 401 GET /irc/docs/installation.html (from /docs/ root, no redirect)
+```
+
 ### csrf-routes.js
 
 This script will check routes that require valid CSRF tokens
+
+```txt
+Test: 10 GET /status (server is running)
+Test: 50 GET /login - Get new nonce and CSRF token
+Test: 51 POST /login-authorize - Get valid cookie (used in writing tests)
+Test: 52 GET /irc/webclient.html (get CSRF)
+Test: 100 POST /irc/server (No CSRF token)
+Test: 101 POST /irc/connect (No CSRF token)
+Test: 102 POST /irc/message (No CSRF token)
+Test: 103 POST /irc/prune (No CSRF token)
+Test: 104 POST /irc/erase (No CSRF token)
+Test: 105 POST /irc/disconnect (No CSRF token)
+Test: 106 POST /terminate (No CSRF token)
+Test: 201 POST /irc/serverlist (No CSRF token)
+Test: 202 PATCH /irc/serverlist?index=x (No CSRF token)
+Test: 203 COPY /irc/serverlist?index=x (No CSRF token)
+Test: 204 DELETE /irc/serverlist?index=x (No CSRF token)
+```
 
 ### user-auth-login.js
 
 This script will emulate the browser submission of
 the HTML form data for user password entry
 
+```txt
+Test: 100 GET /status (server is running)
+Test: 101 GET /irc/webclient.html (no cookie)
+Test: 102 GET /login - Login form with csrf token and nonce
+Test: 103 POST /login-authorize - Expect successful result
+Test: 104 GET /irc/webclient.html (with valid cookie)
+Test: 105 GET /logout
+Test: 106 GET /irc/webclient.html (previous cookie after logout)
+Test: 200 GET /login - Get new nonce and CSRF token
+Test: 201 POST /login-authorize - Success 1 of 2 in a row
+Test: 202 POST /login-authorize - Re-post same (double POST, expect fail)
+Test: 300 GET /login - Get new nonce and CSRF token
+Test: 301 POST /login-authorize - Missing nonce
+Test: 302 GET /login - Get new nonce and CSRF token
+Test: 303 POST /login-authorize - Invalid nonce
+Test: 304 GET /login - Get new nonce and CSRF token
+Test: 305 POST /login-authorize - Missing CSRF token
+Test: 306 GET /login - Get new nonce and CSRF token
+Test: 307 POST /login-authorize - Invalid CSRF token
+Test: 400 GET /login - Get new nonce and CSRF token
+Test: 401 POST /login-authorize - Missing user
+Test: 402 GET /login - Get new nonce and CSRF token
+Test: 403 POST /login-authorize - Invalid user
+Test: 404 GET /login - Get new nonce and CSRF token
+Test: 405 POST /login-authorize - Missing password
+Test: 406 GET /login - Get new nonce and CSRF token
+Test: 407 POST /login-authorize - Invalid password
+Test: 500 GET /login - Get new nonce and CSRF token
+Test: 501 POST /login-authorize - oversize user
+Test: 502 GET /login - Get new nonce and CSRF token
+Test: 503 POST /login-authorize - oversize password
+Test: 504 GET /login - Get new nonce and CSRF token
+Test: 505 POST /login-authorize - oversize nonce
+Test: 600 GET /login - Get new nonce and CSRF token
+Test: 601 PATCH /login-authorize - wrong method PATCH
+Test: 602 GET /login - Get new nonce and CSRF token
+Test: 603 PUT /login-authorize - wrong method PUT
+Test: 700 GET /login.css
+Test: 701 GET /logout
+Test: 702 GET /blocked
+Test: 703 GET /disabled
+Test: 800 GET /login - Get new nonce and CSRF token
+Test: 801 POST /login-authorize - Get valid cookie
+Test: 802 GET /irc/webclient.html (final test is success)
+```
+
 ### websocket-auth.js
 
 This is a testing utility used specifically to test irc-hybrid-client application
 use of a RFC-4655 websocket connection including authentication.
 
+```txt
+Test: 10 GET /status (server is running)
+Test: 50 GET /login - Get new nonce and CSRF token
+Test: 51 POST /login-authorize - Get valid cookie (used in writing tests)
+Test: 52 GET /irc/webclient.html (get CSRF Token)
+Test: 100 POST /irc/wsauth (enable timer, no CSRF token)
+Test: 101 UPGRADE /irc/wsauth (websocket upgrade, timer not active)
+Test: 102 POST /irc/wsauth (enable timer, no cookie)
+Test: 103 UPGRADE /irc/wsauth (websocket upgrade, timer not active)
+Test: 110 POST /irc/wsauth (Enable server websocket timer)
+Test: 111 UPGRADE /irc/wsauth (websocket upgrade, wait for timer to expire)
+Test: 112 POST /irc/wsauth (Enable server websocket timer)
+Test: 113 UPGRADE /irc/wsauth (websocket upgrade, without cookie)
+Test: 114 POST /irc/wsauth (Enable server websocket timer)
+Test: 115 UPGRADE /irc/wsauth (websocket upgrade, expect HEARTBEAT messages)
+```
+
 ### response.headers.js
 
 Check HTTP security headers provided by Helmet middleware
+
+```txt
+Test: 10 GET /status (server is running)
+Test: 50 GET /login - Get new nonce and CSRF token
+Test: 51 POST /login-authorize - Get valid cookie (used in writing tests)
+Test: 100 GET /irc/webclient.html (validate HTTP response headers)
+```
 
 ### basic-functions.js
 
@@ -202,6 +327,16 @@ This script will execute an IRC network connect.
 Warning: These test will connect to an actual IRC server.
 To avoid getting k-lined on a major IRC network, these
 tests should be run on a dedicated development IRC server.
+
+```txt
+Test: 10 GET /status (server is running)
+Test: 50 GET /login - Get new nonce and CSRF token
+Test: 51 POST /login-authorize - Get valid cookie (used in writing tests)
+Test: 52 GET /irc/webclient.html (get CSRF token)
+Test: 100 GET /secure (confirm authorized)
+Test: 101 GET /userinfo (web login user matches)
+Test: 102 POST /irc/server (server index set for test)
+```
 
 ### cookie-tests.js
 
@@ -222,10 +357,50 @@ cookies will extend the cookie expiration with each request.
   SESSION_SET_ROLLING_COOKIE=true
 ```
 
+```txt
+Test: 10 GET /status (server is running)
+Test: 40 GET /irc/webclient.html - Unauthenticated request to protected route.
+Test: 50 GET /login - Get new nonce and CSRF token
+Test: 51 POST /login-authorize - Get valid cookie
+Test: 52 GET /irc/webclient.html (Confirm access to protected route)
+Test: 100 GET /secure - Confirm access prior to logout
+Test: 101 GET /logout - Call to remove session from session store
+Test: 102 GET /secure - Confirm old cookie not accepted
+Test: 200 GET /login - Get new nonce and CSRF token
+Test: 201 POST /login-authorize - Get valid cookie
+Test: 202 GET /irc/webclient.html (Confirm access to protected route with cookie)
+Test: 203 GET /irc/webclient.html - Send raw cookie SID without signature
+Test: 204 GET /irc/webclient.html - Submit ad-hoc cookie with different cookie name
+Test: 205 GET /irc/webclient.html - Submit ad-hoc cookie signed with wrong secret
+Test: 206 GET /irc/webclient.html - Submit ad-hoc cookie, random SID with valid signature
+Test: 207 GET /irc/webclient.html - Submit original cookie, confirm original cookie still accepted
+Test: 300 GET /login - Get new nonce and CSRF token
+Test: 301 POST /login-authorize - Get valid cookie
+Test: 302 GET /secure - Elapsed time 3 seconds, check if expired
+Test: 303 GET /secure - Elapsed time 3 + 3 = 6 seconds, check if expired
+Test: 304 GET /secure - Elapsed time 3 + 3 + 4 = 10 seconds, check if expired
+Test: 105 GET /secure - Elapsed time 3 + 3 + 4 + 10 = 20 seconds, check if expired
+Test: 106 GET /secure - Elapsed time 3 + 3 + 4 + 10 + 4 = 24 seconds, Done
+```
+
 ### disabled-routes.js
 
 The /docs/ folder and the server list editor are capable of
 being disabled in the configuration.
+
+```txt
+Test: 10 GET /status (server is running)
+Test: 50 GET /login - Get new nonce and CSRF token
+Test: 51 POST /login-authorize - Get valid cookie (used in writing tests)
+Test: 52 GET /irc/webclient.html (get CSRF)
+Test: 200 GET /irc/serverlist (no cookie)
+Test: 201 POST /irc/serverlist (disabled route)
+Test: 202 PATCH /irc/serverlist?index=x (disabled route)
+Test: 203 COPY /irc/serverlist (disabled route)
+Test: 204 DELETE /irc/serverlist (disabled route)
+Test: 400 GET /irc/docs/ (directory /docs/ disabled)
+Test: 401 GET /irc/docs/installation.html (directory /docs/ disabled)
+```
 
 ### user-auth-count.js
 
@@ -235,6 +410,25 @@ With NODE_ENV=production maximum allowed tries is 5
 
 Run with environment variables: `NODE_ENV=production`
 Restart node server before test to reset counter
+
+```txt
+Test: 100 GET /status (server is running)
+Test: 110 GET /login - Get a new csrf token and nonce
+Test: 111 POST /login-authorize - Failed login 1 of 5
+Test: 120 GET /login - Get a new csrf token and nonce
+Test: 121 POST /login-authorize - Failed login 2 of 5
+Test: 130 GET /login - Get a new csrf token and nonce
+Test: 131 POST /login-authorize - Failed login 3 of 5
+Test: 140 GET /login - Get a new csrf token and nonce
+Test: 141 POST /login-authorize - Failed login 4 of 5
+Test: 150 GET /login - Get a new csrf token and nonce
+Test: 151 POST /login-authorize - Failed login 5 of 5
+Test: 160 GET /login - Get a new csrf token and nonce
+Test: 161 POST /login-authorize - Failed login 6 (expect count exceeded)
+Test: 200 GET /login - Get a new csrf token and nonce
+Test: 201 POST /login-authorize - Try valid login while expired
+Test: 202 GET /irc/webclient.html (confirm no access)
+```
 
 ## (Optional) remote authentication
 

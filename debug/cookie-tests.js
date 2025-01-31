@@ -134,7 +134,7 @@ setup(chainObj)
   })
 
   // -------------------------------
-  // 1 GET /irc/webclient.html - Unauthenticated request to protected route.
+  // 40 GET /irc/webclient.html - Unauthenticated request to protected route.
   //
   // This is an initial test to a protected route for cookie testing.
   //
@@ -148,7 +148,7 @@ setup(chainObj)
   // This test also confirms that no cookie is issued to the browser
   // -------------------------------
   .then((chain) => {
-    chain.testDescription = '1 GET /irc/webclient.html - No access to protected route.';
+    chain.testDescription = '40 GET /irc/webclient.html - Unauthenticated request to protected route.';
     chain.requestMethod = 'GET';
     chain.requestFetchURL = encodeURI(testEnv.ircWebURL + '/irc/webclient.html');
     delete chain.currentSessionCookie;
@@ -507,11 +507,11 @@ setup(chainObj)
 
 
   // -------------------------------
-  // 203 GET /irc/webclient.html - Submit ad-hoc cookie with different cookie name
+  // 204 GET /irc/webclient.html - Submit ad-hoc cookie with different cookie name
   // -------------------------------
   .then((chain) => {
     chain.testDescription =
-      '14 GET /secure - Submit ad-hoc cookie with different cookie name';
+      '204 GET /irc/webclient.html - Submit ad-hoc cookie with different cookie name';
     chain.requestMethod = 'GET';
     chain.requestFetchURL = encodeURI(testEnv.ircWebURL + '/irc/webclient.html');
     chain.requestAcceptType = 'text/html';
@@ -529,11 +529,11 @@ setup(chainObj)
   })
 
   // -------------------------------
-  // 204 GET /irc/webclient.html - Submit ad-hoc cookie signed with wrong secret
+  // 205 GET /irc/webclient.html - Submit ad-hoc cookie signed with wrong secret
   // -------------------------------
   .then((chain) => {
     chain.testDescription =
-      '204 GET /irc/webclient.html - Submit ad-hoc cookie signed with wrong secret';
+      '205 GET /irc/webclient.html - Submit ad-hoc cookie signed with wrong secret';
     chain.requestMethod = 'GET';
     chain.requestFetchURL = encodeURI(testEnv.ircWebURL + '/irc/webclient.html');
     chain.requestAcceptType = 'text/html';
@@ -560,11 +560,11 @@ setup(chainObj)
   })
 
   // -------------------------------
-  // 205 GET /irc/webclient.html - Submit ad-hoc cookie, random SID with valid signature
+  // 206 GET /irc/webclient.html - Submit ad-hoc cookie, random SID with valid signature
   // -------------------------------
   .then((chain) => {
     chain.testDescription =
-      '205 GET /irc/webclient.html - Submit ad-hoc cookie, random SID with valid signature';
+      '206 GET /irc/webclient.html - Submit ad-hoc cookie, random SID with valid signature';
       chain.requestMethod = 'GET';
       chain.requestFetchURL = encodeURI(testEnv.ircWebURL + '/irc/webclient.html');
       chain.requestAcceptType = 'text/html';
@@ -594,11 +594,11 @@ setup(chainObj)
   })
 
   // -------------------------------
-  // 206 GET /irc/webclient.html - Submit original cookie, confirm original cookie still accepted
+  // 207 GET /irc/webclient.html - Submit original cookie, confirm original cookie still accepted
   // -------------------------------
   .then((chain) => {
     chain.testDescription =
-      '206 GET /irc/webclient.html - Confirm original cookie still accepted';
+      '207 GET /irc/webclient.html - Submit original cookie, confirm original cookie still accepted';
     chain.requestMethod = 'GET';
     chain.requestFetchURL = encodeURI(testEnv.ircWebURL + '/irc/webclient.html');
     chain.requestAcceptType = 'text/html';
