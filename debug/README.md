@@ -2,23 +2,16 @@
 
 ## Description
 
-The /debug/ folder contains various irc-hybrid-client web
-server API tests that are written in native javascript using
-the Node.js assertion library.
+The /debug/ folder contains various irc-hybrid-client web server API tests that are written in native javascript using the Node.js assertion library.
 
 ## Scope
 
-Overall, the irc-hybrid-client application involves 3 parts: the web browser, the
-web server, and the IRC server. The tests in this utility are primarily
-intended to test the web server as it listens for incoming HTTP requests
-from the internet. The scope of these tests is limited to the web server routes
-related to security, authentication and basic function.
+Overall, the irc-hybrid-client application involves 3 parts: the web browser, the web server, and the IRC server. The tests in this utility are primarily intended to test the web server as it listens for incoming HTTP requests from the internet. The scope of these tests is limited to the web server routes related to security, authentication and basic function.
 
 - This does not test the web browser code as it relates to being an IRC client..
 - This does not test the IRC client interface between the web server and the IRC server.
 
-Additional manual debugging should be used to test overall functionality as an IRC client,
-such as parsing IRC commands for changing an IRC nickname, or sending a message to an IRC channel.
+Additional manual debugging should be used to test overall functionality as an IRC client, such as parsing IRC commands for changing an IRC nickname, or sending a message to an IRC channel.
 
 ## API Documentation
 
@@ -28,12 +21,9 @@ This docs page contains further instructions related to the API
 
 ## Installation of test environment
 
-A private development IRC server is recommended to avoid k-line from tests.
-The irc-hybrid-client was written using the "ngircd" Debian apt repository.
+A private development IRC server is recommended to avoid k-line from tests. The irc-hybrid-client was written using the "ngircd" Debian apt repository.
 
-The test scripts are located in a separate repository "irc-hybrid-client-dev-tools"
-In order to run the tests both irc-hybrid-client and irc-hybrid-client-dev-tools
-repositories must both be installed in the same parent folder.
+The test scripts are located in a separate repository "irc-hybrid-client-dev-tools" In order to run the tests both irc-hybrid-client and irc-hybrid-client-dev-tools repositories must both be installed in the same parent folder.
 
 A symbolic link is required to run testing JavaScript files from the irc-hybrid-client directory.
 
@@ -76,11 +66,7 @@ SERVER_INSTANCE_NUMBER=0
 SESSION_SECRET="---cookie-secret-goes-here--"
 ```
 
-The following variables must NOT be defined in the .env file during testing.
-The test runner (debug/runner.sh) will restart the irc-hybrid-client
-server several times with different values for these variables.
-The .env file will over-rise these ad-hoc environment variables and cause the
-tests to fail.
+The following variables must NOT be defined in the .env file during testing. The test runner (debug/runner.sh) will restart the irc-hybrid-client server several times with different values for these variables. The .env file will over-rise these ad-hoc environment variables and cause the tests to fail.
 
 ```bash
 # Not allowed in .env during testing.
@@ -92,9 +78,7 @@ IRC_DISABLE_LIST_EDITOR=
 IRC_SERVE_HTML_HELP_DOCS=
 ```
 
-Update .env file for the web server's login username and password using the
-irc-hybrid-client utility found in "tools/genEnvVarAuthForUser_1.mjs".
-The .env file should look similar to this:
+Update .env file for the web server's login username and password using the irc-hybrid-client utility found in "tools/genEnvVarAuthForUser_1.mjs". The .env file should look similar to this:
   
 ```bash
 LOGIN_USER_USERID=1
@@ -114,7 +98,6 @@ LOGIN_USER_HASH="---BCRYPT-HASH-GOES-HERE---"
 Environment variables that begin with "TESTENV_" are used to configure the testing script. They are located in the same .env file as the irc-hybrid-client configuration.
 
 The irc-hybrid-client .env file must include setting for the testing instance of the irc-hybrid-client web server including the web server URL, web login username and web login password. You should substitute values that were configured for your web server.
-
 
 ```bash
 TESTENV_WEB_URL=http://localhost:3003
@@ -140,8 +123,7 @@ TESTENV_IRC_CHANNEL="#test"
 
 ## Command line examples
 
-The tests should be run from the base folder of the "irc-hybrid-client" repository
-using the symlink to the debug folder.
+The tests should be run from the base folder of the "irc-hybrid-client" repository using the symlink to the debug folder.
 
 Example CLI commands:
 
@@ -162,8 +144,7 @@ node debug/user-auth-count.js
 
 ### public-routes.js
 
-This script will confirm that routes intended to be public are
-accessible when the browser does not provide a valid cookie.
+This script will confirm that routes intended to be public are accessible when the browser does not provide a valid cookie.
 
 Required Configuration:
 
@@ -182,8 +163,7 @@ Test: 300 GET /not-found.html (Error handler)
 
 ### protected-routes.js
 
-This script will confirm that protected routes are not available
-without a valid login cookie
+This script will confirm that protected routes are not available without a valid login cookie
 
 ```txt
 Test: 10 GET /status (server is running)
@@ -238,8 +218,7 @@ Test: 204 DELETE /irc/serverlist?index=x (No CSRF token)
 
 ### user-auth-login.js
 
-This script will emulate the browser submission of
-the HTML form data for user password entry
+This script will emulate the browser submission of the HTML form data for user password entry
 
 ```txt
 Test: 100 GET /status (server is running)
@@ -289,8 +268,7 @@ Test: 802 GET /irc/webclient.html (final test is success)
 
 ### websocket-auth.js
 
-This is a testing utility used specifically to test irc-hybrid-client application
-use of a RFC-4655 websocket connection including authentication.
+This is a testing utility used specifically to test irc-hybrid-client application use of a RFC-4655 websocket connection including authentication.
 
 ```txt
 Test: 10 GET /status (server is running)
@@ -324,9 +302,7 @@ Test: 100 GET /irc/webclient.html (validate HTTP response headers)
 
 This script will execute an IRC network connect.
 
-Warning: These test will connect to an actual IRC server.
-To avoid getting k-lined on a major IRC network, these
-tests should be run on a dedicated development IRC server.
+Warning: These test will connect to an actual IRC server. To avoid getting k-lined on a major IRC network, these tests should be run on a dedicated development IRC server.
 
 ```txt
 Test: 10 GET /status (server is running)
@@ -385,8 +361,7 @@ Test: 106 GET /secure - Elapsed time 3 + 3 + 4 + 10 + 4 = 24 seconds, Done
 
 ### disabled-routes.js
 
-The /docs/ folder and the server list editor are capable of
-being disabled in the configuration.
+The /docs/ folder and the server list editor are capable of being disabled in the configuration.
 
 ```txt
 Test: 10 GET /status (server is running)
@@ -408,8 +383,7 @@ This script will emulate the browser submission multiple bad
 password attempts, challenging the counter.
 With NODE_ENV=production maximum allowed tries is 5
 
-Run with environment variables: `NODE_ENV=production`
-Restart node server before test to reset counter
+Run with environment variables: `NODE_ENV=production` Restart node server before test to reset counter
 
 ```txt
 Test: 100 GET /status (server is running)
@@ -432,28 +406,17 @@ Test: 202 GET /irc/webclient.html (confirm no access)
 
 ## (Optional) remote authentication
 
-The irc-hybrid-client may be configured to use optional
-remote authentication. The debug/remote/ folder contains
-separate tests that may be used with optional remote authentication.
-See debug/remote/README.md for instructions.
+The irc-hybrid-client may be configured to use optional remote authentication. The debug/remote/ folder contains separate tests that may be used with optional remote authentication. See debug/remote/README.md for instructions.
 
 ## Test runner.sh bash script
 
-The `debug/runner.sh` bash script will run all the test modules in sequence.
-The script will pause for 5 seconds between each test to provide an opportunity
-to review data and/or to abort the tests using ctrl-C.
+The `debug/runner.sh` bash script will run all the test modules in sequence. The script will pause for 5 seconds between each test to provide an opportunity to review data and/or to abort the tests using ctrl-C.
 
-For various different test configurations, the script will stop the irc-hybrid-client
-server, issue new environment variables, then restart the server.
-For this to work properly, a folder is needed to store the server process PID.
-The default is `~/tmp` in the user's home directory.
-The PID folder must exist. An alternate PID folder may be specified
-as an environment variables, such as `PID_DIR=/home/user/somewhere`
+For various different test configurations, the script will stop the irc-hybrid-client server, issue new environment variables, then restart the server. For this to work properly, a folder is needed to store the server process PID. The default is `~/tmp` in the user's home directory. The PID folder must exist. An alternate PID folder may be specified as an environment variables, such as `PID_DIR=/home/user/somewhere`
 
 The runner.sh script will create log files in the PID_DIR folder (~/tmp by default).
 
-Do not start the web server. The runner.sh script will start the web server automatically.
-Start the script from the repository base folder using:
+Do not start the web server. The runner.sh script will start the web server automatically. Start the script from the repository base folder using:
 
 ```bash
 ./debug/runner.sh
@@ -461,10 +424,7 @@ Start the script from the repository base folder using:
 
 ## Command line arguments
 
-Execution of the debug test scripts will basically list
-a passing result for each test. Setting these environment
-variables from the command line will show additional
-information during test execution.
+Execution of the debug test scripts will basically list a passing result for each test. Setting these environment variables from the command line will show additional information during test execution.
 
 | Environment     | Description                                |
 | --------------- | ------------------------------------------ |
@@ -490,13 +450,7 @@ SHOWRES=3 SHOWCOOKIE=1 SHOWSTACK=1 node debug/public-routes.js
 
 ## Structure of JavaScript test files
 
-Each test file contains a series of tests that are run sequentially.
-The results of each test are available for use in subsequent tests.
-Since the network fetch operations are run asynchronously,
-the network requests are embedded in a chain of promises, where
-various promises resolve after the network request has been
-completed and the response values parsed. The following pseudo code
-shows the approach to a chain of tests.
+Each test file contains a series of tests that are run sequentially. The results of each test are available for use in subsequent tests. Since the network fetch operations are run asynchronously, the network requests are embedded in a chain of promises, where various promises resolve after the network request has been completed and the response values parsed. The following pseudo code shows the approach to a chain of tests.
 
 ```js
   // ...

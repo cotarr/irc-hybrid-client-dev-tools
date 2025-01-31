@@ -2,24 +2,18 @@
 
 ## Description
 
-The /bruno/ folder contains various tests to exercise the general functionality
-of the IRC client backend API for the irc-hybrid-client web server.
+The /bruno/ folder contains various tests to exercise the general functionality of the IRC client backend API for the irc-hybrid-client web server.
 
-To run these tests it is necessary to install the BRUNO API testing client
-available from [www.usebruno.com/](https://www.usebruno.com/).
+To run these tests it is necessary to install the BRUNO API testing client available from [www.usebruno.com/](https://www.usebruno.com/).
 
 ## Scope
 
-Overall, the irc-hybrid-client application involves 3 parts: the web browser, the
-web server, and the IRC server. The tests in this utility are primarily
-intended to test the web server as it listens for incoming HTTP requests
-from the internet. The test set represents a general overview of API functinality.
+Overall, the irc-hybrid-client application involves 3 parts: the web browser, the web server, and the IRC server. The tests in this utility are primarily intended to test the web server as it listens for incoming HTTP requests from the internet. The test set represents a general overview of API functinality.
 
 - This does not test the web browser code as it relates to being an IRC client..
 - This does not test the IRC client interface between the web server and the IRC server.
 
-Additional manual debugging should be used to test overall functionality as an IRC client,
-such as parsing IRC commands for changing an IRC nickname, or sending a message to an IRC channel.
+Additional manual debugging should be used to test overall functionality as an IRC client, such as parsing IRC commands for changing an IRC nickname, or sending a message to an IRC channel.
 
 ## API Documentation
 
@@ -29,20 +23,13 @@ This docs page contains further instructions related to testing of the irc-hybri
 
 ## Warning
 
-Running the tests can cause the web server to initiate IRC
-connections and issue IRC commands WITHOUT display of the IRC server responses.
-This is because IRC server responses are returned asynchronously
-in the websocket stream which is not visible in Bruno.
-It is recommended to use a dedicated development IRC server.
+Running the tests can cause the web server to initiate IRC connections and issue IRC commands WITHOUT display of the IRC server responses. This is because IRC server responses are returned asynchronously in the websocket stream which is not visible in Bruno. It is recommended to use a dedicated development IRC server.
 
 ## Installation of test environment
 
-A private development IRC server is recommended to avoid k-line from tests.
-The irc-hybrid-client was written using the "ngircd" Debian apt repository.
+A private development IRC server is recommended to avoid k-line from tests. The irc-hybrid-client was written using the "ngircd" Debian apt repository.
 
-The Bruno test scripts are located in a separate repository "irc-hybrid-client-dev-tools"
-In order to run the tests both irc-hybrid-client and irc-hybrid-client-dev-tools
-repositories must both be installed in the same parent folder.
+The Bruno test scripts are located in a separate repository "irc-hybrid-client-dev-tools" In order to run the tests both irc-hybrid-client and irc-hybrid-client-dev-tools repositories must both be installed in the same parent folder.
 
 Example of side by side repositories:
 
@@ -81,9 +68,7 @@ SERVER_INSTANCE_NUMBER=0
 SESSION_SECRET="---cookie-secret-goes-here--"
 ```
 
-Update .env file for the web server's login username and password using the
-irc-hybrid-client utility found in "tools/genEnvVarAuthForUser_1.mjs".
-The .env file should look similar to this:
+Update .env file for the web server's login username and password using the irc-hybrid-client utility found in "tools/genEnvVarAuthForUser_1.mjs". The .env file should look similar to this:
   
 ```bash
 LOGIN_USER_USERID=1
@@ -94,22 +79,18 @@ LOGIN_USER_HASH="---BCRYPT-HASH-GOES-HERE---"
 
 - Start the web server from the irc-hybrid-client directory `npm start`
 - Using a web browser, login to the web server at route "/irc/webclient.html" and confirm username and password are working correctly.
-- Create at least one definition for a development IRC server to be used for testing 
+- Create at least one definition for a development IRC server to be used for testing
 (see [documentation](https://cotarr.github.io/irc-hybrid-client/login-config.html)).
 - Using the web browser, connect to the IRC network and confirm the testing instance of the irc-hybrid-client web server are working as expected.
 - Close the web browser
 
 ## Bruno Test Collection Setup
 
-In Debian, Bruno is installed as a Debian APT package from the Bruno web site following
-the instructions at [www.usebruno.com/](https://www.usebruno.com/).
-For other distributions of Linux follow the instruction on the Bruno web site.
+In Debian, Bruno is installed as a Debian APT package from the Bruno web site following the instructions at [www.usebruno.com/](https://www.usebruno.com/). For other distributions of Linux follow the instruction on the Bruno web site.
 
 The default settings should be sufficient for these tests.
 
-In Bruno, a test collection is loaded from a git repository by select the disk folder
-that contains the collection. For irc-hybrid-client, the Bruno collection is saved in a
-separate repository irc-hybrid-client-dev-tools.
+In Bruno, a test collection is loaded from a git repository by select the disk folder that contains the collection. For irc-hybrid-client, the Bruno collection is saved in a separate repository irc-hybrid-client-dev-tools.
 
 - Open Bruno
 - Select `Open collection`, it will expect a disk folder name.
@@ -118,10 +99,7 @@ separate repository irc-hybrid-client-dev-tools.
 
 ## Bruno .env Environment Variables
 
-When Bruno starts, it will look for an ".env" file in the collection folder.
-There are two ways to do this. A dedicated .env file may be put into
-the collection folder as "irc-hybrid-client/bruno/irc-hybrid-client/.env".
-The second way is to create a symbolic link to the .env file in the irc-hybrid-client repository.
+When Bruno starts, it will look for an ".env" file in the collection folder. There are two ways to do this. A dedicated .env file may be put into the collection folder as "irc-hybrid-client/bruno/irc-hybrid-client/.env". The second way is to create a symbolic link to the .env file in the irc-hybrid-client repository.
 
 Use caution to avoid committing the symlink of the .env file to a git repository by adjusting the .gitignore if needed.
 
@@ -142,7 +120,6 @@ ln -s /home/user/some-folder/irc-hybrid-client/.env  .env
 Environment variables that begin with "TESTENV_" are used to configure the testing script. They are located in the .env file.
 
 The .env file must include setting for the testing instance of the irc-hybrid-client web server including the web server URL, web login username and web login password. You should substitute values that were configured for your web server.
-
 
 ```bash
 TESTENV_WEB_URL=http://localhost:3003
@@ -228,4 +205,3 @@ The legacy postman collections can be found in the "postman/" folder in commit
 ca1bec034ca2500251bd67387d94c650b3620db1 from 2023-07-17.
 
 The legacy ThunderClient collections (vscode extension) can be found in then "thunderclient/" folder in commit 866fb05e88af042d72bcc9156263538d8ba86b70 from 2024-12-10.
-

@@ -1,13 +1,8 @@
 # (Optional) API Tests for irc-hybrid-client - Remote Login
 
-The purpose of the debug/remote/remote-auth.js test script in this folder is
-to exercise the optional remote login workflow using the
-[collab-auth](https://github.com/cotarr/collab-auth) authorization server
-as an OAuth 2.0 remote login server for irc-hybrid-client program.
+The purpose of the debug/remote/remote-auth.js test script in this folder is to exercise the optional remote login workflow using the [collab-auth](https://github.com/cotarr/collab-auth) authorization server as an OAuth 2.0 remote login server for irc-hybrid-client program.
 
-It is not intended comprehensive test for security vulnerabilities.
-These instructions use temporary passwords that are not
-intended for use in a server that is visible on the internet.
+It is not intended comprehensive test for security vulnerabilities. These instructions use temporary passwords that are not intended for use in a server that is visible on the internet.
 
 ## Remote Authorization Script
 
@@ -15,14 +10,11 @@ The remote-auth.sh script is located in a separate "debug/remote/" folder of the
 
 ## irc-hybrid-client .env configuration
 
-This assumes the irc-hybrid-client ad been previously configured for the
-basic API tests in the debug/ folder, and these tests have passed.
+This assumes the irc-hybrid-client ad been previously configured for the basic API tests in the debug/ folder, and these tests have passed.
 
-This configuration change substitutes a different user password
-authentication service.
+This configuration change substitutes a different user password authentication service.
 
-For the cookies to work properly, the domain name of the irc web server and 
-the authorization server must be different. One uses "127.0.0.1" the other "localhost".
+For the cookies to work properly, the domain name of the irc web server and the authorization server must be different. One uses "127.0.0.1" the other "localhost".
 
 Add this configuration to the .env file:
 
@@ -40,16 +32,9 @@ TESTENV_REMOTE_AUTH_USERNAME=bob
 TESTENV_REMOTE_AUTH_PASSWORD=bobssecret
 ```
 
-The variable OAUTH2_ENABLE_REMOTE_LOGIN is a special case.
-When using the stand alone debug/remote/remote-auth.sh script,
-the "OAUTH2_ENABLE_REMOTE_LOGIN" variable should be set to "true'
-in the .env file as shown above.
+The variable OAUTH2_ENABLE_REMOTE_LOGIN is a special case. When using the stand alone debug/remote/remote-auth.sh script, the "OAUTH2_ENABLE_REMOTE_LOGIN" variable should be set to "true' in the .env file as shown above.
 
-However, when using the test runner script located at debug/runner.sh,
-the "OAUTH2_ENABLE_REMOTE_LOGIN" should be disabled with "#"
-comment character in the .env file. An additional variable 
-"TESTENV_RUNNER_REMOTE_AUTH=enabled" should be added to enable remote
-testing in the runner script as follows:
+However, when using the test runner script located at debug/runner.sh, the "OAUTH2_ENABLE_REMOTE_LOGIN" should be disabled with "#" comment character in the .env file. An additional variable "TESTENV_RUNNER_REMOTE_AUTH=enabled" should be added to enable remote testing in the runner script as follows:
 
 ```bash
 # OAUTH2_ENABLE_REMOTE_LOGIN=true
@@ -58,14 +43,12 @@ TESTENV_RUNNER_REMOTE_AUTH=enabled
 
 ## collab-auth configuration
 
-Install a copy of the collab-auth server in a protected development environment
-that does not have access to the internet, such as a virtual machine or behind a NAT router.
+Install a copy of the collab-auth server in a protected development environment that does not have access to the internet, such as a virtual machine or behind a NAT router.
 
-Follow the instructions in the documentation for collab-auth to configure
-collab-auth in demonstration mode. After it is up and running,
+Follow the instructions in the documentation for collab-auth to configure collab-auth in demonstration mode. After it is up and running,
 make the following changes:
 
-* Locate the users-db.json file. 
+* Locate the users-db.json file.
 * Locate the user with username "bob"
 * Add the role `irc.all` as shown below (note comma after user.admin)
 * Save the file.
@@ -126,24 +109,9 @@ The servers may be stopped in each terminal window by using Ctrl-C.
 
 ## Request Descriptions
 
-The authorization server client account provides credentials for the web server
-to interact directly with the authorization server, independent of any user's permissions.
-For the case where a client account is configured with `trustedClient": false`,
-the authorization server will present the user with a access decision form. The browser will
-submit a POST request for the user to "Accept" or "Deny" the permission to access the resource.
-This will redirect the browser back to the web server with an authorization code.
-In the case of `trustedClient: true`, the decision form is skipped, and the server will
-redirect browser immediately back to the web server with an authorization code.
+The authorization server client account provides credentials for the web server to interact directly with the authorization server, independent of any user's permissions. For the case where a client account is configured with `trustedClient": false`, the authorization server will present the user with a access decision form. The browser will submit a POST request for the user to "Accept" or "Deny" the permission to access the resource. This will redirect the browser back to the web server with an authorization code. In the case of `trustedClient: true`, the decision form is skipped, and the server will redirect browser immediately back to the web server with an authorization code.
 
-The login process involves two different browser cookies, one for the IRC client web server
-and the other for the authorization server login/password form.
-During normal login with no valid cookies, first the browser obtains a cookie from
-the web server, then after redirect to the authorization server, a second cookie is obtained.
-It is possible to be logged out (no cookie) of the IRC client web server, but still
-have an unexpired cookie for the authorization server. In this case, password entry
-is not required, and the authorization code grant workflow will return immediately
-with an authorization code. For the case where the web server is logged out (invalid cookie),
-but the user still has a valid cookie to the authorization server, user password entry will be skipped.
+The login process involves two different browser cookies, one for the IRC client web server and the other for the authorization server login/password form. During normal login with no valid cookies, first the browser obtains a cookie from the web server, then after redirect to the authorization server, a second cookie is obtained. It is possible to be logged out (no cookie) of the IRC client web server, but still have an unexpired cookie for the authorization server. In this case, password entry is not required, and the authorization code grant workflow will return immediately with an authorization code. For the case where the web server is logged out (invalid cookie), but the user still has a valid cookie to the authorization server, user password entry will be skipped.
 
 | Folder Name                         | Trusted | Auth Cookie |
 | ----------------------------------- | ------- | ----------- |
@@ -152,10 +120,7 @@ but the user still has a valid cookie to the authorization server, user password
 | Trusted Client Login                | True    |             |
 | Trusted Client (with auth cookie)   | True    | Valid       |
 
-Note: Only one case of Trusted Client can be configured at one time.
-in order to test both cases, the authorization server client account must be changed
-between trusted and untrusted client, and the authorization server restarted.
-The irc-hybrid-client .env file must be changed to match.
+Note: Only one case of Trusted Client can be configured at one time. in order to test both cases, the authorization server client account must be changed between trusted and untrusted client, and the authorization server restarted. The irc-hybrid-client .env file must be changed to match.
 
 ## Log of remote-auth.sh requests
 
