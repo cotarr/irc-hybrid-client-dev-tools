@@ -1,0 +1,61 @@
+meta {
+  name: 360-irc-part-channel
+  type: http
+  seq: 9
+}
+
+post {
+  url: {{WEB_URL}}/irc/message
+  body: json
+  auth: none
+}
+
+headers {
+  Accept: application/json
+  CSRF-Token: {{CSRF_TOKEN}}
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "message": "PART {{IRC_CHANNEL}}"
+  }
+  
+}
+
+assert {
+  res.status: eq 200
+  res.body.error: eq false
+}
+
+docs {
+  # Route
+  
+  POST /irc/message
+  
+  # Description
+  
+  The /irc/message route is intended for the web browser to send RFC-2812 formatted IRC command to the web server, which in turn will pass the command to the IRC network server.
+  
+  In this case, a message command is set to send a `/PART #test` command to the IRC network to leave the #test channel.
+  
+  # Request Parameters
+  
+  The POST request must include an application/json encoded JSON object specifying the RFC-2812 message going from the IRC client to the IRC server.
+  
+  ```json
+  {
+    "message": "PART #test"
+  }
+  ```
+  
+  # Response Data
+  
+  The request will return an application/json encoded JSON object contain the result of the request.
+  
+  ```json
+  {
+    "error": false
+  }
+  ```
+}

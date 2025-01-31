@@ -1,0 +1,116 @@
+meta {
+  name: 430-create-new-serv
+  type: http
+  seq: 3
+}
+
+post {
+  url: {{WEB_URL}}/irc/serverlist
+  body: json
+  auth: none
+}
+
+headers {
+  Accept: application/json
+  CSRF-Token: {{CSRF_TOKEN}}
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "disabled": false,
+    "group": 0,
+    "name": "local-server",
+    "host": "127.0.0.1",
+    "port": 6667,
+    "tls": false,
+    "verify": false,
+    "proxy": false,
+    "reconnect": false,
+    "logging": false,
+    "password": "",
+    "saslUsername": "",
+    "saslPassword": "",
+    "identifyNick": "",
+    "identifyCommand": "",
+    "nick": "myNick",
+    "altNick": "myNick2",
+    "recoverNick": false,
+    "user": "myUser",
+    "real": "myRealName",
+    "modes": "+iw",
+    "channelList": "#test, #test2, #test3"
+  }
+  
+}
+
+assert {
+  res.status: eq 200
+  res.body.status: eq success
+  res.body.method: eq POST
+}
+
+script:post-response {
+  //
+  // Parse the server index falues 
+  // Save data to Bruno runtime variables for use in future tests.
+  //
+  bru.setVar("IRC_SERVER_INDEX", res.body.index);
+  const previousIndex = parseInt(res.body.index) - 1;
+  bru.setVar("IRC_LAST_INDEX", previousIndex);
+}
+
+docs {
+  # Route
+  
+  POST /irc/serverlist
+  
+  # Description
+  
+  This route will create a new IRC server definition.
+  
+  The index number of the new server will be parsed from the response and saved in Bruno runtime variables for use in future test.
+  
+  # Request Parameters
+  
+  The POST request must include an application/json encoded JSON object containing the IRC server definition.
+  
+  ```JSON
+  {
+    "disabled": false,
+    "group": 0,
+    "name": "local-server",
+    "host": "127.0.0.1",
+    "port": 6667,
+    "tls": false,
+    "verify": false,
+    "proxy": false,
+    "reconnect": false,
+    "logging": false,
+    "password": "",
+    "saslUsername": "",
+    "saslPassword": "",
+    "identifyNick": "",
+    "identifyCommand": "",
+    "nick": "myNick",
+    "altNick": "myNick2",
+    "recoverNick": false,
+    "user": "myUser",
+    "real": "myRealName",
+    "modes": "+iw",
+    "channelList": "#test, #test2, #test3"
+  }
+  ```
+  
+  # Response Data
+  
+  The request will return an application/json encoded JSON object showing the result of the request.
+  
+  ```json
+  {
+    "status": "success",
+    "method": "POST",
+    "index": 6
+  }
+  ```
+}

@@ -1,0 +1,49 @@
+meta {
+  name: 120-secure-route
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{WEB_URL}}/secure
+  body: none
+  auth: none
+}
+
+headers {
+  Accept: application/json
+}
+
+assert {
+  res.status: eq 200
+  res.body.secure: eq ok
+}
+
+docs {
+  # Route
+  
+  GET /secure
+  
+  # Description
+  
+  Check the user's authentication state
+  
+  - Request has unexpired cookie with valid signature
+  - User's session is marked as authenticated.
+  
+  # Request Parameters
+  
+  Request headers must include a valid cookie
+  
+  # Response Data
+  
+  If the user is currently authorized the request will return an application/json encoded JSON object showing authorization status.
+  
+  ```json
+  {
+    "secure": "ok"
+  }
+  ```
+  
+  In case where the client does not have a valid session cookie, the web server will return a status 403 Forbidden error.
+}

@@ -1,0 +1,48 @@
+meta {
+  name: 460-unlock-new-serv
+  type: http
+  seq: 6
+}
+
+get {
+  url: {{WEB_URL}}/irc/serverlist?index={{IRC_SERVER_INDEX}}&lock=0
+  body: none
+  auth: none
+}
+
+params:query {
+  index: {{IRC_SERVER_INDEX}}
+  lock: 0
+}
+
+headers {
+  Accept: application/json
+}
+
+assert {
+  res.status: eq 200
+  res.body.disabled: eq true
+  res.body.name: eq local-server2
+  res.body.port: eq 6668
+  res.body.nick: eq myNick2
+}
+
+docs {
+  # Route
+  
+  GET /irc/serverlist
+  
+  # Description
+  
+  This route will retrieve the modified IRC server definition. In this case, the database is set to an unlocked state to allow the record to be deleted in the next test.
+  
+  # Request Parameters
+  
+  - Query parameter: index numbmer `index=6` (index value changes)
+  - Query parameter: lock state `lock=0`
+  
+  # Response Data
+  
+  The request will return an application/json encoded JSON object that includes the server definition at the index value (not shown)
+  
+}

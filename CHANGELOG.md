@@ -8,20 +8,33 @@ and this project adheres to
 
 ## Next
 
-Added: New collection of API tests used to test the irc-hybrid-client web server.
+Change: This change includes addition of new irc-hybrid-client tests to the
+irc-hybrid-client-dev-tools repository.
+
+- There are no code changes in this change.
+
+Motivation: The ThunderClient tests included in the irc-hybrid-client
+repository are no longer available because free features of ThunderClient
+VSCode extension have become pay-walled.
 
 Status: WORK IN PROGRESS, Git branch: debug-tests
 
-Motivation: The ThunderClient tests included in the irc-hybrid-client
-repository are not longer available because free features of ThunderClient
-VSCode plugin are now pay-walled.
+### Part 1 NodeJs JavaScript Test Scripts
 
-Using the Node.js assertion library, some alternate tests of the web server
-are being developed. The intention is that some tests may be run from
-the irc-hybrid-client repository by installing a symbolic link to
-the /debug/ folder in this repository.
+Using the Node.js assertion library and the NodeJs native fetch AIP,
+tests of the web server API routes have been developed. The intention
+is that these tests may be run from the irc-hybrid-client repository by 
+installing a symbolic link to the /debug/ folder in this repository.
 
-As the tests are developed, documentation will be added to the /debug/README.md file.
+Documentation can be found in the /debug/README.md file.
+
+### Part 2 Bruno API Test Scripts
+
+Using the Bruno API test client, a series of ThunderClient requests have been
+converted to Bruno requests. These have been stored in the
+irc-hybrid-client-dev-tools repository in the bruno/irc-hybrid-client folder.
+
+Documentation can be found in the /bruno/README.md file.
 
 ## [v3.0.2](https://github.com/cotarr/irc-hybrid-client-dev-tools/releases/tag/v3.0.2) 2024-09-26
 

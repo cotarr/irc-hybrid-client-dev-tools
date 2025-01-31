@@ -1,0 +1,31 @@
+script:pre-request {
+  // Don't redirect any of the routes
+  req.setMaxRedirects(0);
+  
+  bru.setVar("WEB_URL", bru.getProcessEnv("TESTENV_WEB_URL"));
+  bru.setVar("WEB_USERNAME", bru.getProcessEnv("TESTENV_WEB_USERNAME"));
+  bru.setVar("WEB_PASSWORD", bru.getProcessEnv("TESTENV_WEB_PASSWORD"));
+  
+  bru.setVar("IRC_SERVERINDEX", bru.getProcessEnv("TESTENV_IRC_SERVERINDEX"));
+  bru.setVar("IRC_NICKNAME", bru.getProcessEnv("TESTENV_IRC_NICKNAME"));
+  bru.setVar("IRC_REALNAME", bru.getProcessEnv("TESTENV_IRC_REALNAME"));
+  bru.setVar("IRC_CONNECTMODE", bru.getProcessEnv("TESTENV_IRC_CONNECTMODE"));
+  bru.setVar("IRC_CHANNEL", bru.getProcessEnv("TESTENV_IRC_CHANNEL"));
+  
+  bru.setEnvVar("WEB_URL", bru.getProcessEnv("TESTENV_WEB_URL"));
+  
+}
+
+docs {
+  # Collection Description
+  
+  This test collection is used to debug the irc-hybrid-client web server.
+  
+  ## Folders
+  
+  Each of the folders has a description in the folder 'docs' tab.
+  
+  ## Requests
+  
+  Each request in this collection has a description in the request 'docs' tab.
+}

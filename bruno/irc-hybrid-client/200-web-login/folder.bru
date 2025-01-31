@@ -1,0 +1,20 @@
+meta {
+  name: 200-web-login
+}
+
+docs {
+  # Description
+  
+  Three requests in this folder are intended to be run in sequence to emulatd a user's login to the web server.
+  
+  ## Testing Note:
+  
+  In order for the web server to accept authenticated http requests, the test client must provide a valid session cookie and a valid CSRF token. These are obtain by a three step login process in this seciton.
+  
+  Each of the following requests must be run individually in sequence. Attempting to use Bruno's running will result in missing data in the runtime variables.
+  
+  - 1 Request: 210-login form
+  - 2 Request: 220-submit password
+  - 3 Request: 230-get-csrf-token
+  
+}

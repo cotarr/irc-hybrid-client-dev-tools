@@ -1,0 +1,47 @@
+meta {
+  name: 110-server-status
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{WEB_URL}}/status
+  body: none
+  auth: none
+}
+
+headers {
+  Accept: application/json
+}
+
+assert {
+  res.status: eq 200
+  res.body.status: eq ok
+}
+
+docs {
+  # Route
+  
+  GET /status
+  
+  # Description
+  
+  Confirm the server is running.
+  
+  This route does not require a cookie or other authenticaiton, so if the server is running, it will always return a status 200 response.
+  
+  # Request Parameters
+  
+  none
+  
+  # Response Data
+  
+  If the server is running, the request will return an application/json encoded JSON object showing status value.
+  
+  ```json
+  {
+    "status": "ok"
+  }
+  ```
+  
+}

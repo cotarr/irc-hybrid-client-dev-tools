@@ -9,7 +9,7 @@ the Node.js assertion library.
 ## Scope
 
 Overall, the irc-hybrid-client application involves 3 parts: the web browser, the
-web server, and the IRC server. The tests in this debug utility are primarily
+web server, and the IRC server. The tests in this utility are primarily
 intended to test the web server as it listens for incoming HTTP requests
 from the internet. The scope of these tests is limited to the web server routes
 related to security, authentication and basic function.
@@ -128,7 +128,7 @@ By default the test script will use the first IRC server definition. If you pref
 TESTENV_IRC_SERVERINDEX=0
 ```
 
-The following optional test variables may be omitted from the .env file unless they need to be changed to alternate values.
+The following test variables added to the .env to specify IRC network related test data.
 
 ```bash
 TESTENV_IRC_REGISTERDELAY=5

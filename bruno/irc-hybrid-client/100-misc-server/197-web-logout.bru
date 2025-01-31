@@ -1,0 +1,40 @@
+meta {
+  name: 197-web-logout
+  type: http
+  seq: 5
+}
+
+get {
+  url: {{WEB_URL}}/logout
+  body: none
+  auth: none
+}
+
+headers {
+  Accept: text/html
+}
+
+assert {
+  res.status: eq 200
+}
+
+docs {
+  # Route
+  
+  GET /logout
+  
+  # Description
+  
+  The /logout request will remove the user's cookie from the web server session store. This invalidates the user's credentials.
+  
+  In terms of testing, /logout should be called before using the GET /login route because the current user must be logged out in order for the login request to return a password entry form with CSRF token and login nonce.
+  
+  # Request Parameters
+  
+  none
+  
+  # Response Data
+  
+  The request will return a text/html encoded web page confirming logout.
+  
+}

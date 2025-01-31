@@ -1,0 +1,57 @@
+meta {
+  name: 311-irc-getIrcState
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{WEB_URL}}/irc/getircstate
+  body: none
+  auth: none
+}
+
+headers {
+  Accept: application/json
+}
+
+assert {
+  res.status: eq 200
+  res.body.ircConnected: eq false
+  res.body.ircServerIndex: eq {{IRC_SERVERINDEX}}
+}
+
+docs {
+  # Route
+  
+  POST /irc/getircstate
+  
+  # Description
+  
+  The /irc/getircstate route will retrieve a JSON object from the web server containing the current state of the web server's internal IRC client.
+  
+  # Request Parameters
+  
+  none
+  
+  # Response Data
+  
+  The request will return an application/json encoded JSON with a large number of web server and IRC server state parameters. For purposes of testing these are key data values:
+  
+  ```json
+  {
+    // ... some not shown ...
+    "ircConnected": false,      <-------------
+    "ircServerIndex": 1,
+    "ircServerName": "local-server",
+    "nickName": "debug-nick",
+    "channels": [],
+    "channelStates": [],
+    // ... some not shown ...
+  }
+  ```
+  
+  ## Testing Comment
+  
+  The intent of this test is to show that the IRC client is not connected to the IRC network prior to use of the connect function.
+  
+}

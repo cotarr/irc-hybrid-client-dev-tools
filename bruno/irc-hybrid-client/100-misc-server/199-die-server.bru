@@ -1,0 +1,60 @@
+meta {
+  name: 199-die-server
+  type: http
+  seq: 7
+}
+
+post {
+  url: {{WEB_URL}}/terminate
+  body: json
+  auth: none
+}
+
+headers {
+  Accept: application/json
+  Content-Type: application/json
+  CSRF-Token: {{CSRF_TOKEN}}
+}
+
+body:json {
+  {
+    "terminate": "YES"
+  }
+}
+
+assert {
+  res.status: eq 200
+  res.body.error: eq false
+  res.body.message: eq Terminate received
+}
+
+docs {
+  # Route
+  
+  POST /terminate
+  
+  # Description
+  
+  The terminate request will remotely shut down the web server and IRC client.
+  
+  # Request Parameters
+  
+  The post request should include an applicaiton/json encoded JSON object confirming the command.
+  
+  ```json
+  {
+    "terminate": "YES"
+  }
+  ```
+  
+  # Response Data
+  
+  The request will return an application/json encoded JSON object showing error status.
+  
+  ```json
+  {
+    "error": false,
+    "message": "Terminate received"
+  }
+  ```
+}

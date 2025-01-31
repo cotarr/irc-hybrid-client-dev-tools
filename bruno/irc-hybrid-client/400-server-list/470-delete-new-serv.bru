@@ -1,0 +1,95 @@
+meta {
+  name: 470-delete-new-serv
+  type: http
+  seq: 7
+}
+
+delete {
+  url: {{WEB_URL}}/irc/serverlist?index={{IRC_SERVER_INDEX}}
+  body: json
+  auth: none
+}
+
+params:query {
+  index: {{IRC_SERVER_INDEX}}
+}
+
+headers {
+  Accept: application/json
+  CSRF-Token: {{CSRF_TOKEN}}
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "disabled": false,
+    "index": "{{IRC_SERVER_INDEX}}",
+    "group": 0,
+    "name": "local-server",
+    "host": "127.0.0.1",
+    "port": 3000,
+    "tls": false,
+    "verify": false,
+    "proxy": false,
+    "reconnect": false,
+    "logging": false,
+    "password": "",
+    "saslUsername": "",
+    "saslPassword": "",
+    "identifyNick": "",
+    "identifyCommand": "",
+    "nick": "myNick",
+    "altNick": "myNick2",
+    "recoverNick": false,
+    "user": "myUsername",
+    "real": "Irc Hybrid Client",
+    "modes": "+iw",
+    "channelList": "#test, #test2, #test3"
+  }
+  
+}
+
+assert {
+  res.status: eq 200
+  res.body.index: eq {{IRC_LAST_INDEX}}
+  res.body.method: eq DELETE
+}
+
+docs {
+  # Route
+  
+  DELETE /irc/serverlist
+  
+  # Description
+  
+  This route will delete the IRC server definition at the specified index.
+  
+  # Request Parameters
+  
+  Query parameter: index number `index=6` (number will change)
+  
+  The POST request will include an application/json encoded JSON object contain the server definition to be deleted. The query parameter index and body index must match.
+  
+  ```json
+  {
+    "disabled": false,
+    "index": "6",
+    "group": 0,
+    "name": "local-server",
+    // ... some data removed ...
+  }
+  
+  ```
+  
+  # Response Data
+  
+  The request will return an application/json encoded JSON object showing the result of the request.
+  
+  ```json
+  {
+    "status": "success",
+    "method": "DELETE",
+    "index": 5
+  }
+  ```
+}

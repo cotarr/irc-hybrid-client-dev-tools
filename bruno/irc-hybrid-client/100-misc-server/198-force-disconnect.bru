@@ -1,0 +1,51 @@
+meta {
+  name: 198-force-disconnect
+  type: http
+  seq: 6
+}
+
+post {
+  url: {{WEB_URL}}/irc/disconnect
+  body: json
+  auth: none
+}
+
+headers {
+  Accept: Application/Json
+  CSRF-Token: {{CSRF_TOKEN}}
+  Content-Type: application/json
+}
+
+body:json {
+  {
+   
+  }
+}
+
+assert {
+  res.status: eq 200
+}
+
+docs {
+  # Route
+  
+  POST /irc/disconnect
+  
+  # Description
+  
+  Normally an IRC session will be terminated using the IRC `/QUIT` command. In the event that is not possible, this request will force the IRC client to disconnect from the IRC server.
+  
+  # Request Parameters
+  
+  The post request should include an empty JSON object.
+  
+  # Response Data
+  
+  The request will return an application/json encoded JSON object showing error status.
+  
+  ```json
+  {
+    "error": false
+  }
+  ```
+}

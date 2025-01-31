@@ -1,0 +1,67 @@
+meta {
+  name: 230-get-csrf-token
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{WEB_URL}}/irc/webclient.html
+  body: none
+  auth: none
+}
+
+headers {
+  Accept: text/html
+}
+
+assert {
+  res.status: eq 200
+  res.body: contains name="csrf-token" content="
+}
+
+script:post-response {
+  //
+  // Main web page at /irc/webclient.html includes a CSRF token.
+  // During testing, this value must be included with POST requests
+  // The CSRF token is parsed from HTML and stored as a Bruno runtime variable.
+  //
+  if (res.getStatus() === 200) {
+    const bodyHtml = res.getBody();
+    bru.setVar("CSRF_TOKEN", bodyHtml.split('name="csrf-token"')[1].split('content="')[1].split('"')[0]);
+  }
+}
+
+docs {
+  # Route
+  
+  GET /irc/webclient.html
+  
+  # Description
+  
+  This request return a single page web application that acts as an IRC client running the web browser.
+  
+  # Request Parameters
+  
+  none
+  
+  # Response Data
+  
+  The response will be a text/html encoded web page.
+  
+  Critical to further testing, the web page will include a CSRF token. The CSRF token will be parsed from the HTML and stored in a Bruno runtime variable for use in future requests. The web server will require this token to mitigate cross site request forgery attemps when submitting data to the web server.
+  
+  ```html
+  <meta name="csrf-token" content="xxxxxxxx-xxxxxxxxxxxxxxxx">
+  ```
+  
+  ## Testing Note:
+  
+  In order for the web server to accept authenticated http requests, the test client must provide a valid session cookie and a valid CSRF token. These are obtain by a three step login process in this seciton.
+  
+  Each of the following requests must be run individually in sequence. Attempting to use Bruno's running will result in missing data in the runtime variables.
+  
+  - 1 Request: 210-login form
+  - 2 Request: 220-submit password
+  - 3 Request: 230-get-csrf-token
+  
+}

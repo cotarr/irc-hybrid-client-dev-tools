@@ -1,0 +1,43 @@
+meta {
+  name: 140-security-txt
+  type: http
+  seq: 4
+}
+
+get {
+  url: {{WEB_URL}}/.well-known/security.txt
+  body: none
+  auth: none
+}
+
+headers {
+  Accept: text/plain
+}
+
+assert {
+  res.status: eq 200
+}
+
+docs {
+  # Route
+  
+  GET /.well-known/security.txt
+  
+  # Description
+  
+  Display the web server security contact information.
+  
+  # Request Parameters
+  
+  none
+  
+  # Response Data
+  
+  The request will return a text/plain encoded response.
+  
+  ```txt
+  # Website security contact 
+  Contact: mailto:bob@example.com
+  Expires: Thu, 22 Feb 2024 10:51:49 -0600
+  ```
+}

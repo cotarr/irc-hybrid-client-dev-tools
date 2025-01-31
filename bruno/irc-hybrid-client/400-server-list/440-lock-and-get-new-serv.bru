@@ -1,0 +1,75 @@
+meta {
+  name: 440-lock-and-get-new-serv
+  type: http
+  seq: 4
+}
+
+get {
+  url: {{WEB_URL}}/irc/serverlist?index={{IRC_SERVER_INDEX}}&lock=1
+  body: none
+  auth: none
+}
+
+params:query {
+  index: {{IRC_SERVER_INDEX}}
+  lock: 1
+}
+
+headers {
+  Accept: application/json
+}
+
+assert {
+  res.status: eq 200
+  res.body.port: eq 6667
+  res.body.nick: eq myNick
+  res.body.disabled: eq false
+  res.body.name: eq local-server
+}
+
+docs {
+  # Route
+  
+  GET /irc/serverlist
+  
+  # Description
+  
+  This route will retrieve the previously created new IRC server definition. In this case, the database is locked prior to changing the newly created record in the next test.
+  
+  # Request Parameters
+  
+  - Query parameter: index number `index=6`  (the number changes)
+  - Query parameter: lock state `lock=1`
+  
+  # Response Data
+  
+  The request will return an application/json encoded JSON object that includes the previously created new IRC server definition.
+  
+  ```json
+  {
+    "index": 6,
+    "disabled": false,
+    "group": 0,
+    "name": "local-server",
+    "host": "127.0.0.1",
+    "port": 6667,
+    "tls": false,
+    "verify": false,
+    "proxy": false,
+    "reconnect": false,
+    "logging": false,
+    "password": "",
+    "saslUsername": "",
+    "saslPassword": "",
+    "identifyNick": "",
+    "identifyCommand": "",
+    "nick": "myNick",
+    "altNick": "myNick2",
+    "recoverNick": false,
+    "user": "myUser",
+    "real": "myRealName",
+    "modes": "+iw",
+    "channelList": "#test, #test2, #test3"
+  }
+  ```
+}

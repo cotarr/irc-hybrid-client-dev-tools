@@ -1,0 +1,42 @@
+meta {
+  name: 350-irc-cache
+  type: http
+  seq: 8
+}
+
+get {
+  url: {{WEB_URL}}/irc/cache
+  body: none
+  auth: none
+}
+
+headers {
+  Accept: application/json
+}
+
+assert {
+  res.status: eq 200
+  JSON.stringify(res.body): contains This is a test message
+}
+
+docs {
+  # Route
+  
+  POST /irc/cache
+  
+  # Description
+  
+  The /irc/cache route will command the web server to transmit a full copy of the IRC message buffer to the web browser.
+  
+  In the case of this test, the message cache should contain the user's channel message that was sent in the previous test.
+  
+  # Request Parameters
+  
+  none
+  
+  # Response Data
+  
+  The request will return an application/json encoded JSON object containing a fully copy of the IRC message cache (not shown here).
+  
+  
+}

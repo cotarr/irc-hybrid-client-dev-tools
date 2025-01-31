@@ -1,0 +1,42 @@
+meta {
+  name: 130-robots-txt
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{WEB_URL}}/robots.txt
+  body: none
+  auth: none
+}
+
+headers {
+  Accept: text/plain
+}
+
+assert {
+  res.status: eq 200
+}
+
+docs {
+  # Route
+  
+  GET /robots.txt
+  
+  # Description
+  
+  Display the web server robot exclusing policy.
+  
+  # Request Parameters
+  
+  none
+  
+  # Response Data
+  
+  The request will return a text/plain encoded response.
+  
+  ```txt
+  User-agent: *
+  Disallow: /
+  ```
+}

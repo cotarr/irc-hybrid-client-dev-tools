@@ -1,0 +1,74 @@
+meta {
+  name: 410-get-all-serv
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{WEB_URL}}/irc/serverlist
+  body: none
+  auth: none
+}
+
+headers {
+  Accept: application/json
+}
+
+assert {
+  res.status: eq 200
+}
+
+docs {
+  # Route
+  
+  GET /irc/serverlist
+  
+  # Description
+  
+  This route will return the full serverlist.
+  
+  # Request Parameters
+  
+  none
+  
+  # Response Data
+  
+  The request will return an application/json encoded JSON object that includes an array of IRC server definitions.
+  
+  ```json
+    {
+      "index": 0,
+      "disabled": false,
+      "group": 0,
+      "name": "local-server",
+      "host": "127.0.0.1",
+      "port": 6667,
+      "tls": false,
+      "verify": false,
+      "proxy": false,
+      "reconnect": false,
+      "logging": false,
+      "password": "",
+      "saslUsername": "",
+      "saslPassword": "",
+      "identifyNick": "",
+      "identifyCommand": "",
+      "nick": "myNick",
+      "altNick": "myNick2",
+      "recoverNick": false,
+      "user": "myUser",
+      "real": "myRealName",
+      "modes": "+iw",
+      "channelList": "#test, #test2, #test3"
+    },
+    {
+      "index": 1,
+      // ... server 2 ...
+    },
+    {
+      "index": 2,
+      // ... server 3 ...
+    }
+  ]
+  ```
+}

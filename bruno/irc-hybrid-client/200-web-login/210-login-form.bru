@@ -1,0 +1,71 @@
+meta {
+  name: 210-login-form
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{WEB_URL}}/login
+  body: none
+  auth: none
+}
+
+headers {
+  Accept: text/html
+}
+
+assert {
+  res.status: eq 200
+  res.body: contains nonce=
+  res.body: contains name="_csrf" value="
+}
+
+script:post-response {
+  //
+  // Parse login random nonce and CSRF token from login form
+  // Save values to Bruno runtime variables for use in future tests
+  //
+  if (res.getStatus() === 200) {
+    const bodyHtml = res.getBody();
+    bru.setVar("LOGIN_NONCE", bodyHtml.split('nonce=')[1].split('"')[0]);
+    bru.setVar("CSRF_TOKEN", bodyHtml.split('name="_csrf')[1].split('value="')[1].split('"')[0]);
+  }
+  
+  
+}
+
+docs {
+  # Route
+  
+  GET /login
+  
+  # Description
+  
+  This request will present the user with a login form for the user to enter their username and password.
+  
+  # Request Parameters
+  
+  none
+  
+  # Response Data
+  
+  The response will be a text/html encoded web page that contains a user login form. In terms of testing, two critical items are present, the random login nonce, and the CSRF token. These values are parsed from the HTML and stored into Bruno runtime variables for use in POST /login.
+  
+  
+  ```html
+  <form action="/login-authorize?nonce=xxxxxxxx" method="post">
+  
+  <input type="hidden" name="_csrf" value="xxxxxxxx-xxxxxxxx" />
+  ```
+  
+  ## Testing Note:
+  
+  In order for the web server to accept authenticated http requests, the test client must provide a valid session cookie and a valid CSRF token. These are obtain by a three step login process in this seciton.
+  
+  Each of the following requests must be run individually in sequence. Attempting to use Bruno's running will result in missing data in the runtime variables.
+  
+  - 1 Request: 210-login form
+  - 2 Request: 220-submit password
+  - 3 Request: 230-get-csrf-token
+  
+}

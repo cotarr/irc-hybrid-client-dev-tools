@@ -1,0 +1,19 @@
+meta {
+  name: 300-irc-commands
+}
+
+docs {
+  # Description
+  
+  The requests in this folder are intended to demonstrate some of the web server API functionality of the web server acting as an IRC client. 
+  
+  It is noted that most of the IRC client functionality is integral to the web browser which is outside the scope of API testing.
+  
+  ## Testing Note:
+  
+  The tests in this folder require a valid session cookie and CSRF token. These may be obtained by running:
+  
+  - 1 Request: 210-login form
+  - 2 Request: 220-submit password
+  - 3 Request: 230-get-csrf-token
+}

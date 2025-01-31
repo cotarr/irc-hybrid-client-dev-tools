@@ -1,0 +1,63 @@
+meta {
+  name: 310-set-index-number
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{WEB_URL}}/irc/server
+  body: json
+  auth: none
+}
+
+headers {
+  Accept: application/json
+  CSRF-Token: {{CSRF_TOKEN}}
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "index": {{IRC_SERVERINDEX}}
+  }
+  
+}
+
+assert {
+  res.status: eq 200
+  res.body.index: eq {{IRC_SERVERINDEX}}
+  res.body.error: eq false
+}
+
+docs {
+  # Route
+  
+  POST /irc/server
+  
+  # Description
+  
+  The /irc/server route is intended to specify an index number indicating which of the server definitions should be used for making a connection to the IRC network.
+  
+  The default index value is zero. The /irc/server command is not needed if the testing involves the first definition at index 0.
+  
+  # Request Parameters
+  
+  The POST request must include an application/json encoded JSON object specifying the index value as an integer starting from zero.
+  
+  {
+    "index": 3}
+  }
+  
+  # Response Data
+  
+  The request will return an application/json encoded JSON object contain the result of the request.
+  
+  ```json
+  {
+    "error": false,
+    "index": 3,
+    "name": "local-server"
+  }
+  ```
+  
+}

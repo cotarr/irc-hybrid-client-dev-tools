@@ -1,0 +1,74 @@
+meta {
+  name: 361-irc-getIrcState
+  type: http
+  seq: 10
+}
+
+get {
+  url: {{WEB_URL}}/irc/getircstate
+  body: none
+  auth: none
+}
+
+headers {
+  Accept: application/json
+}
+
+assert {
+  res.status: eq 200
+  res.body.ircConnected: eq true
+  res.body.channels[0]: eq #test
+  res.body.channelStates[0].joined: eq false
+}
+
+docs {
+  # Route
+  
+  POST /irc/getircstate
+  
+  # Description
+  
+  The /irc/getircstate route will retrieve a JSON object from the web server containing the current state of the web server's internal IRC client.
+  
+  # Request Parameters
+  
+  none
+  
+  # Response Data
+  
+  The request will return an application/json encoded JSON with a large number of web server and IRC server state parameters. For purposes of testing these are key data values:
+  
+  ```json
+  {
+    // ... some not shown ...
+    "ircConnected": true,
+    "ircServerIndex": 1,
+    "ircServerName": "local-server",
+    "nickName": "debug-nick",
+    "channels": [
+      "#test"
+    ],
+    "channelStates": [
+      {
+        "name": "#test",
+        "csName": "#test",
+        "topic": "",
+        "names": [
+          "debug-nick",
+          "some-other-nick"
+        ],
+        "joined": false,     <-------------
+        "kicked": false
+      }
+    ],
+    // ... some not shown ...
+  }
+  ```
+  
+  ## Testing Comment
+  
+  The intent of this test is to show that the IRC client has /PART the intended IRC channel.
+  
+  Note the false value in `channelStates[0].joined: false`
+  
+}
