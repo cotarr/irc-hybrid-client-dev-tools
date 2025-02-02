@@ -2,7 +2,9 @@
 
 ## Description
 
-The /debug/ folder contains various irc-hybrid-client web server API tests that are written in native javascript using the Node.js assertion library.
+The debug test script feature is a collection of various irc-hybrid-client web server API tests that are written in native javascript using the Node.js assertion library.
+
+The primary purpose of the debug test scripts is to check the operation of the irc-hybrid-client web server following installation of NPM dependency package updates. Often these dependency module upgrades include major version revisions that may contain breaking changes. Following installation of updates, these provide a quick check that noting within the web server has been broken by the updates.
 
 ## Scope
 
@@ -25,8 +27,6 @@ A private development IRC server is recommended to avoid k-line from tests. The 
 
 The test scripts are located in a separate repository "irc-hybrid-client-dev-tools" In order to run the tests both irc-hybrid-client and irc-hybrid-client-dev-tools repositories must both be installed in the same parent folder.
 
-A symbolic link is required to run testing JavaScript files from the irc-hybrid-client directory.
-
 Example of side by side repositories:
 
 ```txt
@@ -34,20 +34,31 @@ drwxr-xr-x 13 user user 4096 Jan 23 14:13 irc-hybrid-client
 drwxr-xr-x  5 user user 4096 Jan 23 09:52 irc-hybrid-client-dev-tools
 ```
 
+Since the debug scripts are in an alternate folder location, a symbolic link inside the irc-hybrid-client repository is needed to make the remote /debug/ folder visible inside the irc-hybrid-client repository folder.
+
 Example commands to install both repositories and create symlink:
 
 ```bash
 # Clone GitHub repositories.
 git clone https://github.com/cotarr/irc-hybrid-client.git
 git clone https://github.com/cotarr/irc-hybrid-client-dev-tools.git
+
 cd irc-hybrid-client
+
 # install dependencies
 npm install
+
 # Create symbolic link from irc-hybrid-client repository to the testing folder
 ln -s ../irc-hybrid-client-dev-tools/debug debug
 ```
 
 ## Configure irc-hybrid-client .env file for testing
+
+A private development IRC server is recommended to avoid k-line from tests. The irc-hybrid-client was written using the "ngircd" Debian apt repository. If possible, an isolated virtual machine is preferred where the VM contains both the test instance of the IRC server and the irc-hybric-client web server.
+
+Install the irc-hybrid-client web server in accordance with the Installation Instructions in the irc-hybrid-client /docs/ folder.
+
+Configure irc-hybrid-client .env file for testing
 
 - For testing, the irc-hybrid-client configuration must use the ".env file" (Not the legacy "credentials.js" file)
 - In the base folder of the irc-hybrid-client repository, create a new .env file.
@@ -66,7 +77,7 @@ SERVER_INSTANCE_NUMBER=0
 SESSION_SECRET="---cookie-secret-goes-here--"
 ```
 
-The following variables must NOT be defined in the .env file during testing. The test runner (debug/runner.sh) will restart the irc-hybrid-client server several times with different values for these variables. The .env file will over-rise these ad-hoc environment variables and cause the tests to fail.
+The following variables must NOT be defined in the .env file during testing. The test runner (debug/runner.sh) will restart the irc-hybrid-client server several times with different values for these variables. The .env file will over-write these ad-hoc environment variables and cause the tests to fail.
 
 ```bash
 # Not allowed in .env during testing.
@@ -78,7 +89,7 @@ IRC_DISABLE_LIST_EDITOR=
 IRC_SERVE_HTML_HELP_DOCS=
 ```
 
-Update .env file for the web server's login username and password using the irc-hybrid-client utility found in "tools/genEnvVarAuthForUser_1.mjs". The .env file should look similar to this:
+If necessary, update .env file for the web server's login username and password using the irc-hybrid-client utility found in "tools/genEnvVarAuthForUser_1.mjs". The .env file should look similar to this:
   
 ```bash
 LOGIN_USER_USERID=1
@@ -111,7 +122,7 @@ By default the test script will use the first IRC server definition. If you pref
 TESTENV_IRC_SERVERINDEX=0
 ```
 
-The following test variables added to the .env to specify IRC network related test data.
+Various IRC related data values are required for use in testing. These must be specified using environment variables. Add the following definitions the the .env file, but substitute different data values as needed for your specific test environment.
 
 ```bash
 TESTENV_IRC_REGISTERDELAY=5
@@ -119,6 +130,45 @@ TESTENV_IRC_NICKNAME=debug-nick
 TESTENV_IRC_REALNAME=test
 TESTENV_IRC_CONNECTMODE="+i"
 TESTENV_IRC_CHANNEL="#test"
+```
+
+## Sample output from a Debug Test Script
+
+Enter the following command in the terminal:
+
+```bash
+node ./debug/public-routes.js
+```
+
+The debug/public-routes.js script will confirm some un-protected public routes that do not require a user's login session cookie.
+
+```txt
+Test: 100 GET /status (server is running)
+  200 GET http://localhost:3003/status
+  Expect: status === 200
+  Expect: status: "ok"
+
+Test: 101 GET /.well-known/security.txt
+  200 GET http://localhost:3003/.well-known/security.txt
+  Expect: status === 200
+  Expect: response include security contact email
+
+Test: 102 GET /robots.txt
+  200 GET http://localhost:3003/robots.txt
+  Expect: status === 200
+  Expect: response include "Disallow: /"
+
+Test: 103 GET /favicon.ico
+  204 GET http://localhost:3003/favicon.ico
+  Expect: status === 204
+
+Test: 300 GET /not-found.html (Error handler)
+  404 GET http://localhost:3003/not-found.html
+  Expect: status === 404
+  Expect: Error response includes "Not Found"
+---------------------
+  All Tests Passed
+---------------------
 ```
 
 ## Command line examples
@@ -498,4 +548,4 @@ Each test file contains a series of tests that are run sequentially. The results
 
 The legacy postman collections can be found in the "postman/" folder in commit ca1bec034ca2500251bd67387d94c650b3620db1 from 2023-07-17.
 
-The legacy ThunderClient collections (vscode extension) can be found in then "thunderclient/" folder in commit 866fb05e88af042d72bcc9156263538d8ba86b70 from 2024-12-10.
+The legacy ThunderClient collections (vscode extension) can be found in then "thunderclient/" folder in commit 4521f164eb84767447eaa5566b8ca6209f53b966 for version v2.0.23 from 2025-01-22
