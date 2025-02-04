@@ -53,11 +53,11 @@ if (process.env.TESTENV_WEB_PASSWORD) {
 
 testEnv.ircServerIndex = 0;
 if (process.env.TESTENV_IRC_SERVERINDEX) {
-  testEnv.ircServerIndex = process.env.TESTENV_IRC_SERVERINDEX;
+  testEnv.ircServerIndex = parseInt(process.env.TESTENV_IRC_SERVERINDEX);
 }
 testEnv.ircRegisterDelay = 5;
 if (process.env.TESTENV_IRC_REGISTERDELAY) {
-  testEnv.ircRegisterDelay = process.env.TESTENV_IRC_REGISTERDELAY;
+  testEnv.ircRegisterDelay = parseInt(process.env.TESTENV_IRC_REGISTERDELAY);
 }
 testEnv.ircNickname = 'debug-nick';
 if (process.env.TESTENV_IRC_NICKNAME) {

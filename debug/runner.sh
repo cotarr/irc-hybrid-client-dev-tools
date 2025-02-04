@@ -383,6 +383,25 @@ node ./debug/user-auth-count.js
 check_for_errors 11-user-auth-count
 sleep 5
 
+# -------------------------------------------------
+# Restart node server with alternate configuration
+# -------------------------------------------------
+echo
+stop_server
+set_default_env
+restart_server
+sleep 5
+
+# ---------------------
+# Test: serverlist-edit.js
+# ---------------------
+echo
+echo "Executing: node debug/serverlist-edit.js"
+sleep 5
+node ./debug/serverlist-edit.js
+check_for_errors 12-serverlist-edit
+sleep 5
+
 # ------------- Start of case of include remote auth ------------
 if grep "^TESTENV_RUNNER_REMOTE_AUTH\=enabled" ./.env &> /dev/null ; then
 
@@ -405,7 +424,7 @@ if grep "^TESTENV_RUNNER_REMOTE_AUTH\=enabled" ./.env &> /dev/null ; then
     echo "Executing: node debug/remote/remote-auth.js"
     sleep 5
     node ./debug/remote/remote-auth.js
-    check_for_errors 12-remote/remote-auth
+    check_for_errors 13-remote/remote-auth
     sleep 5
 # ------------- End of case of include remote auth ------------
 else

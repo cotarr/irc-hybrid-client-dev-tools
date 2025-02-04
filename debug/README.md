@@ -188,6 +188,7 @@ node debug/basic-functions.js
 node debug/cookie-tests.js
 node debug/disabled-routes.js
 node debug/user-auth-count.js
+node debug/serverlist-edit.js
 ```
 
 ## Description of test files
@@ -362,6 +363,11 @@ Test: 52 GET /irc/webclient.html (get CSRF token)
 Test: 100 GET /secure (confirm authorized)
 Test: 101 GET /userinfo (web login user matches)
 Test: 102 POST /irc/server (server index set for test)
+Test: 103 POST /irc/connect (connect to IRC at specified index)
+Test: 105 GET /irc/getircstate
+Test: 500 POST /irc/disconnect
+Test: 501 GET /irc/getircstate (wait for disconnect)
+Test: 502 POST /terminate (shutdown server)
 ```
 
 ### cookie-tests.js
@@ -452,6 +458,59 @@ Test: 161 POST /login-authorize - Failed login 6 (expect count exceeded)
 Test: 200 GET /login - Get a new csrf token and nonce
 Test: 201 POST /login-authorize - Try valid login while expired
 Test: 202 GET /irc/webclient.html (confirm no access)
+```
+
+### serverlist-edit.js
+
+This script will test the API calls used to edit the list of IRC servers.
+
+```txt
+Test: 10 GET /status (server is running)
+Test: 50 GET /login - Get new nonce and CSRF token
+Test: 51 POST /login-authorize - Get valid cookie (used in writing tests)
+Test: 52 GET /irc/webclient.html (get CSRF token)
+Test: 100 GET /irc/getircstate (Not connected to IRC)
+Test: 101 POST /irc/server (server index set to zero)
+Test: 102 GET /irc/serverlist (Retrieve full sever list)
+Test: 103 GET /irc/serverlist (Retrieve a server, clear edit lock)
+Test: 104 GET /irc/serverlist (Set edit lock),
+Test: 105 POST /irc/serverlist (Conflict, create new while locked, expect 409)
+Test: 106 GET /irc/serverlist (Conflict, attempt lock while locked, expect 409)
+Test: 107 GET /irc/serverlist (Clear edit lock)
+Test: 108 PATCH /irc/serverlist (Conflict, modify while locked, expect 409)
+Test: 109 POST /irc/serverlist (Create new IRC server definition)
+Test: 110 GET /irc/serverlist (Check new server values, lock database)
+Test: 111 PATCH /irc/serverlist (Modify with invalid locked index value, expect 409)
+Test: 112 GET /irc/serverlist (Conflict, attempt lock while locked)
+Test: 113 PATCH /irc/serverlist (Modify definition of created server)
+Test: 114 GET /irc/serverlist (Check modified values, keep locked)
+Test: 115 DELETE /irc/serverliar (Delete while locked, expect 409)
+Test: 116 GET /irc/serverlist (Remove database lock)
+Test: 117 DELETE /irc/serverlist (Delete the created server definition)
+Test: 200 GET /irc/serverlist (Set edit lock at index 0),
+Test: 201 COPY /irc/serverlist (Copy server, expect unlocked, fail 409)
+Test: 202 GET /irc/serverlist (Remove database lock)
+Test: 203 COPY /irc/serverlist (Copy server from Index 0 to 1)
+Test: 204 POST /irc/serverlist (Move up from Index 1 to 0)
+Test: 205 POST /irc/serverlist/tools (Toggle Disabled)
+Test: 206 GET /irc/serverlist (Get server, confirm is disabled)
+Test: 207 DELETE /irc/serverlist (Delete the copied server definition)
+Test: 208 GET /irc/serverlist (Confirm original record at index 0) 
+Test: 300 POST /irc/serverlist (Input validation error: host)
+Test: 301 POST /irc/serverlist (Input validation error: port number)
+Test: 302 POST /irc/serverlist (Input validation error: missing name)
+Test: 303 POST /irc/serverlist (Input validation error: missing nick)
+Test: 304 POST /irc/serverlist (Input validation error: missing user)
+Test: 400 POST /irc/server (set server index for connect to IRC)
+Test: 401 POST /irc/connect (connect to IRC before testing serverlist edit)
+Test: 402 GET /irc/getircstate (Confirm connected to IRC)
+Test: 403 POST /irc/serverlist (Attempt create new while connected to IRC)
+Test: 404 GET /irc/serverlist (Attempt lock while connected to IRC)
+Test: 405 PATCH /irc/serverlist (Attempt modify while connected to IRC)
+Test: 406 DELETE /irc/serverlist (Attempt delete while connected to IRC)
+Test: 407 COPY /irc/serverlist (Attempt copy while connected to IRC)
+Test: 408 GET /irc/serverlist (Retrieve full list is allowed while connected IRC)
+Test: 409 POST /irc/disconnect (Done server list tests, disconnect from IRC)
 ```
 
 ## (Optional) remote authentication
