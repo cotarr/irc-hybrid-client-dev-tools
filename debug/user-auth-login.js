@@ -9,8 +9,13 @@
 const assert = require('node:assert');
 const fs = require('node:fs');
 
-const Tokens = require('../../irc-hybrid-client/node_modules/@dr.pogodin/csurf/tokens.js');
-const tokens = new Tokens({});
+// From csurf v1.14.1
+// const Tokens = require('../../irc-hybrid-client/node_modules/@dr.pogodin/csurf/tokens.js');
+// const tokens = new Tokens({});
+
+// Updated imports to address csurf 1.16.4
+const Tokens = require("../../irc-hybrid-client/node_modules/@dr.pogodin/csurf/build/cjs/tokens")
+const tokens = new Tokens.default({});
 
 if (!fs.existsSync('./package.json')) {
   console.log('Must be run from repository base folder as: node debug/user-auth-login.js');

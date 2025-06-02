@@ -9,6 +9,7 @@ and this project adheres to
 ## next
 
 - Update npm dev dependencies: gulp@5.0.1, del@8.0.0
+- Update test scripts to accommodate npm dependency updates in irc-hybrid-client.
 
 ## [v3.0.3](https://github.com/cotarr/irc-hybrid-client-dev-tools/releases/tag/v3.0.3) 2025-02-04
 
