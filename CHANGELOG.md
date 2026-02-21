@@ -6,6 +6,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [v3.0.6](https://github.com/cotarr/irc-hybrid-client-dev-tools/releases/tag/v3.0.6) 2026-02-21
+
+- Bump outdated npm packages: del, gulp-rename
+- Update package-lock.json to update minimatch@10.2.2 to clear npm audit warning, dependency of gulp-order3.
+
 ## [v3.0.5](https://github.com/cotarr/irc-hybrid-client-dev-tools/releases/tag/v3.0.5) 2025-06-14
 
 - Run npm audit fix to clear GitHub dependabot audit warning for dev dependency
