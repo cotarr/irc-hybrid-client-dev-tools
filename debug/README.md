@@ -125,7 +125,7 @@ TESTENV_IRC_SERVERINDEX=0
 Various IRC related data values are required for use in testing. These must be specified using environment variables. Add the following definitions the the .env file, but substitute different data values as needed for your specific test environment.
 
 ```bash
-TESTENV_IRC_REGISTERDELAY=5
+TESTENV_IRC_REGISTERDELAY=15
 TESTENV_IRC_NICKNAME=debug-nick
 TESTENV_IRC_REALNAME=test
 TESTENV_IRC_CONNECTMODE="+i"
