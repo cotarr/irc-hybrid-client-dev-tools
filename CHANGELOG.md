@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [v3.0.9](https://github.com/cotarr/irc-hybrid-client-dev-tools/releases/tag/v3.0.9) 2026-05-20
+
+- Run npm audit fix to clear npm audit warning
+
 ## [v3.0.8](https://github.com/cotarr/irc-hybrid-client-dev-tools/releases/tag/v3.0.8) 2026-03-28
 
 - Run npm audit fix to clear npm audit warning
