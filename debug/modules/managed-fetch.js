@@ -235,7 +235,7 @@ exports.managedFetch = (chain) => {
             const cookieFields = responseCookieArray[0].split(';');
             cookieFields.forEach((field) => {
               if (field.toLowerCase().indexOf('expires=') >= 0) {
-                const expDateObj = new Date(field.split('='[1]));
+                const expDateObj = new Date(field.split('=')[1]);
                 chain.parseSetCookieHeaderExpires = Math.floor(expDateObj.getTime() / 1000);
                 chain.currentSessionCookieExpires = Math.floor(expDateObj.getTime() / 1000);
                 // console.log(chain.cookieExpires);

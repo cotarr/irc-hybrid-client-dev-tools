@@ -640,7 +640,7 @@ exports.testIrcHybridClientWebsocket = (chain) => {
         } 
 
         // Test: this is main test, wait for HEARTBEAT
-        // opcode 8 is a  text frame
+        // opcode 1 is a  text frame
         if (frameDataObj.opCode === 1) {
           if (frameDataObj.messageUtf8.indexOf('HEARTBEAT') >= 0) {
             heartbeatCount++;
@@ -712,8 +712,9 @@ exports.testIrcHybridClientWebsocket = (chain) => {
       }
       // Done, all HEARTBEAT messages have been received.
       if (websocketTestDone) {
-        // Minimum of 1 PONG reply to websocket PING is required, else error
-        if (pongCount < 1) {
+        // setting chain.exitEarly=true masks error when skipping PING, PONG, HEARTBEAT, HEARTBEAT
+        if (!chain.exitEarly & pongCount < 1) {
+          // Minimum of 1 PONG reply to websocket PING is required, else error
           chain.websocketError = true;
           chain.websocketErrorMessage += 'Failed to receive websocket PONG';
         }
@@ -756,7 +757,13 @@ exports.testIrcHybridClientWebsocket = (chain) => {
 
           // 4 - Successful websocket upgrade response
         } else if (websocketConnectState === 4) {
-          websocketConnectState = 5;
+          if (chain.exitEarly) {
+            // This is work around to test two upgrade requests, to verify timer is deactivated
+            // Skip PING, PONG, HEARTBEAT, HEARTBEAT
+            websocketConnectState = 10;
+          } else {
+            websocketConnectState = 5;
+          }
           if (show) console.log('websocketConnectState', websocketConnectState, '(Connected)');
 
         // 5 Delay timer
@@ -794,7 +801,21 @@ exports.testIrcHybridClientWebsocket = (chain) => {
 
         // 10 - Send websocket protocol CLOSE (opcode 0x08)
         } else if (websocketConnectState === 10) {
-          if (heartbeatCount >= heartbeatCountLimit) {
+          if (chain.exitEarly) {
+            // This is work around to test two upgrade requests, to verify timer is deactivated
+            // Skip PING, PONG, HEARTBEAT, HEARTBEAT
+            console.log('        Test: Aborting websocket HEARTBEAT delay');
+            chain.websocketError = false;
+            chain.websocketErrorMessage = '';
+            websocketTestDone = true;
+            const closeOpcode = 0x08;
+            const commandFrame = _encodeCommandFrame(closeOpcode);
+            if (show) printOutFrame(commandFrame);
+            socket.write(commandFrame);
+            websocketConnectState = 11;
+            if (show) console.log('websocketConnectState', websocketConnectState);
+          } else if (heartbeatCount >= heartbeatCountLimit) {
+            // Else all websocket tests completed.
             websocketTestDone = true;
             console.log('        Test: All HEARTBEAT messages received, ending test.')
             const closeOpcode = 0x08;

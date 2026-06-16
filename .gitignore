@@ -5,4 +5,8 @@ push*
 logs/
 *.bak
 .env
+*.swp
 bruno/irc-hybrid-client/.env
+.codex
+.agents
+AGENTS.md

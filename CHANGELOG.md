@@ -6,6 +6,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [v3.0.10](https://github.com/cotarr/irc-hybrid-client-dev-tools/releases/tag/v3.0.10) 2026-06-16
+
+- debug/websocket-auth.js - Refactored and extended tests to address addition of an allow list for websocket request Origin header URL host info.
+- debug/csrf-routes.js - Added CSRF test for POST /irc/wsauth.
+- debug/runner.sh - Added environment variable to define websocket Origin allow list.
+- debug/README.ms - Updated to address websocket Origin allow list.
+- debug/modules/managed-fetch.js - Fixed syntax error, parenthesis location, generating new expiration date. Error did not break test.
+- Update .gitignore
+
 ## [v3.0.9](https://github.com/cotarr/irc-hybrid-client-dev-tools/releases/tag/v3.0.9) 2026-05-20
 
 - Run npm audit fix to clear npm audit warning

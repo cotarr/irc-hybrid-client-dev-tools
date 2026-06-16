@@ -52,6 +52,7 @@ function set_default_env
     OAUTH2_ENABLE_REMOTE_LOGIN=false
     IRC_DISABLE_LIST_EDITOR=false
     IRC_SERVE_HTML_HELP_DOCS=true
+    SERVER_WEBSOCKET_ORIGIN_LIST=http://localhost:3003
   }
 
 function show_default_env
@@ -64,6 +65,7 @@ function show_default_env
     echo "Config: OAUTH2_ENABLE_REMOTE_LOGIN=false"
     echo "Config: IRC_DISABLE_LIST_EDITOR=false"
     echo "Config: IRC_SERVE_HTML_HELP_DOCS=true"
+    echo "Config: SERVER_WEBSOCKET_ORIGIN_LIST=http://localhost:3003"
   }
 
 #

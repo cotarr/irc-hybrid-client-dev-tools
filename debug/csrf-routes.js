@@ -424,6 +424,26 @@ setup(chainObj)
   .then((chain) => managedFetch(chain))
   .then((chain) => validateCsrfTokenFail(chain, 403))
 
+  // -----------------------------------------------
+  // 205 POST /irc/wsauth (No CSRF token)
+  // -----------------------------------------------
+  .then((chain) => {
+    chain.testDescription = '205 POST /irc/wsauth (No CSRF token)';
+    chain.requestMethod = 'POST';
+    chain.requestFetchURL = encodeURI(testEnv.ircWebURL + '/irc/wsauth');
+    chain.requestContentType = 'application/json';
+    chain.requestAcceptType = 'application/json'
+    chain.requestCsrfHeader = chain.savedParsedCsrfToken;
+    // Remove CSRF token from request (this is the test)
+    chain.requestCsrfHeader = null;
+    chain.requestBody = {
+      index: testEnv.ircServerIndex,
+    };
+    return Promise.resolve(chain);
+  })
+  .then((chain) => managedFetch(chain))
+  .then((chain) => validateCsrfTokenFail(chain, 403))
+
   //
   // For Debug, show chain object
   //

@@ -75,6 +75,7 @@ SERVER_PORT=3003
 SERVER_PID_FILENAME=/home/user/tmp/ircHybridClient.PID
 SERVER_INSTANCE_NUMBER=0
 SESSION_SECRET="---cookie-secret-goes-here--"
+SERVER_WEBSOCKET_ORIGIN_LIST="http://localhost:3003"
 ```
 
 The following variables must NOT be defined in the .env file during testing. The test runner (debug/runner.sh) will restart the irc-hybrid-client server several times with different values for these variables. The .env file will over-write these ad-hoc environment variables and cause the tests to fail.
@@ -189,6 +190,7 @@ node debug/cookie-tests.js
 node debug/disabled-routes.js
 node debug/user-auth-count.js
 node debug/serverlist-edit.js
+node debug/display-config.js
 ```
 
 ## Description of test files
@@ -265,6 +267,7 @@ Test: 201 POST /irc/serverlist (No CSRF token)
 Test: 202 PATCH /irc/serverlist?index=x (No CSRF token)
 Test: 203 COPY /irc/serverlist?index=x (No CSRF token)
 Test: 204 DELETE /irc/serverlist?index=x (No CSRF token)
+Test: 205 POST /irc/wsauth (No CSRF token)
 ```
 
 ### user-auth-login.js
@@ -326,16 +329,23 @@ Test: 10 GET /status (server is running)
 Test: 50 GET /login - Get new nonce and CSRF token
 Test: 51 POST /login-authorize - Get valid cookie (used in writing tests)
 Test: 52 GET /irc/webclient.html (get CSRF Token)
+Test: 80 POST /irc/wsauth (Enable server websocket timer for pre-test)
+Test: 81 UPGRADE /irc/ws (websocket upgrade, pre-test, expect success)
 Test: 100 POST /irc/wsauth (enable timer, no CSRF token)
-Test: 101 UPGRADE /irc/wsauth (websocket upgrade, timer not active)
+Test: 101 UPGRADE /irc/ws (websocket upgrade, timer not active)
 Test: 102 POST /irc/wsauth (enable timer, no cookie)
-Test: 103 UPGRADE /irc/wsauth (websocket upgrade, timer not active)
+Test: 103 UPGRADE /irc/ws (websocket upgrade, timer not active)
 Test: 110 POST /irc/wsauth (Enable server websocket timer)
-Test: 111 UPGRADE /irc/wsauth (websocket upgrade, wait for timer to expire)
+Test: 111 UPGRADE /irc/ws (websocket upgrade, wait for timer to expire)
 Test: 112 POST /irc/wsauth (Enable server websocket timer)
-Test: 113 UPGRADE /irc/wsauth (websocket upgrade, without cookie)
+Test: 113 UPGRADE /irc/ws (websocket upgrade, without cookie)
 Test: 114 POST /irc/wsauth (Enable server websocket timer)
-Test: 115 UPGRADE /irc/wsauth (websocket upgrade, expect HEARTBEAT messages)
+Test: 115 UPGRADE /irc/ws (websocket upgrade, Origin header mismatch)
+Test: 116 POST /irc/wsauth (Enable server websocket timer)
+Test: 117 UPGRADE /irc/ws (websocket upgrade, 1 of 2, success on first)
+Test: 118 UPGRADE /irc/ws (websocket upgrade, 2 of 2, Fail second within time window)
+Test: 119 POST /irc/wsauth (Enable server websocket timer)
+Test: 120 UPGRADE /irc/ws (websocket upgrade, expect HEARTBEAT messages)
 ```
 
 ### response.headers.js

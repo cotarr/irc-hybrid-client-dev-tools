@@ -23,6 +23,11 @@ const {
   // servers
 } = require('./modules/import-config.js');
 
+if (config.server.websocketOriginAllowList.length <= 0) {
+  console.log('The array websocketOriginAllowList of allowed Origin headers is required');
+  process.exit(1);
+}
+
 const managedFetch = require('./modules/managed-fetch').managedFetch;
 const {
   logRequest,
@@ -235,6 +240,58 @@ setup(chainObj)
   })
 
   // -----------------------------------------------
+  // 80 POST /irc/wsauth (Enable server websocket timer for pre-test)
+  // -----------------------------------------------
+  .then((chain) => {
+    chain.testDescription = '80 POST /irc/wsauth (Enable server websocket timer for pre-test)';
+    chain.requestMethod = 'POST';
+    chain.requestFetchURL = encodeURI(testEnv.ircWebURL + '/irc/wsauth');
+    chain.requestContentType = 'application/json';
+    chain.requestAcceptType = 'application/json'
+    chain.requestCsrfHeader = chain.savedParsedCsrfToken;
+    chain.currentSessionCookie = chain.savedCurrentSessionCookie;
+    chain.requestBody = {
+      index: testEnv.ircServerIndex
+    };
+    return Promise.resolve(chain);
+  })
+  .then((chain) => managedFetch(chain))
+  .then((chain) => {
+    logRequest(chain);
+    // console.log('responseRawData:', chain.responseRawData);
+    // console.log('responseErrorMessage:', chain.responseErrorMessage);
+    console.log('\tExpect: status === 200');
+    assert.strictEqual(chain.responseStatus, 200);
+    console.log('\tExpect: response contains error === false');
+    assert.strictEqual(chain.responseRawData.error, false);
+    return Promise.resolve(chain);
+  })
+
+  // -----------------------------------------------
+  // 81 UPGRADE /irc/ws (websocket upgrade, pre-test, expect success)
+  // -----------------------------------------------
+  .then((chain) => {
+    chain.testDescription = '81 UPGRADE /irc/ws (websocket upgrade, pre-test, expect success)';
+    chain.requestMethod = 'UPGRADE';
+    chain.requestFetchURL = encodeURI(testEnv.ircWebURL + '/irc/ws');
+    chain.requestCsrfHeader = chain.savedParsedCsrfToken;
+    chain.requestBody = {};
+    chain.currentSessionCookie = chain.savedCurrentSessionCookie;
+    console.log('\nTest: ' + chain.testDescription);
+    return Promise.resolve(chain);
+  })
+  .then((chain) => testIrcHybridClientWebsocket(chain))
+  .then((chain) => {
+    // console.log('websocketError:', chain.websocketError);
+    // console.log('websocketErrorMessage:', chain.websocketErrorMessage);
+
+    console.log('\tExpect: no errors');
+    assert.ok(!chain.websocketError);
+
+    return Promise.resolve(chain);
+  })  
+  
+  // -----------------------------------------------
   // 100 POST /irc/wsauth (enable timer, no CSRF token)
   // -----------------------------------------------
   .then((chain) => {
@@ -265,10 +322,10 @@ setup(chainObj)
   })
 
   // -----------------------------------------------
-  // 101 UPGRADE /irc/wsauth (websocket upgrade, timer not active)
+  // 101 UPGRADE /irc/ws (websocket upgrade, timer not active)
   // -----------------------------------------------
   .then((chain) => {
-    chain.testDescription = '101 UPGRADE /irc/wsauth (websocket upgrade, timer not active)';
+    chain.testDescription = '101 UPGRADE /irc/ws (websocket upgrade, timer not active)';
     chain.requestMethod = 'UPGRADE';
     chain.requestFetchURL = encodeURI(testEnv.ircWebURL + '/irc/ws');
     chain.requestCsrfHeader = chain.savedParsedCsrfToken;
@@ -319,10 +376,10 @@ setup(chainObj)
   })
 
   // -----------------------------------------------
-  // 103 UPGRADE /irc/wsauth (websocket upgrade, timer not active)
+  // 103 UPGRADE /irc/ws (websocket upgrade, timer not active)
   // -----------------------------------------------
   .then((chain) => {
-    chain.testDescription = '103 UPGRADE /irc/wsauth (websocket upgrade, timer not active)';
+    chain.testDescription = '103 UPGRADE /irc/ws (websocket upgrade, timer not active)';
     chain.requestMethod = 'UPGRADE';
     chain.requestFetchURL = encodeURI(testEnv.ircWebURL + '/irc/ws');
     chain.requestCsrfHeader = chain.savedParsedCsrfToken;
@@ -376,10 +433,10 @@ setup(chainObj)
 
 
   // -----------------------------------------------
-  // 111 UPGRADE /irc/wsauth (websocket upgrade, wait for timer to expire)
+  // 111 UPGRADE /irc/ws (websocket upgrade, wait for timer to expire)
   // -----------------------------------------------
   .then((chain) => {
-    chain.testDescription = '111 UPGRADE /irc/wsauth (websocket upgrade, wait for timer to expire)';
+    chain.testDescription = '111 UPGRADE /irc/ws (websocket upgrade, wait for timer to expire)';
     chain.requestMethod = 'UPGRADE';
     chain.requestFetchURL = encodeURI(testEnv.ircWebURL + '/irc/ws');
     chain.requestCsrfHeader = chain.savedParsedCsrfToken;
@@ -433,10 +490,10 @@ setup(chainObj)
 
 
   // -----------------------------------------------
-  // 113 UPGRADE /irc/wsauth (websocket upgrade, without cookie)
+  // 113 UPGRADE /irc/ws (websocket upgrade, without cookie)
   // -----------------------------------------------
   .then((chain) => {
-    chain.testDescription = '113 UPGRADE /irc/wsauth (websocket upgrade, without cookie)';
+    chain.testDescription = '113 UPGRADE /irc/ws (websocket upgrade, without cookie)';
     chain.requestMethod = 'UPGRADE';
     chain.requestFetchURL = encodeURI(testEnv.ircWebURL + '/irc/ws');
     chain.requestCsrfHeader = chain.savedParsedCsrfToken;
@@ -487,12 +544,150 @@ setup(chainObj)
     return Promise.resolve(chain);
   })
 
-
   // -----------------------------------------------
-  // 115 UPGRADE /irc/wsauth (websocket upgrade, expect HEARTBEAT messages)
+  // 115 UPGRADE /irc/ws (websocket upgrade, Origin header mismatch)
   // -----------------------------------------------
   .then((chain) => {
-    chain.testDescription = '115 UPGRADE /irc/wsauth (websocket upgrade, expect HEARTBEAT messages)';
+    chain.testDescription = '115 UPGRADE /irc/ws (websocket upgrade, Origin header mismatch)';
+    chain.requestMethod = 'UPGRADE';
+    chain.requestFetchURL = encodeURI(testEnv.ircWebURL + '/irc/ws');
+    chain.requestCsrfHeader = chain.savedParsedCsrfToken;
+    chain.requestBody = {};
+    chain.currentSessionCookie = chain.savedCurrentSessionCookie;
+    chain.oldWebsocketOrigin = chain.websocketOptions.wsOrigin;
+    chain.websocketOptions.wsOrigin = 'http://evil-site.com:1234';
+    console.log('\nTest: ' + chain.testDescription);
+    return Promise.resolve(chain);
+  })
+  .then((chain) => testIrcHybridClientWebsocket(chain))
+  .then((chain) => {
+    logRequest(chain);  
+    // console.log('websocketError:', chain.websocketError);
+    // console.log('websocketErrorMessage:', chain.websocketErrorMessage);
+    console.log('\tExpect: status === 200');
+    assert.strictEqual(chain.responseStatus, 200);
+    console.log('\tExpect: chain.websocketError === true');
+    assert.strictEqual(chain.websocketError, true);
+    console.log('\tExpect: websocket error contains: "401 Unauthorized"');
+    assert.ok(chain.websocketErrorMessage.indexOf('401 Unauthorized') >= 0);
+
+    return Promise.resolve(chain);
+  })  
+
+  // -----------------------------------------------
+  // 116 POST /irc/wsauth (Enable server websocket timer)
+  // -----------------------------------------------
+  .then((chain) => {
+    chain.testDescription = '116 POST /irc/wsauth (Enable server websocket timer)';
+    chain.requestMethod = 'POST';
+    chain.requestFetchURL = encodeURI(testEnv.ircWebURL + '/irc/wsauth');
+    chain.requestContentType = 'application/json';
+    chain.requestAcceptType = 'application/json'
+    chain.requestCsrfHeader = chain.savedParsedCsrfToken;
+    chain.currentSessionCookie = chain.savedCurrentSessionCookie;
+    chain.websocketOptions.wsOrigin = chain.oldWebsocketOrigin;
+    delete chain.oldWebsocketOrigin;
+    chain.requestBody = {
+      index: testEnv.ircServerIndex
+    };
+    return Promise.resolve(chain);
+  })
+  .then((chain) => managedFetch(chain))
+  .then((chain) => {
+    logRequest(chain);
+    // console.log('responseRawData:', chain.responseRawData);
+    // console.log('responseErrorMessage:', chain.responseErrorMessage);
+    console.log('\tExpect: status === 200');
+    assert.strictEqual(chain.responseStatus, 200);
+    console.log('\tExpect: response contains error === false');
+    assert.strictEqual(chain.responseRawData.error, false);
+    return Promise.resolve(chain);
+  })
+
+  // -----------------------------------------------
+  // 117 UPGRADE /irc/ws (websocket upgrade, 1 of 2, success on first)
+  // -----------------------------------------------
+  .then((chain) => {
+    chain.testDescription = '117 UPGRADE /irc/ws (websocket upgrade, 1 of 2, success on first)';
+    chain.requestMethod = 'UPGRADE';
+    chain.requestFetchURL = encodeURI(testEnv.ircWebURL + '/irc/ws');
+    chain.requestCsrfHeader = chain.savedParsedCsrfToken;
+    chain.requestBody = {};
+    chain.currentSessionCookie = chain.savedCurrentSessionCookie;
+    // Disable extended tests PING, HEARTBEAT to keep upgrade time rrunning
+    chain.exitEarly=true;
+    console.log('\nTest: ' + chain.testDescription);
+    return Promise.resolve(chain);
+  })
+  .then((chain) => testIrcHybridClientWebsocket(chain))
+  .then((chain) => {
+    // console.log('websocketError:', chain.websocketError);
+    // console.log('websocketErrorMessage:', chain.websocketErrorMessage);
+    console.log('\tExpect: no errors');
+    assert.ok(!chain.websocketError);
+    delete chain.exitEarly;
+    return Promise.resolve(chain);
+  }) 
+
+  // -----------------------------------------------
+  // 118 UPGRADE /irc/ws (websocket upgrade, 2 of 2, Fail second within time window)
+  // -----------------------------------------------
+  .then((chain) => {
+    chain.testDescription = '118 UPGRADE /irc/ws (websocket upgrade, 2 of 2, Fail second within time window)';
+    chain.requestMethod = 'UPGRADE';
+    chain.requestFetchURL = encodeURI(testEnv.ircWebURL + '/irc/ws');
+    chain.requestCsrfHeader = chain.savedParsedCsrfToken;
+    chain.requestBody = {};
+    chain.currentSessionCookie = chain.savedCurrentSessionCookie;
+    console.log('\nTest: ' + chain.testDescription);
+    return Promise.resolve(chain);
+  })
+  .then((chain) => testIrcHybridClientWebsocket(chain))
+  .then((chain) => {
+    // console.log('websocketError:', chain.websocketError);
+    // console.log('websocketErrorMessage:', chain.websocketErrorMessage);
+
+    console.log('\tExpect: error exists');
+    assert.ok(chain.websocketError);
+    console.log('\tExpect: websocket error contains: "401 Unauthorized"');
+    assert.ok(chain.websocketErrorMessage.indexOf('401 Unauthorized') >= 0);
+
+    return Promise.resolve(chain);
+  }) 
+
+  // -----------------------------------------------
+  // 119 POST /irc/wsauth (Enable server websocket timer)
+  // -----------------------------------------------
+  .then((chain) => {
+    chain.testDescription = '119 POST /irc/wsauth (Enable server websocket timer)';
+    chain.requestMethod = 'POST';
+    chain.requestFetchURL = encodeURI(testEnv.ircWebURL + '/irc/wsauth');
+    chain.requestContentType = 'application/json';
+    chain.requestAcceptType = 'application/json'
+    chain.requestCsrfHeader = chain.savedParsedCsrfToken;
+    chain.currentSessionCookie = chain.savedCurrentSessionCookie;
+    chain.requestBody = {
+      index: testEnv.ircServerIndex
+    };
+    return Promise.resolve(chain);
+  })
+  .then((chain) => managedFetch(chain))
+  .then((chain) => {
+    logRequest(chain);
+    // console.log('responseRawData:', chain.responseRawData);
+    // console.log('responseErrorMessage:', chain.responseErrorMessage);
+    console.log('\tExpect: status === 200');
+    assert.strictEqual(chain.responseStatus, 200);
+    console.log('\tExpect: response contains error === false');
+    assert.strictEqual(chain.responseRawData.error, false);
+    return Promise.resolve(chain);
+  })
+
+  // -----------------------------------------------
+  // 120 UPGRADE /irc/ws (websocket upgrade, expect HEARTBEAT messages)
+  // -----------------------------------------------
+  .then((chain) => {
+    chain.testDescription = '120 UPGRADE /irc/ws (websocket upgrade, expect HEARTBEAT messages)';
     chain.requestMethod = 'UPGRADE';
     chain.requestFetchURL = encodeURI(testEnv.ircWebURL + '/irc/ws');
     chain.requestCsrfHeader = chain.savedParsedCsrfToken;
